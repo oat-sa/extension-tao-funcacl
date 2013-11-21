@@ -1,0 +1,30 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: TAO v2.6-alpha\n"
+"PO-Revision-Date: 2013-11-13T15:39:40\n"
+"Last-Translator: TAO Translation Team <translation@tao.lu>\n"
+"MIME-Version: 1.0\n"
+"Language: en-US\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Actions"
+msgstr ""
+
+msgid "Available roles"
+msgstr ""
+
+#, tao-public
+msgid "Manage Access Rights"
+msgstr ""
+
+msgid "Modules"
+msgstr ""
+
+msgid "Roles"
+msgstr ""
+
+#, tao-public
+msgid "Users"
+msgstr ""
+
