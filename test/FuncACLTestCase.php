@@ -35,7 +35,7 @@ class FuncACLTestCase extends UnitTestCase {
         $roleService = tao_models_classes_RoleService::singleton();
 		$baseRole = new core_kernel_classes_Resource(INSTANCE_ROLE_BACKOFFICE);
 		$this->testRole = $roleService->addRole('testrole', $baseRole);
-		$this->user = $userService->addUser('testcase', md5('testcase'));
+		$this->user = $userService->addUser('testcase', 'testcase');
 		$userService->attachRole($this->user, $this->testRole);
     }
     
