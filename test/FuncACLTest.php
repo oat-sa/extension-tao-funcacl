@@ -20,10 +20,11 @@
  */
 ?>
 <?php
-require_once dirname(__FILE__) . '/TaoTestRunner.php';
 include_once dirname(__FILE__) . '/../includes/raw_start.php';
+require_once dirname(__FILE__) . '/../../tao/test/TaoPhpUnitTestRunner.php';
 
-class FuncACLTestCase extends UnitTestCase {
+
+class FuncACLTest extends TaoPhpUnitTestRunner {
 	
 	private $user;
 	private $testrole;
