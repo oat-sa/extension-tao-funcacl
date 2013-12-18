@@ -1,4 +1,3 @@
-<script type="text/javascript" src="<?=BASE_WWW?>js/acl.js"></script>
 <link rel="stylesheet" type="text/css" href="<?=BASE_WWW?>css/acl.css" />
 
 <div class="main-container">
