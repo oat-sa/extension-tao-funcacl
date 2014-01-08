@@ -48,11 +48,10 @@ class funcAcl_helpers_Model
      */
     public static function spawnExtensionModel( common_ext_Extension $extension)
     {
-        // section 127-0-1-1--1875a6a1:137e65726c7:-8000:0000000000003B19 begin
     	common_Logger::i('Spawning Module/Action model for extension '.$extension->getID());
 		
     	$aclExt = self::addExtension($extension->getID());
-    	foreach ($extension->getAllModules() as $moduleClass) {
+    	foreach ($extension->getAllModules() as $moduleName => $moduleClass) {
 			//Introspection, get public method
 			try {
 				$reflector = new ReflectionClass($moduleClass);
@@ -63,7 +62,6 @@ class funcAcl_helpers_Model
 					}
 				}
 				if (count($actions) > 0) {
-					$moduleName = substr($moduleClass, strrpos($moduleClass, '_') + 1);
 					$aclModule = self::addModule($aclExt, $moduleName);
 					foreach ($actions as $action) {
 						self::addAction($aclModule, $action);
@@ -71,10 +69,9 @@ class funcAcl_helpers_Model
 				}
 			}
 			catch (ReflectionException $e) {
-				echo $e->getLine().' : '.$e->getMessage()."\n";
+			    common_Logger::w('ReflectionException in '.$moduleClass.' on line '.$e->getLine().' : '.$e->getMessage());
 			}
 		}
-        // section 127-0-1-1--1875a6a1:137e65726c7:-8000:0000000000003B19 end
     }
 
     /**

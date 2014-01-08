@@ -51,11 +51,7 @@ return array(
 	'managementRole' => 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#FuncAclManagerRole',
     'acl' => array(
         array('grant', 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#FuncAclManagerRole', array('ext'=>'funcAcl')),
-    ),    
-	'classLoaderPackages' => array(
-		dirname(__FILE__).'/actions/',
-		dirname(__FILE__).'/helpers/'
-	),
+    ),
 	'optimizableClasses' => array(
 		'http://www.tao.lu/Ontologies/taoFuncACL.rdf#Extension'
 	),
