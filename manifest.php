@@ -90,4 +90,3 @@ return array(
 		'TAOVIEW_PATH' => $extpath."views".DIRECTORY_SEPARATOR
 	 )
 );
-?>

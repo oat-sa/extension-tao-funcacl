@@ -14,11 +14,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
- * Copyright (c) 2002-2008 (original work) Public Research Centre Henri Tudor & University of Luxembourg (under the project TAO & TAO2);
- *               2008-2010 (update and modification) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ * Copyright (c) 2013 (original work) Open Assessment Techonologies SA (under the project TAO-PRODUCT);
  */
-require_once dirname(__FILE__) .'/../includes/raw_start.php';
 
-new funcAcl_scripts_TaoPreparePublicActions(array('parameters' => array()));
+/**
+ * RAW Bootstraping
+ */
+require_once dirname(__FILE__) .'/../../tao/includes/class.Bootstrap.php';
+
+$bootStrap = new BootStrap('funcAcl');
+$bootStrap->start();
+?>

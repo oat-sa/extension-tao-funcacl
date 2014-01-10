@@ -108,7 +108,7 @@ class funcAcl_helpers_funcACL
 		$extAccess = funcAcl_helpers_Cache::retrieveExtensions();
 		//Test if we have a role giving access to the extension.
 		foreach ($roles as $r){
-			if (isset($extAccess[$extensionUri]) && in_array($r->getUri(), $extAccess[$extensionUri])){
+			if (isset($extAccess[$extensionUri]) && in_array($r, $extAccess[$extensionUri])){
 				$returnValue = true;
 				break;
 			}
@@ -119,7 +119,7 @@ class funcAcl_helpers_funcACL
 		
 		//Test if we have a role giving access to the module.
 		foreach ($roles as $r){
-			if (in_array($r->getUri(), $moduleAccess['module'])){
+			if (in_array($r, $moduleAccess['module'])){
 				$returnValue = true;
 				break;
 			}
@@ -129,7 +129,7 @@ class funcAcl_helpers_funcACL
 		foreach ($roles as $r){
 			if (isset($moduleAccess['actions'][$actionUri])){
 				$actionRoles = $moduleAccess['actions'][$actionUri];
-				if (in_array($r->getUri(), $actionRoles)){
+				if (in_array($r, $actionRoles)){
 					$returnValue = true;
 					break;
 				}
