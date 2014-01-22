@@ -30,8 +30,9 @@ $extpath = dirname(__FILE__).DIRECTORY_SEPARATOR;
 
 return array(
     'name' => 'funcAcl',
-	'description' => 'An Access Control Layer implementation that allows to restrict acces to functionalities of the platform',
-	'version' => '2.6',
+	'description' => 'Functionality Access Control Layer',
+    'license' => 'GPL-2.0',
+    'version' => '2.6',
 	'author' => 'Open Assessment Technologies, CRP Henri Tudor',
 	'dependencies' => array('tao'),
 	'models' => array(
