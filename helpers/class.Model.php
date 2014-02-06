@@ -48,9 +48,9 @@ class funcAcl_helpers_Model
      */
     public static function spawnExtensionModel( common_ext_Extension $extension)
     {
-    	common_Logger::i('Spawning Module/Action model for extension '.$extension->getID());
+    	common_Logger::i('Spawning Module/Action model for extension '.$extension->getId());
 		
-    	$aclExt = self::addExtension($extension->getID());
+    	$aclExt = self::addExtension($extension->getId());
     	foreach ($extension->getAllModules() as $moduleName => $moduleClass) {
 			//Introspection, get public method
 			try {

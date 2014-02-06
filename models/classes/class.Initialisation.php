@@ -46,7 +46,7 @@ class funcAcl_models_classes_Initialisation
                         $uri = explode('#', $moduleURI);
                         list($type, $extId) = explode('_', $uri[1]);
                          
-                        if ($extId == $extension->getID()) {
+                        if ($extId == $extension->getId()) {
                             $managementRole = $mR;
                             break 2;
                         }
@@ -55,7 +55,7 @@ class funcAcl_models_classes_Initialisation
             }
         
             if (!empty($managementRole)) {
-                $managementRolesByExtension[$extension->getID()] = $managementRole;
+                $managementRolesByExtension[$extension->getId()] = $managementRole;
             }
         }
          
@@ -73,7 +73,7 @@ class funcAcl_models_classes_Initialisation
         funcAcl_helpers_Cache::flush();
          
         foreach (common_ext_ExtensionsManager::singleton()->getInstalledExtensions() as $extension) {
-            if ($extension->getID() != 'generis') {
+            if ($extension->getId() != 'generis') {
                 // 1. Create the Extension Model.
                 // All action classes of this module will be reflected to get an equivalent in the ontology.
                 funcAcl_helpers_Model::spawnExtensionModel($extension);
@@ -81,14 +81,14 @@ class funcAcl_models_classes_Initialisation
         }
         
         foreach (common_ext_ExtensionsManager::singleton()->getInstalledExtensions() as $extension) {
-            if ($extension->getID() != 'generis') {
+            if ($extension->getId() != 'generis') {
                 // 2. Grant access to Management Role.
-                if (!empty($managementRolesByExtension[$extension->getID()])) {
+                if (!empty($managementRolesByExtension[$extension->getId()])) {
                     $extAccessService = funcAcl_models_classes_ExtensionAccessService::singleton();
-                    $extAccessService->add($managementRolesByExtension[$extension->getID()]->getUri(), $extAccessService->makeEMAUri($extension->getID()));
+                    $extAccessService->add($managementRolesByExtension[$extension->getId()]->getUri(), $extAccessService->makeEMAUri($extension->getId()));
                 }
                 else {
-                    common_Logger::i('Management Role not found for extension ' . $extension->getID());
+                    common_Logger::i('Management Role not found for extension ' . $extension->getId());
                 }
             }
         }

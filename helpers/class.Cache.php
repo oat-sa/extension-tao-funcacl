@@ -69,7 +69,7 @@ class funcAcl_helpers_Cache
     public static function cacheExtension( common_ext_Extension $extension)
     {
         // section 10-13-1-85--1d76564e:13ca4d5068d:-8000:0000000000003C64 begin
-        foreach (funcAcl_helpers_Model::getModules($extension->getID()) as $module){
+        foreach (funcAcl_helpers_Model::getModules($extension->getId()) as $module){
         	self::cacheModule($module);
         }
         // section 10-13-1-85--1d76564e:13ca4d5068d:-8000:0000000000003C64 end
@@ -173,7 +173,7 @@ class funcAcl_helpers_Cache
         	$roleClass = new core_kernel_classes_Class(CLASS_ROLE);
         	$extensions = common_ext_ExtensionsManager::singleton()->getInstalledExtensions();
         	foreach ($extensions as $ext) {
-	        	$aclExtUri = funcAcl_models_classes_AccessService::singleton()->makeEMAUri($ext->getID());
+	        	$aclExtUri = funcAcl_models_classes_AccessService::singleton()->makeEMAUri($ext->getId());
 	        	$returnValue[$aclExtUri] = array();
 		        $roles = $roleClass->searchInstances(array(
 		        	PROPERTY_ACL_GRANTACCESS => $aclExtUri
