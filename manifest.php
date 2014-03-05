@@ -42,9 +42,6 @@ return array(
 		'rdf' => array(
 			dirname(__FILE__). '/models/ontology/taofuncacl.rdf'
 		),
-		'checks' => array(
-            array('type' => 'CheckFileSystemComponent', 'value' => array('id' => 'fs_funcAcl_includes', 'location' => 'funcAcl/includes', 'rights' => 'rw'))
-		),
 	    'php' => array(
 	        dirname(__FILE__). '/scripts/install/setFuncAclImpl.php'
 	    ),
