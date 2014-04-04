@@ -26,7 +26,7 @@
  * @author Jehan Bihin
  * @package tao
  * @since 2.2
- * @subpackage models_classes_funcACL
+ 
  */
 class funcAcl_models_classes_AccessService extends tao_models_classes_GenerisService
 {

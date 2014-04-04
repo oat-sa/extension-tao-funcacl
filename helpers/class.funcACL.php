@@ -26,7 +26,7 @@
  * @access public
  * @author Jehan Bihin
  * @package tao
- * @subpackage helpers_funcACL
+ 
  */
 class funcAcl_helpers_funcACL
 {

@@ -25,7 +25,7 @@
  * @access public
  * @author Jerome Bogaerts, <jerome@taotesting.com>
  * @package tao
- * @subpackage helpers_funcACL
+ 
  */
 class funcAcl_helpers_Cache
 {

@@ -26,7 +26,7 @@
  * @access public
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package tao
- * @subpackage helpers_funcACL
+ 
  */
 class funcAcl_helpers_Model
 {

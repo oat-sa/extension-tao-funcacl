@@ -27,7 +27,7 @@
  * @author Jérôme Bogaerts, <jerome@taotesting.com>
  * @author Joel Bout, <joel@taotesting.com>
  * @package tao
- * @subpackage scripts
+ 
  */
 class funcAcl_scripts_TaoPreparePublicActions
     extends tao_scripts_Runner

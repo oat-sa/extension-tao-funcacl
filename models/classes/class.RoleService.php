@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -18,38 +18,6 @@
  *               
  * 
  */
-?>
-<?php
-
-error_reporting(E_ALL);
-
-/**
- * Func ACL roles services
- *
- * @author Jehan Bihin
- * @package tao
- * @since 2.2
- * @subpackage models_classes_funcACL
- */
-
-if (0 > version_compare(PHP_VERSION, '5')) {
-    die('This file was generated for PHP 5');
-}
-
-/**
- * This class provide the services for the Tao extension
- *
- * @author Jehan Bihin, <jehan.bihin@tudor.lu>
- */
-require_once('tao/models/classes/class.TaoService.php');
-
-/* user defined includes */
-// section 127-0-1-1--43b2a85f:1372be1e0be:-8000:00000000000039EF-includes begin
-// section 127-0-1-1--43b2a85f:1372be1e0be:-8000:00000000000039EF-includes end
-
-/* user defined constants */
-// section 127-0-1-1--43b2a85f:1372be1e0be:-8000:00000000000039EF-constants begin
-// section 127-0-1-1--43b2a85f:1372be1e0be:-8000:00000000000039EF-constants end
 
 /**
  * Func ACL roles services
@@ -58,7 +26,7 @@ require_once('tao/models/classes/class.TaoService.php');
  * @author Jehan Bihin
  * @package tao
  * @since 2.2
- * @subpackage models_classes_funcACL
+ 
  */
 class funcAcl_models_classes_RoleService
     extends tao_models_classes_GenerisService
