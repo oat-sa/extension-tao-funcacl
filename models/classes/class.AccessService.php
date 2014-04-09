@@ -45,6 +45,21 @@ class funcAcl_models_classes_AccessService extends tao_models_classes_GenerisSer
         $accessUri = $this->makeEMAUri($ext, $mod, $act);
         funcAcl_models_classes_ActionAccessService::singleton()->add($role->getUri(), $accessUri);
     }
+
+    public function revokeExtensionAccess(core_kernel_classes_Resource $role, $ext) {
+        $accessUri = $this->makeEMAUri($ext);
+        funcAcl_models_classes_ExtensionAccessService::singleton()->remove($role->getUri(), $accessUri);
+    }
+    
+    public function revokeModuleAccess(core_kernel_classes_Resource $role, $ext, $mod) {
+        $accessUri = $this->makeEMAUri($ext, $mod);
+        funcAcl_models_classes_ModuleAccessService::singleton()->remove($role->getUri(), $accessUri);
+    }
+    
+    public function revokeActionAccess(core_kernel_classes_Resource $role, $ext, $mod, $act) {
+        $accessUri = $this->makeEMAUri($ext, $mod, $act);
+        funcAcl_models_classes_ActionAccessService::singleton()->remove($role->getUri(), $accessUri);
+    }
     
     /**
      * Short description of method makeEMAUri

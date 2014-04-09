@@ -66,4 +66,22 @@ class funcAcl_models_classes_FuncAcl
             common_Logger::w('Only grant rules accepted in '.__CLASS__);
         }
     }
+    
+    public function revokeRule(tao_models_classes_accessControl_AccessRule $rule) {
+        if ($rule->isGrant()) {
+            $accessService = funcAcl_models_classes_AccessService::singleton();
+            $filter = $rule->getMask();
+            if (isset($filter['act']) && isset($filter['mod']) && isset($filter['ext'])) {
+                $accessService->revokeActionAccess($rule->getRole(), $filter['ext'], $filter['mod'], $filter['act']);
+            } elseif (isset($filter['mod']) && isset($filter['ext'])) {
+                $accessService->revokeModuleAccess($rule->getRole(), $filter['ext'], $filter['mod']);
+            } elseif (isset($filter['ext'])) {
+                $accessService->revokeExtensionAccess($rule->getRole(), $filter['ext']);
+            } else {
+                common_Logger::w('Uninterpretable filter in '.__CLASS__);
+            }
+        } else {
+            common_Logger::w('Only grant rules accepted in '.__CLASS__);
+        }
+    }
 }
