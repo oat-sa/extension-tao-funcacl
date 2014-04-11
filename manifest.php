@@ -81,7 +81,5 @@ return array(
 	
 		#STUFF that belongs in TAO
 		'TAOBASE_WWW' => ROOT_URL . 'tao/views/',
-		'TAO_TPL_PATH' => $extpath."views".DIRECTORY_SEPARATOR."templates".DIRECTORY_SEPARATOR,
-		'TAOVIEW_PATH' => $extpath."views".DIRECTORY_SEPARATOR
 	 )
 );
