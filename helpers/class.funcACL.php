@@ -57,7 +57,7 @@ class funcAcl_helpers_funcACL
 		$access = false;
 		if (substr($url, 0, strlen(ROOT_URL)) == ROOT_URL) {
 			$resolver = new Resolver($url);
-			$access = self::hasAccess($resolver->getExtensionFromURL(), $resolver->getModule(), $resolver->getAction());
+			$access = self::hasAccess($resolver->getAction(), $resolver->getModule(), $resolver->getExtensionFromURL());
 		} else {
 			common_Logger::w('\''.$url.'\' not part of this Tao');
 		}
@@ -76,7 +76,7 @@ class funcAcl_helpers_funcACL
      * @return boolean
      * @since 2.2
      */
-    public static function hasAccess($extension, $module, $action)
+    public static function hasAccess($action, $controller, $extension)
     {
         $returnValue = (bool) false;
 
