@@ -45,24 +45,6 @@ class funcAcl_helpers_funcACL
     public static $rolesByActions = null;
 
     // --- OPERATIONS ---
-
-    /**
-     * Test if the current user has access to the following url
-     * if this url is part of the current tao install
-     * 
-     * @param string $url
-     * @return boolean
-     */
-	public static function hasAccessURL($url) {
-		$access = false;
-		if (substr($url, 0, strlen(ROOT_URL)) == ROOT_URL) {
-			$resolver = new Resolver($url);
-			$access = self::hasAccess($resolver->getAction(), $resolver->getModule(), $resolver->getExtensionFromURL());
-		} else {
-			common_Logger::w('\''.$url.'\' not part of this Tao');
-		}
-		return $access;
-	}
 	
     /**
      * Test if the Module and Action of this module is accessible by the current
@@ -76,7 +58,7 @@ class funcAcl_helpers_funcACL
      * @return boolean
      * @since 2.2
      */
-    public static function hasAccess($action, $controller, $extension)
+    public static function hasAccess($action, $module, $extension)
     {
         $returnValue = (bool) false;
 
