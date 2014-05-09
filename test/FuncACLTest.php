@@ -44,8 +44,12 @@ class FuncACLTest extends TaoPhpUnitTestRunner {
         parent::tearDown();
         $userService = tao_models_classes_UserService::singleton();
         $roleService = tao_models_classes_RoleService::singleton();
-        $userService->removeUser($this->user);
-		$roleService->removeRole($this->testRole);
+        if($this->user != null){
+            $userService->removeUser($this->user);
+        }
+        if($this->testRole){
+		  $roleService->removeRole($this->testRole);
+        }
     }
 	
 	public function testFuncACL() {
@@ -60,20 +64,20 @@ class FuncACLTest extends TaoPhpUnitTestRunner {
 		$emaurimod = FUNCACL_NS . '#m_tao_Users';
 		$makeemauri = funcAcl_models_classes_AccessService::singleton()->makeEMAUri('tao', 'Users', 'add');
 		$makeemaurimod = funcAcl_models_classes_AccessService::singleton()->makeEMAUri('tao', 'Users');
-		$this->assertEqual($emauri, $makeemauri);
-		$this->assertEqual($emaurimod, $makeemaurimod);
-		
+		$this->assertEquals($emauri, $makeemauri);
+		$this->assertEquals($emaurimod, $makeemaurimod);
+
 		$funcAclImp = new funcAcl_models_classes_FuncAcl();
 		
 		// -- Try to access a restricted action
-		$this->assertFalse($funcAclImp->hasAccess('tao', 'Users', 'add'));
+		$this->assertFalse($funcAclImp->hasAccess('add', 'Users', 'tao'));
 		
 		// -- Try to access a unrestricted action
 		// (BACKOFFICE has access to the backend login action because it includes the TAO Role)
-		$this->assertTrue($funcAclImp->hasAccess('tao', 'Main', 'login'));
+		$this->assertTrue($funcAclImp->hasAccess('login', 'Main', 'tao'));
 		
 		// -- Try to access an action that does not exist.
-		$this->assertFalse($funcAclImp->hasAccess('tao', 'Unknown', 'action'));
+		$this->assertFalse($funcAclImp->hasAccess('action', 'Unknown', 'tao'));
 		
 		// -- Try to access a unrestricted action
 		// Add access for this action to the Manager role.
@@ -86,21 +90,21 @@ class FuncACLTest extends TaoPhpUnitTestRunner {
 		$this->assertTrue($srv->loginUser('testcase', 'testcase'));
 		
 		// Ask for access
-		$this->assertTrue($funcAclImp->hasAccess('tao', 'Users', 'add'));
+		$this->assertTrue($funcAclImp->hasAccess('add', 'Users', 'tao'));
 
 		// Remove the access to this action from the Manager role
 		funcAcl_models_classes_ActionAccessService::singleton()->remove($this->testRole->getUri(), $makeemauri);
 		
 		// We should not have access anymore to this action with the Manager role
-		$this->assertFalse($funcAclImp->hasAccess('tao', 'Users', 'add'));
+		$this->assertFalse($funcAclImp->hasAccess('add', 'Users', 'tao'));
 		
 		// -- Give access to the entire module and try to access the previously tested action
 		funcAcl_models_classes_ModuleAccessService::singleton()->add($this->testRole->getUri(), $makeemaurimod);
-		$this->assertTrue($funcAclImp->hasAccess('tao', 'Users', 'add'));
+		$this->assertTrue($funcAclImp->hasAccess('add', 'Users', 'tao'));
 		
 		// -- Remove the entire module access and try again
 		funcAcl_models_classes_ModuleAccessService::singleton()->remove($this->testRole->getUri(), $makeemaurimod);
-		$this->assertFalse($funcAclImp->hasAccess('tao', 'Users', 'add'));
+		$this->assertFalse($funcAclImp->hasAccess('add', 'Users', 'tao'));
 		
 		// reset
 		funcAcl_models_classes_ModuleAccessService::singleton()->add($this->testRole->getUri(), $makeemaurimod);
