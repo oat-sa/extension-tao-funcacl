@@ -37,7 +37,7 @@ class funcAcl_models_classes_FuncAcl
      * (non-PHPdoc)
      * @see tao_models_classes_accessControl_AccessControl::hasAccess()
      */
-    public function hasAccess($action, $controller, $extension, $parameters) {
+    public function hasAccess($action, $controller, $extension, $parameters =array()) {
         return funcAcl_helpers_funcACL::hasAccess($action, $controller, $extension);
     }
     
