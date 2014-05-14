@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -49,7 +49,7 @@ class funcAcl_models_classes_ActionAccessService
      */
     public function add($roleUri, $accessUri)
     {
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:0000000000003A42 begin
+        
 		//$rba = funcAcl_helpers_funcACL::getRolesByActions();
 		$uri = explode('#', $accessUri);
 		list($type, $ext, $mod, $act) = explode('_', $uri[1]);
@@ -73,7 +73,7 @@ class funcAcl_models_classes_ActionAccessService
 		}
 		
 		funcAcl_helpers_Cache::cacheModule($module);
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:0000000000003A42 end
+        
     }
 
     /**
@@ -87,7 +87,7 @@ class funcAcl_models_classes_ActionAccessService
      */
     public function remove($roleUri, $accessUri)
     {
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:0000000000003A46 begin
+        
 		$uri = explode('#', $accessUri);
 		list($type, $ext, $mod, $act) = explode('_', $uri[1]);
 		
@@ -98,7 +98,7 @@ class funcAcl_models_classes_ActionAccessService
 		$role->removePropertyValues($actionAccessProperty, array('pattern' => $accessUri));
 		
 		funcAcl_helpers_Cache::cacheModule($module);
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:0000000000003A46 end
+        
     }
 
     /**
@@ -112,7 +112,7 @@ class funcAcl_models_classes_ActionAccessService
      */
     public function moduleToActionAccess($roleUri, $accessUri)
     {
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:0000000000003A4A begin
+        
 		$uri = explode('#', $accessUri);
 		list($type, $ext, $mod, $act) = explode('_', $uri[1]);
 		$module = new core_kernel_classes_Resource($this->makeEMAUri($ext, $mod));
@@ -127,7 +127,7 @@ class funcAcl_models_classes_ActionAccessService
 		
 		$module = new core_kernel_classes_Resource($this->makeEMAUri($ext, $mod));
 		funcAcl_helpers_Cache::cacheModule($module);
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:0000000000003A4A end
+        
     }
 
     /**
@@ -141,7 +141,7 @@ class funcAcl_models_classes_ActionAccessService
      */
     public function moduleToActionsAccess($roleUri, $accessUri)
     {
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:0000000000003A4C begin
+        
 		$uri = explode('#', $accessUri);
 		list($type, $ext, $mod) = explode('_', $uri[1]);
 		$module = new core_kernel_classes_Resource($accessUri);
@@ -154,7 +154,7 @@ class funcAcl_models_classes_ActionAccessService
 		
 		$module = new core_kernel_classes_Resource($this->makeEMAUri($ext, $mod));
 		funcAcl_helpers_Cache::cacheModule($module);
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:0000000000003A4C end
+        
     }
 
 } /* end of class funcAcl_models_classes_ActionAccessService */

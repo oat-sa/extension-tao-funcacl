@@ -117,7 +117,7 @@ class funcAcl_helpers_Model
     {
         $returnValue = null;
 
-        // section 127-0-1-1--1875a6a1:137e65726c7:-8000:0000000000003B1C begin
+        
         $moduleClass = new core_kernel_classes_Class(CLASS_ACL_MODULE);
         list($prefix, $extensionName) = explode('_', substr($extension->getUri(), strrpos($extension->getUri(), '#')));
         
@@ -127,7 +127,7 @@ class funcAcl_helpers_Model
         	PROPERTY_ACL_MODULE_EXTENSION	=> $extension,
         	PROPERTY_ACL_MODULE_ID			=> $name
         ));
-        // section 127-0-1-1--1875a6a1:137e65726c7:-8000:0000000000003B1C end
+        
 
         return $returnValue;
     }
@@ -146,7 +146,7 @@ class funcAcl_helpers_Model
     {
         $returnValue = null;
 
-        // section 127-0-1-1--1875a6a1:137e65726c7:-8000:0000000000003B1F begin
+        
         $actionClass = new core_kernel_classes_Class(CLASS_ACL_ACTION);
 
         list($prefix, $extensionName, $moduleName) = explode('_', substr($module->getUri(), strrpos($module->getUri(), '#')));
@@ -156,7 +156,7 @@ class funcAcl_helpers_Model
         	PROPERTY_ACL_ACTION_MEMBEROF	=> $module,
         	PROPERTY_ACL_ACTION_ID			=> $action
         ));
-        // section 127-0-1-1--1875a6a1:137e65726c7:-8000:0000000000003B1F end
+        
 
         return $returnValue;
     }
@@ -182,14 +182,14 @@ class funcAcl_helpers_Model
     {
         $returnValue = array();
 
-        // section 127-0-1-1--1ccb663f:138d70cdc8b:-8000:0000000000003B59 begin
+        
         $moduleClass = new core_kernel_classes_Class(CLASS_ACL_MODULE);
 		$returnValue = $moduleClass->searchInstances(array(
 			PROPERTY_ACL_MODULE_EXTENSION	=> self::getAclExtension($extensionID)
 		), array( 
 			'like'	=> false
 		));
-        // section 127-0-1-1--1ccb663f:138d70cdc8b:-8000:0000000000003B59 end
+        
 
         return (array) $returnValue;
     }
@@ -206,10 +206,10 @@ class funcAcl_helpers_Model
     {
         $returnValue = array();
 
-        // section 127-0-1-1--1ccb663f:138d70cdc8b:-8000:0000000000003B5C begin
+        
         $moduleClass = new core_kernel_classes_Class(CLASS_ACL_ACTION);
 		$returnValue = $moduleClass->searchInstances(array(PROPERTY_ACL_ACTION_MEMBEROF => $module));
-        // section 127-0-1-1--1ccb663f:138d70cdc8b:-8000:0000000000003B5C end
+        
 
         return (array) $returnValue;
     }

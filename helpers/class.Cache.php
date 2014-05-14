@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -68,11 +68,11 @@ class funcAcl_helpers_Cache
      */
     public static function cacheExtension( common_ext_Extension $extension)
     {
-        // section 10-13-1-85--1d76564e:13ca4d5068d:-8000:0000000000003C64 begin
+        
         foreach (funcAcl_helpers_Model::getModules($extension->getId()) as $module){
         	self::cacheModule($module);
         }
-        // section 10-13-1-85--1d76564e:13ca4d5068d:-8000:0000000000003C64 end
+        
     }
 
     /**
@@ -85,7 +85,7 @@ class funcAcl_helpers_Cache
      */
     public static function cacheModule( core_kernel_classes_Resource $module)
     {
-        // section 10-13-1-85--1d76564e:13ca4d5068d:-8000:0000000000003C67 begin
+        
         $serial = self::buildModuleSerial($module);
         $roleClass = new core_kernel_classes_Class(CLASS_ROLE);
         $grantedModulesProperty = new core_kernel_classes_Property(PROPERTY_ACL_MODULE_GRANTACCESS);
@@ -130,7 +130,7 @@ class funcAcl_helpers_Cache
         }
         
         self::getCacheImplementation()->put($toCache, $serial);
-        // section 10-13-1-85--1d76564e:13ca4d5068d:-8000:0000000000003C67 end
+        
     }
 
     /**
@@ -145,7 +145,7 @@ class funcAcl_helpers_Cache
     {
         $returnValue = array();
 
-        // section 10-13-1-85--1d76564e:13ca4d5068d:-8000:0000000000003C6D begin
+        
         try{
         	$returnValue = self::getCacheImplementation()->get(self::buildModuleSerial($module));
         }
@@ -153,7 +153,7 @@ class funcAcl_helpers_Cache
         	$msg = "Module cache for ACL not found.";
         	throw new common_cache_Exception($msg);
         }
-        // section 10-13-1-85--1d76564e:13ca4d5068d:-8000:0000000000003C6D end
+        
 
         return (array) $returnValue;
     }
@@ -206,7 +206,7 @@ class funcAcl_helpers_Cache
      */
     public static function flush()
     {
-        // section 10-13-1-85--1d76564e:13ca4d5068d:-8000:0000000000003C70 begin
+        
         self::flushExtensionCache();
     	$cacheDir = GENERIS_CACHE_PATH;
         $matching = self::SERIAL_PREFIX_MODULE;
@@ -229,7 +229,7 @@ class funcAcl_helpers_Cache
         	$msg = 'The ACL Cache is not readable or is not a directory.';
         	throw new funcAcl_helpers_CacheException($msg);
         }
-        // section 10-13-1-85--1d76564e:13ca4d5068d:-8000:0000000000003C70 end
+        
     }
 
     /**
@@ -244,11 +244,11 @@ class funcAcl_helpers_Cache
     {
         $returnValue = (string) '';
 
-        // section 10-13-1-85--1d76564e:13ca4d5068d:-8000:0000000000003C72 begin
+        
         $uri = explode('#', $module->getUri());
 		list($type, $extId) = explode('_', $uri[1]);
         $returnValue = self::SERIAL_PREFIX_MODULE . $extId . urlencode($module->getUri());
-        // section 10-13-1-85--1d76564e:13ca4d5068d:-8000:0000000000003C72 end
+        
 
         return (string) $returnValue;
     }
@@ -263,9 +263,9 @@ class funcAcl_helpers_Cache
      */
     public static function removeModule( core_kernel_classes_Resource $module)
     {
-        // section 10-13-1-85--1d76564e:13ca4d5068d:-8000:0000000000003C7C begin
+        
         self::getCacheImplementation()->remove(self::buildModuleSerial($module));
-        // section 10-13-1-85--1d76564e:13ca4d5068d:-8000:0000000000003C7C end
+        
     }
 
 } /* end of class funcAcl_helpers_Cache */

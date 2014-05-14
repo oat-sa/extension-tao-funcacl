@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -49,7 +49,7 @@ class funcAcl_models_classes_ExtensionAccessService
      */
     public function add($roleUri, $accessUri)
     {
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:0000000000003A1E begin
+        
 		$uri = explode('#', $accessUri);
 		list($type, $extId) = explode('_', $uri[1]);
 		
@@ -64,7 +64,7 @@ class funcAcl_models_classes_ExtensionAccessService
 
 		$role->setPropertyValue(new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS), $accessUri);
 		funcAcl_helpers_Cache::flushExtensionCache();
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:0000000000003A1E end
+        
     }
 
     /**
@@ -78,7 +78,7 @@ class funcAcl_models_classes_ExtensionAccessService
      */
     public function remove($roleUri, $accessUri)
     {
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:0000000000003A22 begin
+        
 		$uri = explode('#', $accessUri);
 		list($type, $extId) = explode('_', $uri[1]);
 		
@@ -103,7 +103,7 @@ class funcAcl_models_classes_ExtensionAccessService
 			}
 		}
 		funcAcl_helpers_Cache::flushExtensionCache();
-		// section 127-0-1-1--43b2a85f:1372be1e0be:-8000:0000000000003A22 end
+		
     }
 
 } /* end of class funcAcl_models_classes_ExtensionAccessService */

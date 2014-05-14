@@ -1,5 +1,5 @@
 <?php
-/*  
+/**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -49,7 +49,7 @@ class funcAcl_models_classes_ModuleAccessService
      */
     public function add($roleUri, $accessUri)
     {
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:0000000000003A31 begin
+        
 		$module = new core_kernel_classes_Resource($accessUri);
 		$role = new core_kernel_classes_Resource($roleUri);
 		$moduleAccessProperty = new core_kernel_classes_Property(PROPERTY_ACL_MODULE_GRANTACCESS);
@@ -61,7 +61,7 @@ class funcAcl_models_classes_ModuleAccessService
 		$role->setPropertyValue($moduleAccessProperty, $module->getUri());
 		
 		funcAcl_helpers_Cache::cacheModule($module);
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:0000000000003A31 end
+        
     }
 
     /**
@@ -75,7 +75,7 @@ class funcAcl_models_classes_ModuleAccessService
      */
     public function remove($roleUri, $accessUri)
     {
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:0000000000003A35 begin
+        
 		$module = new core_kernel_classes_Resource($accessUri);
 		$role = new core_kernel_classes_Class($roleUri);
 		$moduleAccessProperty = new core_kernel_classes_Property(PROPERTY_ACL_MODULE_GRANTACCESS);
@@ -104,7 +104,7 @@ class funcAcl_models_classes_ModuleAccessService
 		}
 		
 		funcAcl_helpers_Cache::cacheModule($module);
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:0000000000003A35 end
+        
     }
 
     /**
@@ -118,7 +118,7 @@ class funcAcl_models_classes_ModuleAccessService
      */
     public function actionsToModuleAccess($roleUri, $accessUri)
     {
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:0000000000003A39 begin
+        
 		$uri = explode('#', $accessUri);
 		list($type, $ext, $mod) = explode('_', $uri[1]);
 		$module = new core_kernel_classes_Resource($accessUri);
@@ -131,7 +131,7 @@ class funcAcl_models_classes_ModuleAccessService
 		
 		$module = new core_kernel_classes_Resource($this->makeEMAUri($ext, $mod));
 		funcAcl_helpers_Cache::cacheModule($module);
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:0000000000003A39 end
+        
     }
 
 } /* end of class funcAcl_models_classes_ModuleAccessService */

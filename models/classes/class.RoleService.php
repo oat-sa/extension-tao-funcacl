@@ -50,12 +50,12 @@ class funcAcl_models_classes_RoleService
     {
         $returnValue = (string) '';
 
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:00000000000039F1 begin
+        
 		$roleService = tao_models_classes_RoleService::singleton();
 		$role = $roleService->addRole($name);
 		
 		$returnValue = $role->getUri();
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:00000000000039F1 end
+        
 
         return (string) $returnValue;
     }
@@ -71,10 +71,10 @@ class funcAcl_models_classes_RoleService
      */
     public function edit($uri, $name)
     {
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:00000000000039F4 begin
+        
 		$instance = new core_kernel_classes_Resource($uri);
 		$instance->setLabel($name);
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:00000000000039F4 end
+        
     }
 
     /**
@@ -87,10 +87,10 @@ class funcAcl_models_classes_RoleService
      */
     public function remove($uri)
     {
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:00000000000039F8 begin
+        
 		$instance = new core_kernel_classes_Resource($uri);
 		$instance->delete();
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:00000000000039F8 end
+        
     }
 
     /**
@@ -104,10 +104,10 @@ class funcAcl_models_classes_RoleService
      */
     public function attachUser($userUri, $roleUri)
     {
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:0000000000003A01 begin
+        
 		$userRes = new core_kernel_classes_Resource($userUri);
 		$userRes->setPropertyValue(new core_kernel_classes_Property(PROPERTY_USER_ROLES), $roleUri);
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:0000000000003A01 end
+        
     }
 
     /**
@@ -121,13 +121,13 @@ class funcAcl_models_classes_RoleService
      */
     public function unattachUser($userUri, $roleUri)
     {
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:0000000000003A04 begin
+        
 		$userService = tao_models_classes_UserService::singleton();
 		$user = new core_kernel_classes_Resource($userUri);
 		$role = new core_kernel_classes_Resource($roleUri);
 		
 		$userService->unnatachRole($user, $role);
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:0000000000003A04 end
+        
     }
 
     /**
@@ -142,7 +142,7 @@ class funcAcl_models_classes_RoleService
     {
         $returnValue = array();
 
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:0000000000003A07 begin
+        
 		$userRes = new core_kernel_classes_Resource($userUri);
 
 		$rolesc = new core_kernel_classes_Class(CLASS_ROLE);
@@ -157,7 +157,7 @@ class funcAcl_models_classes_RoleService
 				$returnValue[] = $nrole;
 			}
 		}
-        // section 127-0-1-1--43b2a85f:1372be1e0be:-8000:0000000000003A07 end
+        
 
         return (array) $returnValue;
     }

@@ -62,7 +62,7 @@ class funcAcl_helpers_funcACL
     {
         $returnValue = (bool) false;
 
-        // section 127-0-1-1--b28769d:135f11069cc:-8000:000000000000385B begin
+        
 		if (empty($extension) || empty($module) || empty($action)) {
 			$context = Context::getInstance();
 			if (empty($extension)) {
@@ -122,7 +122,7 @@ class funcAcl_helpers_funcACL
 			common_Logger::i('Access denied to '.$extension.'::'.$module.'::'.$action.' for user \''
 			                 .core_kernel_classes_Session::singleton()->getUserUri().'\'');
 		}
-        // section 127-0-1-1--b28769d:135f11069cc:-8000:000000000000385B end
+        
 
         return (bool) $returnValue;
     }
@@ -139,7 +139,7 @@ class funcAcl_helpers_funcACL
     {
         $returnValue = array();
 
-        // section 127-0-1-1--299b9343:13616996224:-8000:000000000000389B begin
+        
 		if (is_null(self::$rolesByActions)) {
 			try {
 				self::$rolesByActions = common_cache_FileCache::singleton()->get('RolesByActions');
@@ -150,7 +150,7 @@ class funcAcl_helpers_funcACL
 			}
 		}
 		$returnValue = self::$rolesByActions;
-        // section 127-0-1-1--299b9343:13616996224:-8000:000000000000389B end
+        
 
         return (array) $returnValue;
     }
@@ -165,7 +165,7 @@ class funcAcl_helpers_funcACL
      */
     public static function buildRolesByActions()
     {
-        // section 127-0-1-1--299b9343:13616996224:-8000:000000000000389D begin
+        
 		$reverse_access = array();
 		// alternate:
 
@@ -236,7 +236,7 @@ class funcAcl_helpers_funcACL
 
 		common_cache_FileCache::singleton()->put($reverse_access, 'RolesByActions');
 		return $reverse_access;
-        // section 127-0-1-1--299b9343:13616996224:-8000:000000000000389D end
+        
     }
 
     /**
@@ -249,10 +249,10 @@ class funcAcl_helpers_funcACL
      */
     public static function removeRolesByActions()
     {
-        // section 127-0-1-1-5382e8cb:136ab734ff6:-8000:0000000000003908 begin
+        
 			common_cache_FileCache::singleton()->remove('RolesByActions');
 			self::$rolesByActions = null;
-        // section 127-0-1-1-5382e8cb:136ab734ff6:-8000:0000000000003908 end
+        
     }
 
     /**
@@ -267,7 +267,7 @@ class funcAcl_helpers_funcACL
     {
         $returnValue = array();
 
-        // section 127-0-1-1--1ccb663f:138d70cdc8b:-8000:0000000000003B65 begin
+        
 	    // @todo: don't use uri
         $uri = explode('#', $action->getUri());
 		$uri = explode('_', $uri[1], 4);
@@ -280,7 +280,7 @@ class funcAcl_helpers_funcACL
 				$returnValue[] = new core_kernel_classes_Resource($role);
 			}
 		}
-        // section 127-0-1-1--1ccb663f:138d70cdc8b:-8000:0000000000003B65 end
+        
 
         return (array) $returnValue;
     }
@@ -297,7 +297,7 @@ class funcAcl_helpers_funcACL
     {
         $returnValue = array();
 
-        // section 127-0-1-1--1ccb663f:138d70cdc8b:-8000:0000000000003B68 begin
+        
         // @todo: don't use uri
         $uri = explode('#', $module->getUri());
 		$uri = explode('_', $uri[1]);
@@ -309,7 +309,7 @@ class funcAcl_helpers_funcACL
 				$returnValue[] = new core_kernel_classes_Resource($role);
 			}
 		}
-        // section 127-0-1-1--1ccb663f:138d70cdc8b:-8000:0000000000003B68 end
+        
 
         return (array) $returnValue;
     }
@@ -332,7 +332,7 @@ class funcAcl_helpers_funcACL
     {
         $returnValue = array();
 
-        // section 127-0-1-1--37da3151:13cfce0f4f3:-8000:0000000000003C93 begin
+        
         try{
         	$returnValue = funcAcl_helpers_Cache::retrieveModule($module);
         }
@@ -342,7 +342,7 @@ class funcAcl_helpers_funcACL
         	funcAcl_helpers_Cache::cacheModule($module);
         	$returnValue = funcAcl_helpers_Cache::retrieveModule($module);
         }
-        // section 127-0-1-1--37da3151:13cfce0f4f3:-8000:0000000000003C93 end
+        
 
         return (array) $returnValue;
     }
