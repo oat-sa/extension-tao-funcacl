@@ -152,7 +152,9 @@ class funcAcl_models_classes_RoleService
 				$nrole = array('id' => tao_helpers_Uri::encode($id), 'label' => $r->getLabel(), 'selected' => false);
 				//Selected
 				foreach ($userRoles as $uri => $t) {
-					if ($uri == $id) $nrole['selected'] = true;
+					if ($uri == $id) {
+					    $nrole['selected'] = true;
+					}
 				}
 				$returnValue[] = $nrole;
 			}
