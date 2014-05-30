@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    @sourceLanguage EN
+    @sourceLanguage en-US
     @targetLanguage en-US
 -->
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xml:base="http://www.tao.lu/Ontologies/taoFuncACL.rdf#">
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/taoFuncACL.rdf#ControlComponent">
     <!--
-    @sourceLanguage EN
+    @sourceLanguage en-US
     @targetLanguage en-US
     @source Control component
     @subject http://www.tao.lu/Ontologies/taoFuncACL.rdf#ControlComponent
@@ -14,7 +14,7 @@
     -->
     <rdfs:label xml:lang="en-US"><![CDATA[Control component]]></rdfs:label>
     <!--
-    @sourceLanguage EN
+    @sourceLanguage en-US
     @targetLanguage en-US
     @source Either an extension, module or action
     @subject http://www.tao.lu/Ontologies/taoFuncACL.rdf#ControlComponent
@@ -24,7 +24,7 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/taoFuncACL.rdf#Extension">
     <!--
-    @sourceLanguage EN
+    @sourceLanguage en-US
     @targetLanguage en-US
     @source An extension
     @subject http://www.tao.lu/Ontologies/taoFuncACL.rdf#Extension
@@ -32,7 +32,7 @@
     -->
     <rdfs:label xml:lang="en-US"><![CDATA[An extension]]></rdfs:label>
     <!--
-    @sourceLanguage EN
+    @sourceLanguage en-US
     @targetLanguage en-US
     @source A tao extension
     @subject http://www.tao.lu/Ontologies/taoFuncACL.rdf#Extension
@@ -42,7 +42,7 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/taoFuncACL.rdf#Module">
     <!--
-    @sourceLanguage EN
+    @sourceLanguage en-US
     @targetLanguage en-US
     @source A module
     @subject http://www.tao.lu/Ontologies/taoFuncACL.rdf#Module
@@ -50,7 +50,7 @@
     -->
     <rdfs:label xml:lang="en-US"><![CDATA[A module]]></rdfs:label>
     <!--
-    @sourceLanguage EN
+    @sourceLanguage en-US
     @targetLanguage en-US
     @source A MVC Controller Module
     @subject http://www.tao.lu/Ontologies/taoFuncACL.rdf#Module
@@ -60,7 +60,7 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/taoFuncACL.rdf#Action">
     <!--
-    @sourceLanguage EN
+    @sourceLanguage en-US
     @targetLanguage en-US
     @source An action
     @subject http://www.tao.lu/Ontologies/taoFuncACL.rdf#Action
@@ -68,7 +68,7 @@
     -->
     <rdfs:label xml:lang="en-US"><![CDATA[An action]]></rdfs:label>
     <!--
-    @sourceLanguage EN
+    @sourceLanguage en-US
     @targetLanguage en-US
     @source A MVC Controller Action
     @subject http://www.tao.lu/Ontologies/taoFuncACL.rdf#Action
@@ -78,7 +78,7 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/taoFuncACL.rdf#Identifier">
     <!--
-    @sourceLanguage EN
+    @sourceLanguage en-US
     @targetLanguage en-US
     @source Identifier
     @subject http://www.tao.lu/Ontologies/taoFuncACL.rdf#Identifier
@@ -86,7 +86,7 @@
     -->
     <rdfs:label xml:lang="en-US"><![CDATA[Identifier]]></rdfs:label>
     <!--
-    @sourceLanguage EN
+    @sourceLanguage en-US
     @targetLanguage en-US
     @source Identifier
     @subject http://www.tao.lu/Ontologies/taoFuncACL.rdf#Identifier
@@ -96,7 +96,7 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/taoFuncACL.rdf#GrantAccess">
     <!--
-    @sourceLanguage EN
+    @sourceLanguage en-US
     @targetLanguage en-US
     @source Grant access to a control component
     @subject http://www.tao.lu/Ontologies/taoFuncACL.rdf#GrantAccess
@@ -104,7 +104,7 @@
     -->
     <rdfs:label xml:lang="en-US"><![CDATA[Grant access to a control component]]></rdfs:label>
     <!--
-    @sourceLanguage EN
+    @sourceLanguage en-US
     @targetLanguage en-US
     @source Grant access to a control component
     @subject http://www.tao.lu/Ontologies/taoFuncACL.rdf#GrantAccess
@@ -114,7 +114,7 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/taoFuncACL.rdf#grantAccessAction">
     <!--
-    @sourceLanguage EN
+    @sourceLanguage en-US
     @targetLanguage en-US
     @source Give access to an action
     @subject http://www.tao.lu/Ontologies/taoFuncACL.rdf#grantAccessAction
@@ -122,7 +122,7 @@
     -->
     <rdfs:label xml:lang="en-US"><![CDATA[Give access to an action]]></rdfs:label>
     <!--
-    @sourceLanguage EN
+    @sourceLanguage en-US
     @targetLanguage en-US
     @source Give access to an action
     @subject http://www.tao.lu/Ontologies/taoFuncACL.rdf#grantAccessAction
@@ -132,7 +132,7 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/taoFuncACL.rdf#grantAccessModule">
     <!--
-    @sourceLanguage EN
+    @sourceLanguage en-US
     @targetLanguage en-US
     @source Give access to a module
     @subject http://www.tao.lu/Ontologies/taoFuncACL.rdf#grantAccessModule
@@ -140,7 +140,7 @@
     -->
     <rdfs:label xml:lang="en-US"><![CDATA[Give access to a module]]></rdfs:label>
     <!--
-    @sourceLanguage EN
+    @sourceLanguage en-US
     @targetLanguage en-US
     @source Give access to a module
     @subject http://www.tao.lu/Ontologies/taoFuncACL.rdf#grantAccessModule
@@ -150,7 +150,7 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/taoFuncACL.rdf#actionIdentifier">
     <!--
-    @sourceLanguage EN
+    @sourceLanguage en-US
     @targetLanguage en-US
     @source Identifier
     @subject http://www.tao.lu/Ontologies/taoFuncACL.rdf#actionIdentifier
@@ -158,7 +158,7 @@
     -->
     <rdfs:label xml:lang="en-US"><![CDATA[Identifier]]></rdfs:label>
     <!--
-    @sourceLanguage EN
+    @sourceLanguage en-US
     @targetLanguage en-US
     @source Identifier of the action
     @subject http://www.tao.lu/Ontologies/taoFuncACL.rdf#actionIdentifier
@@ -168,7 +168,7 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/taoFuncACL.rdf#actionMemberOf">
     <!--
-    @sourceLanguage EN
+    @sourceLanguage en-US
     @targetLanguage en-US
     @source Member of
     @subject http://www.tao.lu/Ontologies/taoFuncACL.rdf#actionMemberOf
@@ -176,7 +176,7 @@
     -->
     <rdfs:label xml:lang="en-US"><![CDATA[Member of]]></rdfs:label>
     <!--
-    @sourceLanguage EN
+    @sourceLanguage en-US
     @targetLanguage en-US
     @source Member of a module
     @subject http://www.tao.lu/Ontologies/taoFuncACL.rdf#actionMemberOf
@@ -186,7 +186,7 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/taoFuncACL.rdf#moduleIdentifier">
     <!--
-    @sourceLanguage EN
+    @sourceLanguage en-US
     @targetLanguage en-US
     @source Identifier
     @subject http://www.tao.lu/Ontologies/taoFuncACL.rdf#moduleIdentifier
@@ -194,7 +194,7 @@
     -->
     <rdfs:label xml:lang="en-US"><![CDATA[Identifier]]></rdfs:label>
     <!--
-    @sourceLanguage EN
+    @sourceLanguage en-US
     @targetLanguage en-US
     @source Identifier of the module
     @subject http://www.tao.lu/Ontologies/taoFuncACL.rdf#moduleIdentifier
@@ -204,7 +204,7 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://www.tao.lu/Ontologies/taoFuncACL.rdf#moduleExtension">
     <!--
-    @sourceLanguage EN
+    @sourceLanguage en-US
     @targetLanguage en-US
     @source Extension
     @subject http://www.tao.lu/Ontologies/taoFuncACL.rdf#moduleExtension
@@ -212,12 +212,30 @@
     -->
     <rdfs:label xml:lang="en-US"><![CDATA[Extension]]></rdfs:label>
     <!--
-    @sourceLanguage EN
+    @sourceLanguage en-US
     @targetLanguage en-US
     @source Extension of the module
     @subject http://www.tao.lu/Ontologies/taoFuncACL.rdf#moduleExtension
     @predicate http://www.w3.org/2000/01/rdf-schema#comment
     -->
     <rdfs:comment xml:lang="en-US"><![CDATA[Extension of the module]]></rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.tao.lu/Ontologies/taoFuncACL.rdf#FuncAclManagerRole">
+    <!--
+    @sourceLanguage en-US
+    @targetLanguage en-US
+    @source Function ACL Manager
+    @subject http://www.tao.lu/Ontologies/taoFuncACL.rdf#FuncAclManagerRole
+    @predicate http://www.w3.org/2000/01/rdf-schema#label
+    -->
+    <rdfs:label xml:lang="en-US"><![CDATA[Function ACL Manager]]></rdfs:label>
+    <!--
+    @sourceLanguage en-US
+    @targetLanguage en-US
+    @source The functionality based access controll layer Manager Role
+    @subject http://www.tao.lu/Ontologies/taoFuncACL.rdf#FuncAclManagerRole
+    @predicate http://www.w3.org/2000/01/rdf-schema#comment
+    -->
+    <rdfs:comment xml:lang="en-US"><![CDATA[The functionality based access controll layer Manager Role]]></rdfs:comment>
   </rdf:Description>
 </rdf:RDF>
