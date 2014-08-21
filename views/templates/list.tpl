@@ -1,4 +1,6 @@
-<link rel="stylesheet" type="text/css" href="<?=BASE_WWW?>css/acl.css" />
+<?php
+use oat\tao\helpers\Template;
+?><link rel="stylesheet" type="text/css" href="<?= Template::css('acl.css')?>" />
 
 <div class="main-container">
 	<div class="aclContainer">
