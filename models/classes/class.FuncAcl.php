@@ -18,30 +18,33 @@
  * 
  */
 
+use oat\tao\model\accessControl\func\FuncAccessControl;
+use oat\tao\model\accessControl\func\AccessRule;
+
 /**
  * Proxy for the Acl Implementation
  *
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
  * @package tao
- 
  */
 class funcAcl_models_classes_FuncAcl
-    implements tao_models_classes_accessControl_AccessControl
+    implements FuncAccessControl
 {
     public function __construct() {
         common_ext_ExtensionsManager::singleton()->getExtensionById('funcAcl');
     }
     
-    /**
-     * (non-PHPdoc)
-     * @see tao_models_classes_accessControl_AccessControl::hasAccess()
-     */
-    public function hasAccess($action, $controller, $extension, $parameters =array()) {
-        return funcAcl_helpers_funcACL::hasAccess($action, $controller, $extension);
+    public function accessPossible($user, $controller, $action) {
+        $extension = self::findExtensionId($controller);
+        $shortName = strpos($controller, '\\') !== false
+            ? substr($controller, strrpos($controller, '\\')+1)
+            : substr($controller, strrpos($controller, '_')+1)
+        ;
+        return funcAcl_helpers_funcACL::hasAccess($action, $shortName, $extension);
     }
     
-    public function applyRule(tao_models_classes_accessControl_AccessRule $rule) {
+    public function applyRule(AccessRule $rule) {
         $filter = $rule->getMask();
         if ($rule->isGrant()) {
             $accessService = funcAcl_models_classes_AccessService::singleton();
@@ -67,7 +70,7 @@ class funcAcl_models_classes_FuncAcl
         }
     }
     
-    public function revokeRule(tao_models_classes_accessControl_AccessRule $rule) {
+    public function revokeRule(AccessRule $rule) {
         if ($rule->isGrant()) {
             $accessService = funcAcl_models_classes_AccessService::singleton();
             $filter = $rule->getMask();
@@ -82,6 +85,26 @@ class funcAcl_models_classes_FuncAcl
             }
         } else {
             common_Logger::w('Only grant rules accepted in '.__CLASS__);
+        }
+    }
+    
+    private function findExtensionId($controllerClass) {
+        if (strpos($controllerClass, '\\') === false) {
+            $parts = explode('_', $controllerClass);
+            if (count($parts) == 3) {
+                return $parts[0];
+            } else {
+                throw common_exception_Error('Unknown controller '.$controllerClass);
+            }
+        } else {
+            foreach (common_ext_ExtensionsManager::singleton()->getEnabledExtensions() as $ext) {
+                foreach ($ext->getManifest()->getRoutes() as $routePrefix => $namespace) {
+                    if (is_string($namespace) && substr($controllerClass, 0, strlen($namespace)) == $namespace) {
+                        return $ext->getId();
+                    }
+                }
+            }
+            throw new common_exception_Error('Unknown controller '.$controllerClass);
         }
     }
 }
