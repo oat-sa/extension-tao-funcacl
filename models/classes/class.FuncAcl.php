@@ -31,10 +31,17 @@ use oat\tao\model\accessControl\func\AccessRule;
 class funcAcl_models_classes_FuncAcl
     implements FuncAccessControl
 {
+    /**
+     * Ensrue constants are loaded
+     */
     public function __construct() {
         common_ext_ExtensionsManager::singleton()->getExtensionById('funcAcl');
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see \oat\tao\model\accessControl\func\FuncAccessControl::accessPossible()
+     */
     public function accessPossible($user, $controller, $action) {
         $extension = self::findExtensionId($controller);
         $shortName = strpos($controller, '\\') !== false
@@ -42,6 +49,20 @@ class funcAcl_models_classes_FuncAcl
             : substr($controller, strrpos($controller, '_')+1)
         ;
         return funcAcl_helpers_funcACL::hasAccess($action, $shortName, $extension);
+    }
+    
+    /**
+     * Compatibility class for old implementation
+     * 
+     * @param string $extension
+     * @param string $controller
+     * @param string $action
+     * @param array $parameters
+     * @return boolean
+     * @deprecated
+     */
+    public function hasAccess($extension, $controller, $action, $parameters = array()) {
+        return funcAcl_helpers_funcACL::hasAccess($extension, $controller, $action);
     }
     
     public function applyRule(AccessRule $rule) {
