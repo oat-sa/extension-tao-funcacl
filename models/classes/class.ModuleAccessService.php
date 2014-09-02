@@ -52,7 +52,7 @@ class funcAcl_models_classes_ModuleAccessService
         
 		$module = new core_kernel_classes_Resource($accessUri);
 		$role = new core_kernel_classes_Resource($roleUri);
-		$moduleAccessProperty = new core_kernel_classes_Property(PROPERTY_ACL_MODULE_GRANTACCESS);
+		$moduleAccessProperty = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
 		
 		// Clean role about this module.
 		$this->remove($role->getUri(), $module->getUri());
@@ -75,32 +75,20 @@ class funcAcl_models_classes_ModuleAccessService
      */
     public function remove($roleUri, $accessUri)
     {
-        
-		$module = new core_kernel_classes_Resource($accessUri);
+        $module = new core_kernel_classes_Resource($accessUri);
 		$role = new core_kernel_classes_Class($roleUri);
-		$moduleAccessProperty = new core_kernel_classes_Property(PROPERTY_ACL_MODULE_GRANTACCESS);
-		$actionAccessProperty = new core_kernel_classes_Property(PROPERTY_ACL_ACTION_GRANTACCESS);
+		$accessProperty = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
 		
 		// Retrieve the module ID.
 		$uri = explode('#', $module->getUri());
 		list($type, $extId, $modId) = explode('_', $uri[1]);
 		
 		// Remove the access to the module for this role.
-		$role->removePropertyValues($moduleAccessProperty, array('pattern' => $module->getUri()));
+		$role->removePropertyValue($accessProperty, $module->getUri());
 		
 		// Remove the access to the actions corresponding to the module for this role.
-		$actionAccessService = funcAcl_models_classes_ActionAccessService::singleton();
-		$grantedActions = $role->getPropertyValues($actionAccessProperty);
-		
-		foreach ($grantedActions as $gA){
-			$gA = new core_kernel_classes_Resource($gA);
-			
-			$uri = explode('#', $gA->getUri());
-			list($type, $ext, $mod) = explode('_', $uri[1]);
-			
-			if ($modId == $mod){
-				$actionAccessService->remove($role->getUri(), $gA->getUri());
-			}
+		foreach (funcAcl_helpers_Model::getActions($module) as $actionResource) {
+		    funcAcl_models_classes_ActionAccessService::singleton()->remove($role->getUri(), $actionResource->getUri());
 		}
 		
 		funcAcl_helpers_Cache::cacheModule($module);
@@ -123,8 +111,8 @@ class funcAcl_models_classes_ModuleAccessService
 		list($type, $ext, $mod) = explode('_', $uri[1]);
 		$module = new core_kernel_classes_Resource($accessUri);
 		$roler = new core_kernel_classes_Class($roleUri);
-		$propa = new core_kernel_classes_Property(PROPERTY_ACL_ACTION_GRANTACCESS);
-		$roler->setPropertyValue(new core_kernel_classes_Property(PROPERTY_ACL_MODULE_GRANTACCESS), $this->makeEMAUri($ext, $mod));
+		$propa = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
+		$roler->setPropertyValue(new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS), $this->makeEMAUri($ext, $mod));
 		foreach (funcAcl_helpers_Model::getActions($module) as $action) {
 			$roler->removePropertyValues($propa, array('pattern' => $this->makeEMAUri($ext, $mod, $action->getLabel())));
 		}

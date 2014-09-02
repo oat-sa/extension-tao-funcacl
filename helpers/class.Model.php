@@ -96,7 +96,7 @@ class funcAcl_helpers_Model
         } else {
 	        $returnValue = $moduleClass->createInstance($name,'',$specialURI);
 	        $returnValue->setPropertiesValues(array(
-	        	PROPERTY_ACL_EXTENSION_ID			=> $name
+	        	PROPERTY_ACL_COMPONENT_ID			=> $name
 	        ));
         }
         
@@ -125,7 +125,7 @@ class funcAcl_helpers_Model
         $returnValue = $moduleClass->createInstance($name,'',$specialURI);
          $returnValue->setPropertiesValues(array(
         	PROPERTY_ACL_MODULE_EXTENSION	=> $extension,
-        	PROPERTY_ACL_MODULE_ID			=> $name
+        	PROPERTY_ACL_COMPONENT_ID			=> $name
         ));
         
 
@@ -154,7 +154,7 @@ class funcAcl_helpers_Model
         $returnValue = $actionClass->createInstance($action,'',$specialURI);
         $returnValue->setPropertiesValues(array(
         	PROPERTY_ACL_ACTION_MEMBEROF	=> $module,
-        	PROPERTY_ACL_ACTION_ID			=> $action
+        	PROPERTY_ACL_COMPONENT_ID			=> $action
         ));
         
 

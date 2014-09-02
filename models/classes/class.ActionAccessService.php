@@ -56,15 +56,15 @@ class funcAcl_models_classes_ActionAccessService
 		
 		$role = new core_kernel_classes_Resource($roleUri);
 		$module = new core_kernel_classes_Resource($this->makeEMAUri($ext, $mod));
-		$actionAccessProperty = new core_kernel_classes_Property(PROPERTY_ACL_ACTION_GRANTACCESS);
-		$moduleAccessProperty = new core_kernel_classes_Property(PROPERTY_ACL_MODULE_GRANTACCESS);
+		$actionAccessProperty = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
+		$moduleAccessProperty = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
 		
 		// clean access.
 		$this->remove($role->getUri(), $accessUri);
 		
 		// give access.
 		$role->setPropertyValue($actionAccessProperty, $accessUri);
-		
+
 		// Remove global access to the entire module if granted.
 		$grantedModules = $role->getPropertyValues($moduleAccessProperty);
 
@@ -93,7 +93,7 @@ class funcAcl_models_classes_ActionAccessService
 		
 		$role = new core_kernel_classes_Class($roleUri);
 		$module = new core_kernel_classes_Resource($this->makeEMAUri($ext, $mod));
-		$actionAccessProperty = new core_kernel_classes_Property(PROPERTY_ACL_ACTION_GRANTACCESS);
+		$actionAccessProperty = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
 		
 		$role->removePropertyValues($actionAccessProperty, array('pattern' => $accessUri));
 		
@@ -117,8 +117,8 @@ class funcAcl_models_classes_ActionAccessService
 		list($type, $ext, $mod, $act) = explode('_', $uri[1]);
 		$module = new core_kernel_classes_Resource($this->makeEMAUri($ext, $mod));
 		$roler = new core_kernel_classes_Class($roleUri);
-		$propa = new core_kernel_classes_Property(PROPERTY_ACL_ACTION_GRANTACCESS);
-		$roler->removePropertyValues(new core_kernel_classes_Property(PROPERTY_ACL_MODULE_GRANTACCESS), array('pattern' => $this->makeEMAUri($ext, $mod)));
+		$propa = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
+		$roler->removePropertyValues(new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS), array('pattern' => $this->makeEMAUri($ext, $mod)));
 		foreach (funcAcl_helpers_Model::getActions($module) as $action) {
 			if ($act != $action->getLabel()) {
 			    $roler->setPropertyValue($propa, $this->makeEMAUri($ext, $mod, $action->getLabel()));
@@ -146,8 +146,8 @@ class funcAcl_models_classes_ActionAccessService
 		list($type, $ext, $mod) = explode('_', $uri[1]);
 		$module = new core_kernel_classes_Resource($accessUri);
 		$roler = new core_kernel_classes_Class($roleUri);
-		$propa = new core_kernel_classes_Property(PROPERTY_ACL_ACTION_GRANTACCESS);
-		$roler->removePropertyValues(new core_kernel_classes_Property(PROPERTY_ACL_MODULE_GRANTACCESS), array('pattern' => $this->makeEMAUri($ext, $mod)));
+		$propa = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
+		$roler->removePropertyValues(new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS), array('pattern' => $this->makeEMAUri($ext, $mod)));
 		foreach (funcAcl_helpers_Model::getActions($module) as $action) {
 			$roler->setPropertyValue($propa, $this->makeEMAUri($ext, $mod, $action->getLabel()));
 		}

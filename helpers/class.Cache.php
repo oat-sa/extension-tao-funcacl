@@ -88,47 +88,34 @@ class funcAcl_helpers_Cache
         
         $serial = self::buildModuleSerial($module);
         $roleClass = new core_kernel_classes_Class(CLASS_ROLE);
-        $grantedModulesProperty = new core_kernel_classes_Property(PROPERTY_ACL_MODULE_GRANTACCESS);
-        $grantedActionsProperty = new core_kernel_classes_Property(PROPERTY_ACL_ACTION_GRANTACCESS);
-        $actionIdentifierProperty = new core_kernel_classes_Property(PROPERTY_ACL_ACTION_ID);
+        $accessProperty = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
+        $actionIdentifierProperty = new core_kernel_classes_Property(PROPERTY_ACL_COMPONENT_ID);
         $memberOfProperty = new core_kernel_classes_Property(PROPERTY_ACL_ACTION_MEMBEROF);
         
         $toCache = array('module' => array(), 'actions' => array());
 
         // retrive roles that grant that module.
-        $filters = array($grantedModulesProperty->getUri() => $module->getUri());
+        $filters = array(
+            $accessProperty->getUri() => $module->getUri()
+        );
         $options = array('recursive' => true, 'like' => false);
         
         foreach ($roleClass->searchInstances($filters, $options) as $grantedRole){
         	$toCache['module'][] = $grantedRole->getUri();
         }
         
-        foreach ($roleClass->getInstances(true) as $role){
-        	$actions = $role->getPropertyValues($grantedActionsProperty);
-        	
-        	foreach ($actions as $grantedAction){
-	        	try {
-					$grantedAction = new core_kernel_classes_Resource($grantedAction);
-					$memberOf = $grantedAction->getUniquePropertyValue($memberOfProperty);
-					
-					if ($memberOf->getUri() == $module->getUri()){
-						
-						$grantedActionUri = $grantedAction->getUri();
-						if (!isset($toCache['actions'][$grantedActionUri])){
-							$toCache['actions'][$grantedActionUri] = array();	
-						}
-						
-						$toCache['actions'][$grantedActionUri][] = $role->getUri();
-					}
-	        	}
-	        	catch (Exception $e){
-	        		$moduleLabel = $module->getLabel();
-	        		$actionLabel = $grantedAction->getLabel();
-	        		common_Logger::w("Action '${moduleLabel}/${actionLabel}' has no 'actionMemberOf' property value.");
-	        	}
-        	}
+        foreach (funcAcl_helpers_Model::getActions($module) as $action) {
+            $rolesForAction = $roleClass->searchInstances(array(
+                $accessProperty->getUri() => $action
+            ), array('recursive' => true, 'like' => false));
+            if (!empty($rolesForAction)) {
+                $toCache['actions'][$action->getUri()] = array();
+                foreach ($rolesForAction as $roleResource) {
+                    $toCache['actions'][$action->getUri()][] = $roleResource->getUri();
+                }
+            }
         }
-        
+
         self::getCacheImplementation()->put($toCache, $serial);
         
     }

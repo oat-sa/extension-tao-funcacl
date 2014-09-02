@@ -174,63 +174,68 @@ class funcAcl_helpers_funcACL
 
 		foreach ($roles->getInstances(true) as $role) {
 			$extensionAccess = $role->getPropertyValues(new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS));
-			$moduleAccess = $role->getPropertyValues(new core_kernel_classes_Property(PROPERTY_ACL_MODULE_GRANTACCESS));
-			$actionAccess = $role->getPropertyValues(new core_kernel_classes_Property(PROPERTY_ACL_ACTION_GRANTACCESS));
+			$grantedAccess = $role->getPropertyValues(new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS));
+			$moduleAccess = $role->getPropertyValues(new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS));
+			$actionAccess = $role->getPropertyValues(new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS));
 			foreach ($extensionAccess as $extensionURI) {
 				if (!isset($reverse_access[$extensionURI])) {
 					$reverse_access[$extensionURI] =  array('modules' => array(), 'roles' => array());
 				}
 				$reverse_access[$extensionURI]['roles'][] = $role->getUri();
 			}
-			foreach ($moduleAccess as $moduleURI) {
-				$moduleRessource = new core_kernel_classes_Resource($moduleURI);
-				$arr = $moduleRessource->getPropertiesValues(array(
-					new core_kernel_classes_Property(PROPERTY_ACL_MODULE_ID),
-					new core_kernel_classes_Property(PROPERTY_ACL_MODULE_EXTENSION)
-				));
-				if (!isset($arr[PROPERTY_ACL_MODULE_ID]) || !isset($arr[PROPERTY_ACL_MODULE_EXTENSION])) {
-					common_Logger::e('Module '.$moduleURI.' not found for role '.$role->getLabel());
-					continue;
-				}
-				$ext = (string)current($arr[PROPERTY_ACL_MODULE_EXTENSION]);
-				$mod = (string)current($arr[PROPERTY_ACL_MODULE_ID]);
-				if (!isset($reverse_access[$ext])) {
-					$reverse_access[$ext] = array('modules' => array(), 'roles' => array());
-				}
-				if (!isset($reverse_access[$ext]['modules'][$mod])) {
-					$reverse_access[$ext]['modules'][$mod] = array('actions' => array(), 'roles' => array());
-				}
-				$reverse_access[$ext]['modules'][$mod]['roles'][] = $role->getUri();
-			}
-			foreach ($actionAccess as $actionURI) {
-				$actionRessource = new core_kernel_classes_Resource($actionURI);
-				$arr = $actionRessource->getPropertiesValues(array(
-					new core_kernel_classes_Property(PROPERTY_ACL_ACTION_ID),
-					new core_kernel_classes_Property(PROPERTY_ACL_ACTION_MEMBEROF)
-				));
-				if (!isset($arr[PROPERTY_ACL_ACTION_ID]) || !isset($arr[PROPERTY_ACL_ACTION_MEMBEROF])) {
-					common_Logger::e('Action '.$actionURI.' not found or incomplete');
-					continue;
-				}
-				$act = (string)current($arr[PROPERTY_ACL_ACTION_ID]);
-				// @todo cache module id/extension
-				$moduleRessource = current($arr[PROPERTY_ACL_ACTION_MEMBEROF]);
-				$arr = $moduleRessource->getPropertiesValues(array(
-					new core_kernel_classes_Property(PROPERTY_ACL_MODULE_ID),
-					new core_kernel_classes_Property(PROPERTY_ACL_MODULE_EXTENSION)
-				));
-				$ext = (string)current($arr[PROPERTY_ACL_MODULE_EXTENSION]);
-				$mod = (string)current($arr[PROPERTY_ACL_MODULE_ID]);
-				if (!isset($reverse_access[$ext])) {
-					$reverse_access[$ext] = array('modules' => array(), 'roles' => array());
-				}
-				if (!isset($reverse_access[$ext]['modules'][$mod])) {
-					$reverse_access[$ext]['modules'][$mod] = array('actions' => array(), 'roles' => array());
-				}
-				if (!isset($reverse_access[$ext]['modules'][$mod][$act])) {
-					$reverse_access[$ext][$mod]['actions'][$act] = array();
-				}
-				$reverse_access[$ext][$mod]['actions'][$act][] = $role->getUri();
+			foreach ($grantedAccess as $accessUri) {
+			    $controlRessource = new core_kernel_classes_Resource($accessUri);
+			    $arr = $controlRessource->getPropertiesValues(array(
+			        RDF_TYPE,
+			        PROPERTY_ACL_COMPONENT_ID,
+			        PROPERTY_ACL_MODULE_EXTENSION,
+			        PROPERTY_ACL_ACTION_MEMBEROF
+			    ));
+			    if (isset($arr[PROPERTY_ACL_COMPONENT_ID]) && isset($arr[RDF_TYPE])) {
+                    $type = (string)current($arr[RDF_TYPE]);
+                    $id = (string)current($arr[PROPERTY_ACL_COMPONENT_ID]);
+                    
+                    if ($type == CLASS_ACL_EXTENSION) {
+                        if (!isset($reverse_access[$accessUri])) {
+                            $reverse_access[$accessUri] =  array('modules' => array(), 'roles' => array());
+                        }
+                        $reverse_access[$extensionURI]['roles'][] = $role->getUri();
+                    }
+                    if ($type == CLASS_ACL_MODULE) {
+                        $ext = (string)current($arr[PROPERTY_ACL_MODULE_EXTENSION]);
+                        $mod = (string)current($arr[PROPERTY_ACL_COMPONENT_ID]);
+                        if (!isset($reverse_access[$ext])) {
+                            $reverse_access[$ext] = array('modules' => array(), 'roles' => array());
+                        }
+                        if (!isset($reverse_access[$ext]['modules'][$id])) {
+                            $reverse_access[$ext]['modules'][$id] = array('actions' => array(), 'roles' => array());
+                        }
+                        $reverse_access[$ext]['modules'][$id]['roles'][] = $role->getUri();
+                    }
+                    if ($type == CLASS_ACL_ACTION) {
+                    
+    			        // @todo cache module id/extension
+    			        $moduleRessource = current($arr[PROPERTY_ACL_ACTION_MEMBEROF]);
+    			        $arr = $moduleRessource->getPropertiesValues(array(
+    			            new core_kernel_classes_Property(PROPERTY_ACL_COMPONENT_ID),
+    			            new core_kernel_classes_Property(PROPERTY_ACL_MODULE_EXTENSION)
+    			        ));
+    			        $ext = (string)current($arr[PROPERTY_ACL_MODULE_EXTENSION]);
+    			        $mod = (string)current($arr[PROPERTY_ACL_COMPONENT_ID]);
+    			        if (!isset($reverse_access[$ext])) {
+    			            $reverse_access[$ext] = array('modules' => array(), 'roles' => array());
+    			        }
+    			        if (!isset($reverse_access[$ext]['modules'][$mod])) {
+    			            $reverse_access[$ext]['modules'][$mod] = array('actions' => array(), 'roles' => array());
+    			        }
+    			        if (!isset($reverse_access[$ext]['modules'][$mod][$id])) {
+    			            $reverse_access[$ext][$mod]['actions'][$id] = array();
+    			        }
+    			        $reverse_access[$ext][$mod]['actions'][$id][] = $role->getUri();
+                    }
+			    } else {
+			        common_Logger::e('Controll Component '.$accessUri.' not found for role '.$role->getLabel());
+			    }
 			}
 		}
 

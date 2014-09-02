@@ -57,7 +57,7 @@ class funcAcl_models_classes_ExtensionAccessService
 		$extension = $extManager->getExtensionById($extId);
 		$role = new core_kernel_classes_Resource($roleUri);
 		$modules = funcAcl_helpers_Model::getModules($extension->getId());
-		$moduleAccessProperty = new core_kernel_classes_Property(PROPERTY_ACL_MODULE_GRANTACCESS);
+		$moduleAccessProperty = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
 		
 		// Clean the role about this extension.
 		$this->remove($role->getUri(), $accessUri);
@@ -89,7 +89,7 @@ class funcAcl_models_classes_ExtensionAccessService
 		
 		$role->removePropertyValues(new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS), array('pattern' => $accessUri));
 		
-		$moduleAccessProperty = new core_kernel_classes_Property(PROPERTY_ACL_MODULE_GRANTACCESS);
+		$moduleAccessProperty = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
 		$moduleAccessService = funcAcl_models_classes_ModuleAccessService::singleton();
 		$grantedModules = $role->getPropertyValues($moduleAccessProperty);
 		

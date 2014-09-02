@@ -33,16 +33,14 @@
 $todefine = array(
 
 	'FUNCACL_NS'						=> 'http://www.tao.lu/Ontologies/taoFuncACL.rdf',
-	'CLASS_ACL_EXTENSION'				=> 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#Extension',
-	'PROPERTY_ACL_EXTENSION_ID'			=> 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#Identifier',
+    'PROPERTY_ACL_COMPONENT_ID'         => 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#Identifier',
 	'PROPERTY_ACL_GRANTACCESS'			=> 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#GrantAccess',
-	'CLASS_ACL_MODULE'					=> 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#Module',
-	'PROPERTY_ACL_MODULE_ID'			=> 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#moduleIdentifier',
+	'CLASS_ACL_EXTENSION'				=> 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#Extension',
+    
+    'CLASS_ACL_MODULE'					=> 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#Module',
 	'PROPERTY_ACL_MODULE_EXTENSION'		=> 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#moduleExtension',
-	'PROPERTY_ACL_MODULE_GRANTACCESS'	=> 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#grantAccessModule',
-	'CLASS_ACL_ACTION'					=> 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#Action',
-	'PROPERTY_ACL_ACTION_ID'			=> 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#actionIdentifier',
+	
+    'CLASS_ACL_ACTION'					=> 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#Action',
 	'PROPERTY_ACL_ACTION_MEMBEROF'		=> 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#actionMemberOf',
-	'PROPERTY_ACL_ACTION_GRANTACCESS'	=> 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#grantAccessAction'
     
 );
