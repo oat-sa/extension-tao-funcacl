@@ -1,4 +1,5 @@
 <?php
+use oat\oatbox\user\LoginService;
 /*  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,7 +58,8 @@ class FuncACLTest extends TaoPhpUnitTestRunner {
 		$baseRole = $this->testrole;
 		
 		$srv = tao_models_classes_UserService::singleton();
-		$this->assertTrue($srv->loginUser('testcase', 'testcase'));
+		$generisUser = new core_kernel_users_GenerisUser($this->user);
+		$this->assertTrue(LoginService::startSession($generisUser));
 
 		// -- Test uri creation
 		$emauri = FUNCACL_NS . '#a_tao_Users_add';
@@ -87,7 +89,7 @@ class FuncACLTest extends TaoPhpUnitTestRunner {
 		$roleService->attachUser($this->user->getUri(), $this->testRole->getUri());
 		
 		// Logoff/login, to refresh roles cache
-		$this->assertTrue($srv->loginUser('testcase', 'testcase'));
+		$this->assertTrue(LoginService::startSession($generisUser));
 		
 		// Ask for access
 		$this->assertTrue($funcAclImp->hasAccess('add', 'Users', 'tao'));
