@@ -83,6 +83,20 @@ class funcAcl_models_classes_ModuleAccessService
 		$uri = explode('#', $module->getUri());
 		list($type, $extId, $modId) = explode('_', $uri[1]);
 		
+		// access via extension?
+		$exts = funcAcl_helpers_Cache::retrieveExtensions();
+		$extUri = $this->makeEMAUri($extId);
+		if (isset($exts[$extUri]) && in_array($roleUri, $exts[$extUri])) {
+		    funcAcl_models_classes_ExtensionAccessService::singleton()->remove($roleUri, $extUri);
+		    foreach (funcAcl_helpers_Model::getModules($extId) as $eModule) {
+		        if (!$module->equals($eModule)) {
+		            $role->setPropertyValue($accessProperty, $eModule->getUri());
+		        }
+		    }
+            funcAcl_helpers_Cache::flushExtensionAccess($extId);
+		}
+		
+		
 		// Remove the access to the module for this role.
 		$role->removePropertyValue($accessProperty, $module->getUri());
 		
@@ -122,6 +136,4 @@ class funcAcl_models_classes_ModuleAccessService
         
     }
 
-} /* end of class funcAcl_models_classes_ModuleAccessService */
-
-?>
+}

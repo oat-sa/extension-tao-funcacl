@@ -1,4 +1,5 @@
 <?php
+use oat\tao\helpers\ControllerHelper;
 /*  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,8 +81,11 @@ class funcAcl_actions_Admin extends tao_actions_CommonModule {
 										 'uri' => $extAclUri
 				);
 				
-				foreach (funcAcl_helpers_Model::getModules($extId) as $modUri => $module){
-					$moduleAccess = funcAcl_helpers_funcACL::getReversedAccess($module);
+				foreach (ControllerHelper::getControllers($extId) as $controllerClassName) {
+				    $modUri = funcAcl_helpers_Map::getUriForController($controllerClassName);
+				    $module = new core_kernel_classes_Resource($modUri);
+				    
+				    $moduleAccess = funcAcl_helpers_Cache::getControllerAccess($controllerClassName);
 					$uri = explode('#', $modUri);
 					list($type, $extId, $modId) = explode('_', $uri[1]);
 					
@@ -124,21 +128,21 @@ class funcAcl_actions_Admin extends tao_actions_CommonModule {
 		else{
 			$role = new core_kernel_classes_Resource($this->getRequestParameter('role'));
 			$module = new core_kernel_classes_Resource($this->getRequestParameter('module'));
-			$moduleAccess = funcAcl_helpers_funcACL::getReversedAccess($module);
+			
+			$controllerClassName = funcAcl_helpers_Map::getControllerFromUri($module->getUri());
+			$moduleAccess = funcAcl_helpers_Cache::getControllerAccess($controllerClassName);
 			
 			$actions = array();
-			foreach (funcAcl_helpers_Model::getActions($module) as $action) {
-				$uri = explode('#', $action->getUri());
-				list($type, $extId, $modId, $actId) = explode('_', $uri[1]);
+			foreach (ControllerHelper::getActions($controllerClassName) as $actionName) {
+			    $uri = funcAcl_helpers_Map::getUriForAction($controllerClassName, $actionName);
+				$part = explode('#', $uri);
+				list($type, $extId, $modId, $actId) = explode('_', $part[1]);
 				
-				$actions[$actId] = array('uri' => $action->getUri(),
+				$actions[$actId] = array('uri' => $uri,
 										 'has-access' => false);
 				
-				if (isset($moduleAccess['actions'][$action->getUri()])){
-					$grantedRoles = $moduleAccess['actions'][$action->getUri()];
-					if (true === in_array($role->getUri(), $grantedRoles)){
-						$actions[$actId]['has-access'] = true;
-					}
+				if (isset($moduleAccess['actions'][$actionName]) && in_array($role->getUri(), $moduleAccess['actions'][$actionName])) {
+					$actions[$actId]['has-access'] = true;
 				}
 			}
 			
@@ -174,10 +178,9 @@ class funcAcl_actions_Admin extends tao_actions_CommonModule {
 	}
 
 	public function removeModuleAccess() {
-		if (!tao_helpers_Request::isAjax()){
+		if (!tao_helpers_Request::isAjax()) {
 			throw new Exception("wrong request mode");
-		}
-		else{
+		} else {
 			$role = $this->getRequestParameter('role');
 			$uri = $this->getRequestParameter('uri');
 			$moduleService = funcAcl_models_classes_ModuleAccessService::singleton();

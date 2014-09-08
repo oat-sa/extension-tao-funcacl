@@ -50,7 +50,6 @@ class funcAcl_models_classes_ActionAccessService
     public function add($roleUri, $accessUri)
     {
         
-		//$rba = funcAcl_helpers_funcACL::getRolesByActions();
 		$uri = explode('#', $accessUri);
 		list($type, $ext, $mod, $act) = explode('_', $uri[1]);
 		
@@ -97,8 +96,8 @@ class funcAcl_models_classes_ActionAccessService
 		
 		$role->removePropertyValues($actionAccessProperty, array('pattern' => $accessUri));
 		
-		funcAcl_helpers_Cache::cacheModule($module);
-        
+		$controllerClassName = funcAcl_helpers_Map::getControllerFromUri($module->getUri());
+		funcAcl_helpers_Cache::flushControllerAccess($controllerClassName);
     }
 
     /**

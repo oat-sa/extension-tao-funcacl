@@ -43,12 +43,27 @@ class funcAcl_models_classes_FuncAcl
      * @see \oat\tao\model\accessControl\func\FuncAccessControl::accessPossible()
      */
     public function accessPossible($user, $controller, $action) {
-        $extension = self::findExtensionId($controller);
-        $shortName = strpos($controller, '\\') !== false
-            ? substr($controller, strrpos($controller, '\\')+1)
-            : substr($controller, strrpos($controller, '_')+1)
-        ;
-        return funcAcl_helpers_funcACL::hasAccess($action, $shortName, $extension);
+        if ($user != common_session_SessionManager::getSession()->getUserUri()) {
+            throw new common_exception_Error('Access cannot be verified for non current user');
+        }
+        $userRoles = common_session_SessionManager::getSession()->getUserRoles();
+
+        try {
+            $controllerAccess = funcAcl_helpers_Cache::getControllerAccess($controller);
+            $allowedRoles = isset($controllerAccess['actions'][$action])
+                ? array_merge($controllerAccess['module'], $controllerAccess['actions'][$action])
+                : $controllerAccess['module'];
+            
+            $accessAllowed = count(array_intersect($userRoles, $allowedRoles)) > 0;
+            if (!$accessAllowed) {
+                common_Logger::i('Access denied to '.$controller.'@'.$action.' for user \''.$user.'\'');
+            }
+        } catch (ReflectionException $e) {
+            common_Logger::i('Unknown controller '.$controller);
+            $accessAllowed = false;
+        }
+        
+        return (bool) $accessAllowed;
     }
     
     /**
@@ -61,22 +76,17 @@ class funcAcl_models_classes_FuncAcl
      * @return boolean
      * @deprecated
      */
-    public function hasAccess($extension, $controller, $action, $parameters = array()) {
-        return funcAcl_helpers_funcACL::hasAccess($extension, $controller, $action);
+    public function hasAccess($action, $controller, $extension, $parameters = array()) {
+        $user = common_session_SessionManager::getSession()->getUserUri();
+        $uri = funcAcl_models_classes_ModuleAccessService::singleton()->makeEMAUri($extension, $controller);
+        $controllerClassName = funcAcl_helpers_Map::getControllerFromUri($uri);
+        return self::accessPossible($user, $controllerClassName, $action);
     }
     
     public function applyRule(AccessRule $rule) {
         $filter = $rule->getMask();
         if ($rule->isGrant()) {
             $accessService = funcAcl_models_classes_AccessService::singleton();
-            if (isset($filter['ext'])) {
-                // verify model has been created
-                $extensionModel = new core_kernel_classes_Resource($accessService->makeEMAUri($filter['ext']));
-                if (!$extensionModel->exists()) {
-                    $extension = common_ext_ExtensionsManager::singleton()->getExtensionById($filter['ext']);
-                    funcAcl_helpers_Model::spawnExtensionModel($extension);
-                }
-            }
             if (isset($filter['act']) && isset($filter['mod']) && isset($filter['ext'])) {
                 $accessService->grantActionAccess($rule->getRole(), $filter['ext'], $filter['mod'], $filter['act']);
             } elseif (isset($filter['mod']) && isset($filter['ext'])) {

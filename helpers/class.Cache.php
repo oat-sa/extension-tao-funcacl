@@ -1,4 +1,5 @@
 <?php
+use oat\tao\helpers\ControllerHelper;
 /**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,23 +58,6 @@ class funcAcl_helpers_Cache
     private static function getCacheImplementation(){
     	return common_cache_FileCache::singleton();
     }
-    
-    /**
-     * Short description of method cacheExtension
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  Extension extension
-     * @return void
-     */
-    public static function cacheExtension( common_ext_Extension $extension)
-    {
-        
-        foreach (funcAcl_helpers_Model::getModules($extension->getId()) as $module){
-        	self::cacheModule($module);
-        }
-        
-    }
 
     /**
      * Short description of method cacheModule
@@ -85,64 +69,75 @@ class funcAcl_helpers_Cache
      */
     public static function cacheModule( core_kernel_classes_Resource $module)
     {
-        
-        $serial = self::buildModuleSerial($module);
-        $roleClass = new core_kernel_classes_Class(CLASS_ROLE);
-        $accessProperty = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
-        $actionIdentifierProperty = new core_kernel_classes_Property(PROPERTY_ACL_COMPONENT_ID);
-        $memberOfProperty = new core_kernel_classes_Property(PROPERTY_ACL_ACTION_MEMBEROF);
-        
-        $toCache = array('module' => array(), 'actions' => array());
-
-        // retrive roles that grant that module.
-        $filters = array(
-            $accessProperty->getUri() => $module->getUri()
-        );
-        $options = array('recursive' => true, 'like' => false);
-        
-        foreach ($roleClass->searchInstances($filters, $options) as $grantedRole){
-        	$toCache['module'][] = $grantedRole->getUri();
-        }
-        
-        foreach (funcAcl_helpers_Model::getActions($module) as $action) {
-            $rolesForAction = $roleClass->searchInstances(array(
-                $accessProperty->getUri() => $action
-            ), array('recursive' => true, 'like' => false));
-            if (!empty($rolesForAction)) {
-                $toCache['actions'][$action->getUri()] = array();
-                foreach ($rolesForAction as $roleResource) {
-                    $toCache['actions'][$action->getUri()][] = $roleResource->getUri();
-                }
-            }
-        }
-
-        self::getCacheImplementation()->put($toCache, $serial);
-        
+        common_Logger::d('Recaching controller '.$module->getUri());
+        $controllerClassName = funcAcl_helpers_Map::getControllerFromUri($module->getUri());
+        self::flushControllerAccess($controllerClassName);
+        self::getControllerAccess($controllerClassName);
     }
-
+    
     /**
-     * Short description of method retrieveModule
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  Resource module
+     * Return the cached description of the roles
+     * that have access to this controller
+     * 
+     * @param string $controllerClassName
      * @return array
      */
-    public static function retrieveModule( core_kernel_classes_Resource $module)
+    public static function getControllerAccess($controllerClassName)
     {
-        $returnValue = array();
-
-        
         try{
-        	$returnValue = self::getCacheImplementation()->get(self::buildModuleSerial($module));
+            $returnValue = self::getCacheImplementation()->get(self::SERIAL_PREFIX_MODULE.$controllerClassName);
+        } catch (common_cache_Exception $e) {
+            
+            $extId = funcAcl_helpers_Map::getExtensionFromController($controllerClassName);
+            $extension = funcAcl_helpers_Map::getUriForExtension($extId);
+            $module = funcAcl_helpers_Map::getUriForController($controllerClassName);
+            
+            $serial = self::buildModuleSerial(new core_kernel_classes_Resource($module));
+            $roleClass = new core_kernel_classes_Class(CLASS_ROLE);
+            $accessProperty = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
+            $actionIdentifierProperty = new core_kernel_classes_Property(PROPERTY_ACL_COMPONENT_ID);
+            $memberOfProperty = new core_kernel_classes_Property(PROPERTY_ACL_ACTION_MEMBEROF);
+            
+            $returnValue = array('module' => array(), 'actions' => array());
+            
+            // roles by extensions
+            $roles = $roleClass->searchInstances(array(
+                    $accessProperty->getUri() => $extension
+                ), array(
+                    'recursive' => true, 'like' => false
+            ));
+            foreach ($roles as $grantedRole) {
+                $returnValue['module'][] = $grantedRole->getUri();
+            }
+            
+            // roles by controller
+            $filters = array(
+                $accessProperty->getUri() => $module
+            );
+            $options = array('recursive' => true, 'like' => false);
+            
+            foreach ($roleClass->searchInstances($filters, $options) as $grantedRole){
+                $returnValue['module'][] = $grantedRole->getUri();
+            }
+            
+            // roles by action
+            foreach (ControllerHelper::getActions($controllerClassName) as $actionName) {
+                $actionUri = funcAcl_helpers_Map::getUriForAction($controllerClassName, $actionName);
+                $rolesForAction = $roleClass->searchInstances(array(
+                    $accessProperty->getUri() => $actionUri
+                ), array('recursive' => true, 'like' => false));
+                if (!empty($rolesForAction)) {
+                    $actionName = funcAcl_helpers_Map::getActionFromUri($actionUri);
+                    $returnValue['actions'][$actionName] = array();
+                    foreach ($rolesForAction as $roleResource) {
+                        $returnValue['actions'][$actionName][] = $roleResource->getUri();
+                    }
+                }
+            }
+            
+            self::getCacheImplementation()->put($returnValue, self::SERIAL_PREFIX_MODULE.$controllerClassName);
         }
-        catch (common_exception_FileSystemError $e){
-        	$msg = "Module cache for ACL not found.";
-        	throw new common_cache_Exception($msg);
-        }
-        
-
-        return (array) $returnValue;
+        return $returnValue;
     }
 
     /**
@@ -177,48 +172,19 @@ class funcAcl_helpers_Cache
         return (array) $returnValue;
     }
 
-    /**
-     * flushes the cached extension acl roles
-     */
-    public static function flushExtensionCache(){
+    public static function flushExtensionAccess($extensionId)
+    {
     	self::getCacheImplementation()->remove(self::SERIAL_EXTENSIONS);
+        foreach (ControllerHelper::getControllers($extensionId) as $controllerClassName) {
+            self::flushControllerAccess($controllerClassName);
+        }
+    }
+        
+    public static function flushControllerAccess($controllerClassName)
+    {
+        self::getCacheImplementation()->remove(self::SERIAL_PREFIX_MODULE.$controllerClassName);
     }
     
-    /**
-     * Short description of method flush
-     *
-     * @access public
-     * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @return void
-     */
-    public static function flush()
-    {
-        
-        self::flushExtensionCache();
-    	$cacheDir = GENERIS_CACHE_PATH;
-        $matching = self::SERIAL_PREFIX_MODULE;
-        if (@is_readable($cacheDir) && @is_dir($cacheDir)){
-        	$files = scandir($cacheDir);
-        	if ($files !== false){
-        		foreach ($files as $f){
-        			$canonicalPath = $cacheDir . $f;
-        			if ($f[0] != '.' && @is_writable($canonicalPath) && preg_match("/^${matching}/", $f)){
-        				unlink($canonicalPath);
-        			}
-        		}
-        	}
-        	else{
-        		$msg = 'The ACL Cache cannot be scanned.';
-        		throw new funcAcl_helpers_CacheException($msg);
-        	}
-        }
-        else{
-        	$msg = 'The ACL Cache is not readable or is not a directory.';
-        	throw new funcAcl_helpers_CacheException($msg);
-        }
-        
-    }
-
     /**
      * Short description of method buildModuleSerial
      *

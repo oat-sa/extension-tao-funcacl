@@ -59,26 +59,7 @@ class funcAcl_models_classes_Initialisation
             }
         }
          
-        // delete old Instances
-        $moduleClass = new core_kernel_classes_Class(CLASS_ACL_MODULE);
-        foreach ($moduleClass->getInstances() as $res) {
-            $res->delete();
-        }
-         
-        $actionClass = new core_kernel_classes_Class(CLASS_ACL_ACTION);
-        foreach ($actionClass->getInstances() as $res) {
-            $res->delete();
-        }
-         
         funcAcl_helpers_Cache::flush();
-         
-        foreach (common_ext_ExtensionsManager::singleton()->getInstalledExtensions() as $extension) {
-            if ($extension->getId() != 'generis') {
-                // 1. Create the Extension Model.
-                // All action classes of this module will be reflected to get an equivalent in the ontology.
-                funcAcl_helpers_Model::spawnExtensionModel($extension);
-            }
-        }
         
         foreach (common_ext_ExtensionsManager::singleton()->getInstalledExtensions() as $extension) {
             if ($extension->getId() != 'generis') {

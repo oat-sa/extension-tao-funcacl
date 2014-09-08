@@ -117,12 +117,8 @@ class FuncACLTest extends TaoPhpUnitTestRunner {
 	}
 	
 	public function testACLCache(){
-		$moduleUri = funcAcl_models_classes_AccessService::singleton()->makeEMAUri('tao', 'Users');
-		$module = new core_kernel_classes_Resource($moduleUri);
-		$this->assertTrue($module->exists());
-		
-		funcAcl_helpers_Cache::cacheModule($module);
-		$moduleCache = funcAcl_helpers_Cache::retrieveModule($module);
+		$moduleCache = funcAcl_helpers_Cache::getControllerAccess('tao_actions_Users');
+		$this->assertTrue(is_array($moduleCache));
 	}
 }
 ?>
