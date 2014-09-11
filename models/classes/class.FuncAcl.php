@@ -20,6 +20,7 @@
 
 use oat\tao\model\accessControl\func\FuncAccessControl;
 use oat\tao\model\accessControl\func\AccessRule;
+use oat\oatbox\user\User;
 
 /**
  * Proxy for the Acl Implementation
@@ -42,12 +43,8 @@ class funcAcl_models_classes_FuncAcl
      * (non-PHPdoc)
      * @see \oat\tao\model\accessControl\func\FuncAccessControl::accessPossible()
      */
-    public function accessPossible($user, $controller, $action) {
-        if ($user != common_session_SessionManager::getSession()->getUserUri()) {
-            throw new common_exception_Error('Access cannot be verified for non current user');
-        }
-        $userRoles = common_session_SessionManager::getSession()->getUserRoles();
-
+    public function accessPossible(User $user, $controller, $action) {
+        $userRoles = $user->getRoles();
         try {
             $controllerAccess = funcAcl_helpers_Cache::getControllerAccess($controller);
             $allowedRoles = isset($controllerAccess['actions'][$action])
@@ -56,7 +53,7 @@ class funcAcl_models_classes_FuncAcl
             
             $accessAllowed = count(array_intersect($userRoles, $allowedRoles)) > 0;
             if (!$accessAllowed) {
-                common_Logger::i('Access denied to '.$controller.'@'.$action.' for user \''.$user.'\'');
+                common_Logger::i('Access denied to '.$controller.'@'.$action.' for user \''.$user->getIdentifier().'\'');
             }
         } catch (ReflectionException $e) {
             common_Logger::i('Unknown controller '.$controller);
