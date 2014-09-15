@@ -74,7 +74,7 @@ class funcAcl_models_classes_FuncAcl
      * @deprecated
      */
     public function hasAccess($action, $controller, $extension, $parameters = array()) {
-        $user = common_session_SessionManager::getSession()->getUserUri();
+        $user = common_session_SessionManager::getSession()->getUser();
         $uri = funcAcl_models_classes_ModuleAccessService::singleton()->makeEMAUri($extension, $controller);
         $controllerClassName = funcAcl_helpers_Map::getControllerFromUri($uri);
         return self::accessPossible($user, $controllerClassName, $action);
