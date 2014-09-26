@@ -1,5 +1,9 @@
 <?php
 use oat\oatbox\user\LoginService;
+use oat\tao\test\TaoPhpUnitTestRunner;
+
+include_once dirname(__FILE__) . '/../includes/raw_start.php';
+
 /*  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,11 +23,6 @@ use oat\oatbox\user\LoginService;
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-?>
-<?php
-include_once dirname(__FILE__) . '/../includes/raw_start.php';
-require_once dirname(__FILE__) . '/../../tao/test/TaoPhpUnitTestRunner.php';
-
 
 class FuncACLTest extends TaoPhpUnitTestRunner {
 	
@@ -121,4 +120,3 @@ class FuncACLTest extends TaoPhpUnitTestRunner {
 		$this->assertTrue(is_array($moduleCache));
 	}
 }
-?>
