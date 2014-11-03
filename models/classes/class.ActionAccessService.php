@@ -156,6 +156,4 @@ class funcAcl_models_classes_ActionAccessService
         
     }
 
-} /* end of class funcAcl_models_classes_ActionAccessService */
-
-?>
+}

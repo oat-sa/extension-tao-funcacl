@@ -221,6 +221,4 @@ class funcAcl_helpers_Cache
         
     }
 
-} /* end of class funcAcl_helpers_Cache */
-
-?>
+}
