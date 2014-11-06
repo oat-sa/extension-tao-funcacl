@@ -164,6 +164,4 @@ class funcAcl_models_classes_RoleService
         return (array) $returnValue;
     }
 
-} /* end of class funcAcl_models_classes_RoleService */
-
-?>
+}
