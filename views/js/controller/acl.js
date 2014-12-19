@@ -23,18 +23,27 @@ define(['jquery', 'context', 'i18n'], function($, context, __){
 			for (var e in data) {
 				var ext = data[e];
 				var extra = '';
-				if (ext['has-access']) {
+				if (ext['has-inherited']) {
+					extra = ' has-inherited';
+				} else if (ext['has-access']) {
 					extra = ' has-access';
-				}
-				else if (ext['has-allaccess']) {
+				} else if (ext['has-allaccess']) {
 					extra = ' has-allaccess';
 				}
 				
-				var groupCheckboxTitle = (ext['has-access'] || ext['has-allaccess']) ? __('Revoke access rights to the entire extension') : __('Grant access rights to the entire extension');
+				var groupCheckboxTitle = ext['has-inherited']
+					? __('Inherited access to the extension')
+					: (ext['has-access'] || ext['has-allaccess'])
+						? __('Revoke access rights to the entire extension')
+						: __('Grant access rights to the entire extension');
 				
-				var $group = $('<li class="group expendable closed'+extra+'"><div class="group-title"><span class="ui-icon ui-icon-triangle-1-e"/><span class="title">'+ e +'</span><span class="selector all checkable" title="' + groupCheckboxTitle + '"></span></div><ul></ul></li>');
+				var $group = $('<li class="group expendable closed'+extra+'"><div class="group-title"><span class="ui-icon ui-icon-triangle-1-e"/><span class="title">'+ e +'</span>'
+						+ '<span class="selector all '+(ext['has-inherited'] ? 'inherited' : 'checkable')+'" title="' + groupCheckboxTitle + '"></span></div><ul></ul></li>');
 				$group.acldata('uri', ext.uri);
-				if (ext['has-access'] == true){
+				
+				if (ext['has-inherited']) {
+					// nothing
+				} else if (ext['has-access'] == true){
 					$('.selector', $group).click(function (e) {
 						e.stopPropagation();
 						Access2None($(this))
@@ -75,11 +84,17 @@ define(['jquery', 'context', 'i18n'], function($, context, __){
 					
 					var modCheckboxTitle = (mod['has-access'] || mod['has-allaccess']) ? __('Revoke access rights to the entire module') : __('Grant access rights to the entire module');
 					
-					var $el = $('<li class="selectable'+extra+'"><span class="label">'+ m +'</span><span class="selector checkable" title="'+ modCheckboxTitle +'"></span></li>');
+					var $el = $('<li class="selectable'+extra+'"><span class="label">'+ m +'</span><span class="selector '+(mod['has-inherited'] ? 'inherited' : 'checkable') + '" title="'+ modCheckboxTitle +'"></span></li>');
 					$el.acldata('uri', mod.uri);
-					if (mod['has-access']) $('.selector', $el).click(function (e) {e.stopPropagation();Access2All($(this))});
-					else if (mod['has-allaccess']) $('.selector', $el).click(function (e) {e.stopPropagation();Access2None($(this))});
-					else $('.selector', $el).click(function (e) {e.stopPropagation();Access2All($(this))});
+					if (mod['has-inherited']) {
+						// nothing
+					} else if (mod['has-access']) {
+						$('.selector', $el).click(function (e) {e.stopPropagation();Access2All($(this))});
+					} else if (mod['has-allaccess']) {
+						$('.selector', $el).click(function (e) {e.stopPropagation();Access2None($(this))});
+					} else {
+						$('.selector', $el).click(function (e) {e.stopPropagation();Access2All($(this))});
+					}
 					//Select module
 					$el.click(function() {
 						$('#aclModules .selectable').removeClass('selected');
@@ -118,10 +133,16 @@ define(['jquery', 'context', 'i18n'], function($, context, __){
 				
 				var actCheckBoxTitle = (extra === ' has-allaccess') ? __('Revoke access rights to the action') : __('Grant access rights to the action');
 				
-				var $el = $('<li class="selectable'+extra+'"><span class="label">'+ e +'</span><span class="selector checkable" title="'+ actCheckBoxTitle +'"></span></li>');
+				var $el = $('<li class="selectable'+extra+'"><span class="label">'+ e +'</span><span class="selector '+(act['has-inherited'] ? 'inherited' : 'checkable')+'" title="'+ actCheckBoxTitle +'"></span></li>');
 				$el.acldata('uri', act.uri);
-				if ($el.hasClass('has-allaccess')) $('.selector', $el).click(function (e) {e.stopPropagation();Access2None($(this))});
-				else $('.selector', $el).click(function (e) {e.stopPropagation();Access2All($(this))});
+				
+				if (act['has-inherited']) {
+					// nothing
+				} else if ($el.hasClass('has-allaccess')) {
+					$('.selector', $el).click(function (e) {e.stopPropagation();Access2None($(this))});
+				} else {
+					$('.selector', $el).click(function (e) {e.stopPropagation();Access2All($(this))});
+				}
 				//Select action
 				$el.click(function() {
 					$('#aclActions .selectable').removeClass('selected');
