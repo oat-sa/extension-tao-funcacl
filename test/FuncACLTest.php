@@ -53,7 +53,6 @@ class FuncACLTest extends TaoPhpUnitTestRunner {
     }
 	
 	public function testFuncACL() {
-		$roleService = funcAcl_models_classes_RoleService::singleton();
 		$baseRole = $this->testrole;
 		
 		$srv = tao_models_classes_UserService::singleton();
@@ -85,7 +84,7 @@ class FuncACLTest extends TaoPhpUnitTestRunner {
 		funcAcl_models_classes_ActionAccessService::singleton()->add($this->testRole->getUri(), $makeemauri);
 		
 		// Add the Manager role the the currently tested user
-		$roleService->attachUser($this->user->getUri(), $this->testRole->getUri());
+		tao_models_classes_UserService::singleton()->attachRole($this->user, $this->testRole);
 		
 		// Logoff/login, to refresh roles cache
 		$this->assertTrue(LoginService::startSession($generisUser));
@@ -111,7 +110,7 @@ class FuncACLTest extends TaoPhpUnitTestRunner {
 		funcAcl_models_classes_ModuleAccessService::singleton()->add($this->testRole->getUri(), $makeemaurimod);
 		
 		// Unattach role from user
-		funcAcl_models_classes_RoleService::singleton()->unattachUser($this->user->getUri(), $this->testRole->getUri());
+		tao_models_classes_UserService::singleton()->unnatachRole($this->user, $this->testRole);
 		
 	}
 	

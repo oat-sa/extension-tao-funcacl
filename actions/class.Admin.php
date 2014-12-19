@@ -103,6 +103,7 @@ class funcAcl_actions_Admin extends tao_actions_CommonModule {
 							if (in_array($role->getUri(), $roles)){
 								$profile[$extId]['modules'][$modId]['has-access'] = true;
 								$atLeastOneAccess = true;
+								break;
 							}
 						}
 					}
@@ -266,43 +267,4 @@ class funcAcl_actions_Admin extends tao_actions_CommonModule {
 			echo json_encode(array('uri' => $uri));	
 		}
 	}
-
-	public function getRoles() {
-		if (!tao_helpers_Request::isAjax()){
-			throw new Exception("wrong request mode");
-		}
-		else{
-			$useruri = tao_helpers_Uri::decode($this->getRequestParameter('useruri'));
-			$roleService = funcAcl_models_classes_RoleService::singleton();
-			$roles = $roleService->getRoles($useruri);
-			echo json_encode($roles);
-		}
-	}
-
-	public function attachRole() {
-		if (!tao_helpers_Request::isAjax()){
-			throw new Exception("wrong request mode");
-		}
-		else{
-			$roleuri = tao_helpers_Uri::decode($this->getRequestParameter('roleuri'));
-			$useruri = tao_helpers_Uri::decode($this->getRequestParameter('useruri'));
-			$roleService = funcAcl_models_classes_RoleService::singleton();
-			$roleService->attachUser($useruri, $roleuri);
-			echo json_encode(array('success' => true, 'id' => tao_helpers_Uri::encode($roleuri)));
-		}
-	}
-
-	public function unattachRole() {
-		if (!tao_helpers_Request::isAjax()){
-			throw new Exception("wrong request mode");
-		}
-		else{
-			$roleuri = tao_helpers_Uri::decode($this->getRequestParameter('roleuri'));
-			$useruri = tao_helpers_Uri::decode($this->getRequestParameter('useruri'));
-			$roleService = funcAcl_models_classes_RoleService::singleton();
-			$roleService->unattachUser($useruri, $roleuri);
-			echo json_encode(array('success' => true, 'id' => tao_helpers_Uri::encode($roleuri)));	
-		}
-	}
 }
-?>
