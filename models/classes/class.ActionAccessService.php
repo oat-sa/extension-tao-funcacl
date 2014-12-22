@@ -49,7 +49,6 @@ class funcAcl_models_classes_ActionAccessService
      */
     public function add($roleUri, $accessUri)
     {
-        
 		$uri = explode('#', $accessUri);
 		list($type, $ext, $mod, $act) = explode('_', $uri[1]);
 		
@@ -58,21 +57,14 @@ class funcAcl_models_classes_ActionAccessService
 		$actionAccessProperty = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
 		$moduleAccessProperty = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
 		
-		// clean access.
-		$this->remove($role->getUri(), $accessUri);
-		
-		// give access.
-		$role->setPropertyValue($actionAccessProperty, $accessUri);
-
-		// Remove global access to the entire module if granted.
-		$grantedModules = $role->getPropertyValues($moduleAccessProperty);
-
-		if (in_array($module->getUri(), $grantedModules)){
-			$role->removePropertyValues($moduleAccessProperty, array('like' => false, 'pattern' => $module->getUri()));
+		$values = $role->getPropertyValues($actionAccessProperty);
+		if (!in_array($accessUri, $values)) {
+		    $role->setPropertyValue($actionAccessProperty, $accessUri);
+		    $controllerClassName = funcAcl_helpers_Map::getControllerFromUri($module->getUri());
+		    funcAcl_helpers_Cache::flushControllerAccess($controllerClassName);
+		} else {
+		    common_Logger::w('Tried to regrant access for role '.$role->getUri().' to action '.$accessUri);
 		}
-		
-		funcAcl_helpers_Cache::cacheModule($module);
-        
     }
 
     /**
@@ -91,69 +83,29 @@ class funcAcl_models_classes_ActionAccessService
 		list($type, $ext, $mod, $act) = explode('_', $uri[1]);
 		
 		$role = new core_kernel_classes_Class($roleUri);
-		$module = new core_kernel_classes_Resource($this->makeEMAUri($ext, $mod));
 		$actionAccessProperty = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
 		
-		$role->removePropertyValues($actionAccessProperty, array('pattern' => $accessUri));
-		
+		$module = new core_kernel_classes_Resource($this->makeEMAUri($ext, $mod));
 		$controllerClassName = funcAcl_helpers_Map::getControllerFromUri($module->getUri());
-		funcAcl_helpers_Cache::flushControllerAccess($controllerClassName);
-    }
-
-    /**
-     * Short description of method moduleToActionAccess
-     *
-     * @access public
-     * @author Jehan Bihin, <jehan.bihin@tudor.lu>
-     * @param  string roleUri
-     * @param  string accessUri
-     * @return mixed
-     */
-    public function moduleToActionAccess($roleUri, $accessUri)
-    {
-        
-		$uri = explode('#', $accessUri);
-		list($type, $ext, $mod, $act) = explode('_', $uri[1]);
-		$module = new core_kernel_classes_Resource($this->makeEMAUri($ext, $mod));
-		$roler = new core_kernel_classes_Class($roleUri);
-		$propa = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
-		$roler->removePropertyValues(new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS), array('pattern' => $this->makeEMAUri($ext, $mod)));
-		foreach (funcAcl_helpers_Model::getActions($module) as $action) {
-			if ($act != $action->getLabel()) {
-			    $roler->setPropertyValue($propa, $this->makeEMAUri($ext, $mod, $action->getLabel()));
-			}
-		}
 		
-		$module = new core_kernel_classes_Resource($this->makeEMAUri($ext, $mod));
-		funcAcl_helpers_Cache::cacheModule($module);
-        
-    }
+		// access via controller?
+		$controllerAccess = funcAcl_helpers_Cache::getControllerAccess($controllerClassName);
+		if (in_array($roleUri, $controllerAccess['module'])) {
 
-    /**
-     * Short description of method moduleToActionsAccess
-     *
-     * @access public
-     * @author Jehan Bihin, <jehan.bihin@tudor.lu>
-     * @param  string roleUri
-     * @param  string accessUri
-     * @return mixed
-     */
-    public function moduleToActionsAccess($roleUri, $accessUri)
-    {
-        
-		$uri = explode('#', $accessUri);
-		list($type, $ext, $mod) = explode('_', $uri[1]);
-		$module = new core_kernel_classes_Resource($accessUri);
-		$roler = new core_kernel_classes_Class($roleUri);
-		$propa = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
-		$roler->removePropertyValues(new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS), array('pattern' => $this->makeEMAUri($ext, $mod)));
-		foreach (funcAcl_helpers_Model::getActions($module) as $action) {
-			$roler->setPropertyValue($propa, $this->makeEMAUri($ext, $mod, $action->getLabel()));
-		}
+		    // remove access to controller
+		    funcAcl_models_classes_ModuleAccessService::singleton()->remove($roleUri, $module->getUri());
 		
-		$module = new core_kernel_classes_Resource($this->makeEMAUri($ext, $mod));
-		funcAcl_helpers_Cache::cacheModule($module);
-        
+		    // add access to all other actions
+		    foreach (funcAcl_helpers_Model::getActions($module) as $action) {
+		        if ($action->getUri() != $accessUri) {
+		            $this->add($roleUri, $action->getUri());
+		        }
+		    }
+		    
+		} elseif (isset($controllerAccess['actions'][$act]) && in_array($roleUri, $controllerAccess['actions'][$act])) {
+		    // remove action only
+		    $role->removePropertyValues($actionAccessProperty, array('pattern' => $accessUri));
+            funcAcl_helpers_Cache::flushControllerAccess($controllerClassName);
+		}
     }
-
 }

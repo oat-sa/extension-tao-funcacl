@@ -32,6 +32,36 @@ use oat\tao\helpers\ControllerHelper;
  *
  */
 class funcAcl_actions_Admin extends tao_actions_CommonModule {
+    
+    /**
+     * Access to this functionality is inherited from
+     * an included role
+     * 
+     * @var string
+     */
+    const ACCESS_INHERITED = 'inherited';
+    
+    /**
+     * Full access to this functionalities and children
+     * 
+     * @var string
+     */
+    const ACCESS_FULL = 'full';
+    
+    /**
+     * Partial access to thie functionality means
+     * some children are at least partial accessible
+     * 
+     * @var string
+     */
+    const ACCESS_PARTIAL = 'partial';
+    
+    /**
+     * No access to this functionality or any of its children
+     * 
+     * @var string
+     */
+    const ACCESS_NONE = 'none';
 
     /**
      * Constructor performs initializations actions
@@ -52,6 +82,9 @@ class funcAcl_actions_Admin extends tao_actions_CommonModule {
         foreach ($rolesc->getInstances(true) as $id => $r) {
             $roles[] = array('id' => $id, 'label' => $r->getLabel());
         }
+        usort($roles, function($a, $b) {
+        	return strcmp($a['label'],$b['label']);
+        });
 
         $this->setData('roles', $roles);
         $this->setView('list.tpl');
@@ -63,82 +96,103 @@ class funcAcl_actions_Admin extends tao_actions_CommonModule {
         } else {
             $role = new core_kernel_classes_Class($this->getRequestParameter('role'));
             
-            $profile = array();
-
             $included = array();
             foreach (tao_models_classes_RoleService::singleton()->getIncludedRoles($role) as $includedRole) {
-                $included[] = $includedRole->getUri();
+                $included[$includedRole->getUri()] = $includedRole->getLabel();
             }
             
             $extManager = common_ext_ExtensionsManager::singleton();
-            $extensions = $extManager->getInstalledExtensions();
-            $accessService = funcAcl_models_classes_AccessService::singleton();
 
-            $extAccess = funcAcl_helpers_Cache::retrieveExtensions();
-            foreach ($extensions as $extId => $ext){
-                $extAclUri = $accessService->makeEMAUri($extId);
-                $atLeastOneAccess = false;
-                $allAccess = in_array($role->getUri(), $extAccess[$extAclUri]);
-                $inherited = count(array_intersect($included, $extAccess[$extAclUri])) > 0; 
-                
-                $profile[$extId] = array('modules' => array(), 
-                                         'has-access' => false,
-                                         'has-allaccess' => $allAccess,
-                                         'has-inherited' => $inherited, 
-                                         'uri' => $extAclUri
-                );
-                
-                foreach (ControllerHelper::getControllers($extId) as $controllerClassName) {
-                    $modUri = funcAcl_helpers_Map::getUriForController($controllerClassName);
-                    $module = new core_kernel_classes_Resource($modUri);
-                    
-                    $moduleAccess = funcAcl_helpers_Cache::getControllerAccess($controllerClassName);
-                    $uri = explode('#', $modUri);
-                    list($type, $extId, $modId) = explode('_', $uri[1]);
-                    
-                    $profile[$extId]['modules'][$modId] = array(
-                        'has-access' => false,
-                        'has-allaccess' => false,
-                        'has-inherited' => false,
-                        'uri' => $module->getUri()
-                    );
-                    
-                    if (count(array_intersect($included, $moduleAccess['module'])) > 0) {
-                        $profile[$extId]['modules'][$modId]['has-inherited'] = true;
-                        $atLeastOneAccess = true;
-                    } elseif (true === in_array($role->getUri(), $moduleAccess['module'])){
-                        $profile[$extId]['modules'][$modId]['has-allaccess'] = true;
-                        $atLeastOneAccess = true;
-                    } else {
-                        // have a look at actions.
-                        foreach ($moduleAccess['actions'] as $roles){
-                            if (in_array($role->getUri(), $roles)){
-                                $profile[$extId]['modules'][$modId]['has-access'] = true;
-                                $atLeastOneAccess = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-                
-                if (!$allAccess && $atLeastOneAccess){
-                    $profile[$extId]['has-access'] = true;
+            $extData = array();
+            foreach ($extManager->getInstalledExtensions() as $extension){
+                if ($extension->getId() != 'generis') {
+                    $extData[] = $this->buildExtensionData($extension, $role->getUri(), array_keys($included));
                 }
             }
             
-            if (!empty($profile['generis'])){
-                unset($profile['generis']);
-            }
+            usort($extData, function($a, $b) {
+                return strcmp($a['label'],$b['label']);
+            });
             
-            echo json_encode($profile);
+            
+            $this->returnJson(array(
+            	'extensions' => $extData,
+                'includedRoles' => $included
+            ));
         }
     }
-
-    public function getActions() {
-        if (!tao_helpers_Request::isAjax()){
-            throw new Exception("wrong request mode");
+    
+    protected function buildExtensionData(common_ext_Extension $extension, $roleUri, $includedRoleUris) {
+        $extAccess = funcAcl_helpers_Cache::getExtensionAccess($extension->getId());
+        $extAclUri = funcAcl_models_classes_AccessService::singleton()->makeEMAUri($extension->getId());
+        $atLeastOneAccess = false;
+        $allAccess = in_array($roleUri, $extAccess);
+        $inherited = count(array_intersect($includedRoleUris, $extAccess)) > 0;
+        
+        $controllers = array();
+        foreach (ControllerHelper::getControllers($extension->getId()) as $controllerClassName) {
+            $controllerData = $this->buildControllerData($controllerClassName, $roleUri, $includedRoleUris);
+            $atLeastOneAccess = $atLeastOneAccess || $controllerData['access'] != self::ACCESS_NONE;
+            $controllers[] = $controllerData;
         }
-        else{
+        
+        usort($controllers, function($a, $b) {
+        	return strcmp($a['label'],$b['label']);
+        });
+        
+        $access = $inherited ? 'inherited'
+            : ($allAccess ? 'full'
+                : ($atLeastOneAccess ? 'partial' : 'none'));
+        
+        return array(
+            'uri' => $extAclUri,
+            'label' => $extension->getName(),
+            'access' => $access,
+            'modules' => $controllers
+        );
+        
+    }
+
+    protected function buildControllerData($controllerClassName, $roleUri, $includedRoleUris) {
+        
+        $modUri = funcAcl_helpers_Map::getUriForController($controllerClassName);
+        
+        $moduleAccess = funcAcl_helpers_Cache::getControllerAccess($controllerClassName);
+        $uri = explode('#', $modUri);
+        list($type, $extId, $modId) = explode('_', $uri[1]);
+        
+        $access = self::ACCESS_NONE;
+        if (count(array_intersect($includedRoleUris, $moduleAccess['module'])) > 0) {
+            $access = self::ACCESS_INHERITED;
+        } elseif (true === in_array($roleUri, $moduleAccess['module'])){
+            $access = self::ACCESS_FULL;
+        } else {
+            // have a look at actions.
+            foreach ($moduleAccess['actions'] as $roles) {
+                if (in_array($roleUri, $roles) || count(array_intersect($includedRoleUris, $roles)) > 0){
+                    $access = self::ACCESS_PARTIAL;
+                    break;
+                }
+            }
+        }
+        
+        return array(
+            'uri' => $modUri,
+            'label' => $modId,
+            'access' => $access
+        );
+    }
+    
+    /**
+     * Shows the access to the actions of a controller for a specific role
+     * 
+     * @throws Exception
+     */
+    public function getActions()
+    {
+        if (!tao_helpers_Request::isAjax()) {
+            throw new Exception("wrong request mode");
+        } else {
             $role = new core_kernel_classes_Resource($this->getRequestParameter('role'));
             $included = array();
             foreach (tao_models_classes_RoleService::singleton()->getIncludedRoles($role) as $includedRole) {
@@ -147,7 +201,7 @@ class funcAcl_actions_Admin extends tao_actions_CommonModule {
             $module = new core_kernel_classes_Resource($this->getRequestParameter('module'));
             
             $controllerClassName = funcAcl_helpers_Map::getControllerFromUri($module->getUri());
-            $moduleAccess = funcAcl_helpers_Cache::getControllerAccess($controllerClassName);
+            $controllerAccess = funcAcl_helpers_Cache::getControllerAccess($controllerClassName);
             
             $actions = array();
             foreach (ControllerHelper::getActions($controllerClassName) as $actionName) {
@@ -155,21 +209,25 @@ class funcAcl_actions_Admin extends tao_actions_CommonModule {
                 $part = explode('#', $uri);
                 list($type, $extId, $modId, $actId) = explode('_', $part[1]);
                 
+                $allowedRoles = isset($controllerAccess['actions'][$actionName])
+                    ? array_merge($controllerAccess['module'], $controllerAccess['actions'][$actionName])
+                    : $controllerAccess['module'];
+                
+                $access = count(array_intersect($included, $allowedRoles)) > 0
+                    ? self::ACCESS_INHERITED
+                    : (in_array($role->getUri(), $allowedRoles)
+                        ? self::ACCESS_FULL
+                        : self::ACCESS_NONE);
+                
                 $actions[$actId] = array(
                     'uri' => $uri,
-                    'has-access' => false,
-                    'has-inherited' => false
+                    'access' => $access
                 );
-                
-                if (isset($moduleAccess['actions'][$actionName]) && count(array_intersect($included, $moduleAccess['actions'][$actionName])) > 0) {
-                    $actions[$actId]['has-inherited'] = true;
-                } elseif (isset($moduleAccess['actions'][$actionName]) && in_array($role->getUri(), $moduleAccess['actions'][$actionName])) {
-                    $actions[$actId]['has-access'] = true;
-                }
             }
             
             ksort($actions);
-            echo json_encode($actions);    
+            
+            $this->returnJson($actions);    
         }
     }
 
@@ -250,42 +308,4 @@ class funcAcl_actions_Admin extends tao_actions_CommonModule {
         }
     }
 
-    public function moduleToActionAccess() {
-        if (!tao_helpers_Request::isAjax()){
-            throw new Exception("wrong request mode");
-        }
-        else{
-            $role = $this->getRequestParameter('role');
-            $uri = $this->getRequestParameter('uri');
-            $actionService = funcAcl_models_classes_ActionAccessService::singleton();
-            $actionService->moduleToActionAccess($role, $uri);
-            echo json_encode(array('uri' => $uri));    
-        }
-    }
-
-    public function moduleToActionsAccess() {
-        if (!tao_helpers_Request::isAjax()){
-            throw new Exception("wrong request mode");
-        }
-        else{
-            $role = $this->getRequestParameter('role');
-            $uri = $this->getRequestParameter('uri');
-            $actionService = funcAcl_models_classes_ActionAccessService::singleton();
-            $actionService->moduleToActionsAccess($role, $uri);
-            echo json_encode(array('uri' => $uri));    
-        }
-    }
-
-    public function actionsToModuleAccess() {
-        if (!tao_helpers_Request::isAjax()){
-            throw new Exception("wrong request mode");
-        }
-        else{
-            $role = $this->getRequestParameter('role');
-            $uri = $this->getRequestParameter('uri');
-            $moduleService = funcAcl_models_classes_ModuleAccessService::singleton();
-            $moduleService->actionsToModuleAccess($role, $uri);
-            echo json_encode(array('uri' => $uri));    
-        }
-    }
 }

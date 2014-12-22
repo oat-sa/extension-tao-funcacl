@@ -16,6 +16,10 @@ use oat\tao\helpers\Template;
                     <?php endforeach; ?>
                 </select>
             </div>
+            <div>
+                <h5><?= __('includes')?></h5>
+                <ul class="included-roles plain"></ul>
+            </div>
         </form>
     </div>
 </div>

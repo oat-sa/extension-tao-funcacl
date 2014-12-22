@@ -36,11 +36,12 @@ class funcAcl_helpers_Cache
     // --- ATTRIBUTES ---
 
     /**
-     * Short description of attribute SERIAL_PREFIX_MODULE
+     * prefix for the extension cache
      *
-     * @access public
      * @var string
      */
+    const CACHE_PREFIX_EXTENSION = 'acl_e_';
+    
     const SERIAL_PREFIX_MODULE = 'acl';
 
     /**
@@ -60,7 +61,7 @@ class funcAcl_helpers_Cache
     }
 
     /**
-     * Short description of method cacheModule
+     * force recache of a controller
      *
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
@@ -69,7 +70,6 @@ class funcAcl_helpers_Cache
      */
     public static function cacheModule( core_kernel_classes_Resource $module)
     {
-        common_Logger::d('Recaching controller '.$module->getUri());
         $controllerClassName = funcAcl_helpers_Map::getControllerFromUri($module->getUri());
         self::flushControllerAccess($controllerClassName);
         self::getControllerAccess($controllerClassName);
@@ -139,42 +139,32 @@ class funcAcl_helpers_Cache
         }
         return $returnValue;
     }
-
-    /**
-     * 
-     * Enter description here ...
-     * @return array
-     */
-    public static function retrieveExtensions()
+    
+    public static function getExtensionAccess($extId)
     {
-        $returnValue = array();
         try{
-        	$returnValue = self::getCacheImplementation()->get(self::SERIAL_EXTENSIONS);
-        } catch (common_cache_NotFoundException $e){
-        	// cache not found, building
-        	$roleClass = new core_kernel_classes_Class(CLASS_ROLE);
-        	$extensions = common_ext_ExtensionsManager::singleton()->getInstalledExtensions();
-        	foreach ($extensions as $ext) {
-	        	$aclExtUri = funcAcl_models_classes_AccessService::singleton()->makeEMAUri($ext->getId());
-	        	$returnValue[$aclExtUri] = array();
-		        $roles = $roleClass->searchInstances(array(
-		        	PROPERTY_ACL_GRANTACCESS => $aclExtUri
-		        ), array(
-		        	'recursive' => true,
-		        	'like' => false
-		        ));
-		        foreach ($roles as $grantedRole){
-		        	$returnValue[$aclExtUri][] = $grantedRole->getUri();
-		        }
-        	}
-        	self::getCacheImplementation()->put($returnValue, self::SERIAL_EXTENSIONS);
+            $returnValue = self::getCacheImplementation()->get(self::CACHE_PREFIX_EXTENSION.$extId);
+        } catch (common_cache_Exception $e) {
+            $returnValue = array();
+            $aclExtUri = funcAcl_models_classes_AccessService::singleton()->makeEMAUri($extId);
+            $roleClass = new core_kernel_classes_Class(CLASS_ROLE);
+            $roles = $roleClass->searchInstances(array(
+                PROPERTY_ACL_GRANTACCESS => $aclExtUri
+            ), array(
+                'recursive' => true,
+                'like' => false
+            ));
+            foreach ($roles as $grantedRole){
+                $returnValue[] = $grantedRole->getUri();
+            }
+            self::getCacheImplementation()->put($returnValue, self::CACHE_PREFIX_EXTENSION.$extId);
         }
-        return (array) $returnValue;
+        return $returnValue;
     }
 
     public static function flushExtensionAccess($extensionId)
     {
-    	self::getCacheImplementation()->remove(self::SERIAL_EXTENSIONS);
+    	self::getCacheImplementation()->remove(self::CACHE_PREFIX_EXTENSION.$extensionId);
         foreach (ControllerHelper::getControllers($extensionId) as $controllerClassName) {
             self::flushControllerAccess($controllerClassName);
         }

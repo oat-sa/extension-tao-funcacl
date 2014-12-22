@@ -54,13 +54,13 @@ class funcAcl_models_classes_ModuleAccessService
 		$role = new core_kernel_classes_Resource($roleUri);
 		$moduleAccessProperty = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
 		
-		// Clean role about this module.
-		$this->remove($role->getUri(), $module->getUri());
-		
-		// Grant access to the module for this role.
-		$role->setPropertyValue($moduleAccessProperty, $module->getUri());
-		
-		funcAcl_helpers_Cache::cacheModule($module);
+		$values = $role->getPropertyValues($moduleAccessProperty);
+		if (!in_array($module->getUri(), $values)) {
+		    $role->setPropertyValue($moduleAccessProperty, $module->getUri());
+            funcAcl_helpers_Cache::cacheModule($module);
+		} else {
+		    common_Logger::w('Tried to add role '.$role->getUri().' again to controller '.$accessUri);
+		}
         
     }
 
@@ -84,54 +84,33 @@ class funcAcl_models_classes_ModuleAccessService
 		list($type, $extId, $modId) = explode('_', $uri[1]);
 		
 		// access via extension?
-		$exts = funcAcl_helpers_Cache::retrieveExtensions();
-		$extUri = $this->makeEMAUri($extId);
-		if (isset($exts[$extUri]) && in_array($roleUri, $exts[$extUri])) {
+		$extAccess = funcAcl_helpers_Cache::getExtensionAccess($extId);
+		if (in_array($roleUri, $extAccess)) {
+		    // remove access to extension
+            $extUri = $this->makeEMAUri($extId);
 		    funcAcl_models_classes_ExtensionAccessService::singleton()->remove($roleUri, $extUri);
+		    
+		    // add access to all other controllers
 		    foreach (funcAcl_helpers_Model::getModules($extId) as $eModule) {
 		        if (!$module->equals($eModule)) {
-		            $role->setPropertyValue($accessProperty, $eModule->getUri());
+		            $this->add($roleUri, $eModule->getUri());
+		            //$role->setPropertyValue($accessProperty, $eModule->getUri());
 		        }
 		    }
-            funcAcl_helpers_Cache::flushExtensionAccess($extId);
+            //funcAcl_helpers_Cache::flushExtensionAccess($extId);
 		}
 		
 		
 		// Remove the access to the module for this role.
 		$role->removePropertyValue($accessProperty, $module->getUri());
 		
+		funcAcl_helpers_Cache::cacheModule($module);
+				
 		// Remove the access to the actions corresponding to the module for this role.
 		foreach (funcAcl_helpers_Model::getActions($module) as $actionResource) {
 		    funcAcl_models_classes_ActionAccessService::singleton()->remove($role->getUri(), $actionResource->getUri());
 		}
 		
-		funcAcl_helpers_Cache::cacheModule($module);
-        
-    }
-
-    /**
-     * Short description of method actionsToModuleAccess
-     *
-     * @access public
-     * @author Jehan Bihin, <jehan.bihin@tudor.lu>
-     * @param  string roleUri
-     * @param  string accessUri
-     * @return mixed
-     */
-    public function actionsToModuleAccess($roleUri, $accessUri)
-    {
-        
-		$uri = explode('#', $accessUri);
-		list($type, $ext, $mod) = explode('_', $uri[1]);
-		$module = new core_kernel_classes_Resource($accessUri);
-		$roler = new core_kernel_classes_Class($roleUri);
-		$propa = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
-		$roler->setPropertyValue(new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS), $this->makeEMAUri($ext, $mod));
-		foreach (funcAcl_helpers_Model::getActions($module) as $action) {
-			$roler->removePropertyValues($propa, array('pattern' => $this->makeEMAUri($ext, $mod, $action->getLabel())));
-		}
-		
-		$module = new core_kernel_classes_Resource($this->makeEMAUri($ext, $mod));
 		funcAcl_helpers_Cache::cacheModule($module);
         
     }

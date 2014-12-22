@@ -12,6 +12,7 @@ define(['jquery', 'context', 'i18n'], function($, context, __){
     function loadModules(role, successCallback) {
 	$('#aclModules ul.group-list').empty();
 	$('#aclActions ul.group-list').empty();
+	$('#aclRoles ul.included-roles').empty();
 	if (role === '') return;
 
 	$.ajax({
@@ -20,44 +21,56 @@ define(['jquery', 'context', 'i18n'], function($, context, __){
 		data: 'role='+role,
 		dataType: 'json',
 		success: function(data) {
-			for (var e in data) {
-				var ext = data[e];
-				var extra = '';
-				if (ext['has-inherited']) {
-					extra = ' has-inherited';
-				} else if (ext['has-access']) {
-					extra = ' has-access';
-				} else if (ext['has-allaccess']) {
-					extra = ' has-allaccess';
+			for (var r in data['includedRoles']) {
+				var $role = $('<li>'+ data['includedRoles'][r] +'</li>');
+				$role.appendTo($('#aclRoles ul.included-roles'));
+			}
+			for (var e in data['extensions']) {
+				var ext = data['extensions'][e];
+				
+				switch (ext['access']) {
+					case 'inherited':
+						groupCheckboxTitle = __('Inherited access to the extension');
+						extra = ' has-inherited';
+						break;
+					case 'full':
+						groupCheckboxTitle = __('Revoke access rights to the entire extension');
+						extra = ' has-allaccess';
+						break;
+					case 'partial':
+						extra = ' has-access';
+						groupCheckboxTitle = __('Grant access rights to the entire extension');
+						break;
+					default:
+						// no access
+						extra = '';
+						groupCheckboxTitle = __('Grant access rights to the entire extension');
+						break;
 				}
 				
-				var groupCheckboxTitle = ext['has-inherited']
-					? __('Inherited access to the extension')
-					: (ext['has-access'] || ext['has-allaccess'])
-						? __('Revoke access rights to the entire extension')
-						: __('Grant access rights to the entire extension');
-				
-				var $group = $('<li class="group expendable closed'+extra+'"><div class="group-title"><span class="ui-icon ui-icon-triangle-1-e"/><span class="title">'+ e +'</span>'
-						+ '<span class="selector all '+(ext['has-inherited'] ? 'inherited' : 'checkable')+'" title="' + groupCheckboxTitle + '"></span></div><ul></ul></li>');
+				var $group = $('<li class="group expendable closed'+extra+'"><div class="group-title"><span class="ui-icon ui-icon-triangle-1-e"/><span class="title">'+ ext['label'] +'</span>'
+						+ '<span class="selector all '+(ext['access'] == 'inherited' ? 'inherited' : 'checkable')+'" title="' + groupCheckboxTitle + '"></span></div><ul></ul></li>');
 				$group.acldata('uri', ext.uri);
 				
-				if (ext['has-inherited']) {
-					// nothing
-				} else if (ext['has-access'] == true){
-					$('.selector', $group).click(function (e) {
-						e.stopPropagation();
-						Access2None($(this))
-					});	
+				switch (ext['access']) {
+					case 'full':
+						$('.selector', $group).click(function (e) {
+							e.stopPropagation();
+							Access2None($(this))
+						});
+						break;
+					case 'partial':
+						$('.selector', $group).click(function (e) {
+							e.stopPropagation();
+							Access2All($(this))
+						});	
+						break;
+					case 'none':
+						// no access
+						$('.selector', $group).click(function (e) {e.stopPropagation();Access2All($(this))});
+						break;
 				}
-				else if (ext['has-allaccess'] == true){
-					$('.selector', $group).click(function (e) {
-						e.stopPropagation();
-						Access2None($(this))
-					});
-				} 
-				else {
-					$('.selector', $group).click(function (e) {e.stopPropagation();Access2All($(this))});	
-				}
+				
 				//Open/close group
 				$('.group-title', $group).click(function(e) {
 					if ($(this).parent().hasClass('open')){
@@ -74,27 +87,42 @@ define(['jquery', 'context', 'i18n'], function($, context, __){
 				});
 				for (var m in ext.modules) {
 					var mod = ext.modules[m];
-					var extra = '';
-					if (mod['has-access']){
-						extra = ' has-access';
-					}
-					else if (mod['has-allaccess']){
-						extra = ' has-allaccess';
+					switch (mod['access']) {
+						case 'inherited':
+							modCheckboxTitle = __('Inherited access to the controller');
+							extra = ' has-inherited';
+							break;
+						case 'full':
+							modCheckboxTitle = __('Revoke access rights to the entire controller');
+							extra = ' has-allaccess';
+							break;
+						case 'partial':
+							extra = ' has-access';
+							modCheckboxTitle = __('Grant access rights to the entire controller');
+							break;
+						default:
+							// no access
+							extra = '';
+							modCheckboxTitle = __('Grant access rights to the entire controller');
+							break;
 					}
 					
-					var modCheckboxTitle = (mod['has-access'] || mod['has-allaccess']) ? __('Revoke access rights to the entire module') : __('Grant access rights to the entire module');
-					
-					var $el = $('<li class="selectable'+extra+'"><span class="label">'+ m +'</span><span class="selector '+(mod['has-inherited'] ? 'inherited' : 'checkable') + '" title="'+ modCheckboxTitle +'"></span></li>');
+					var $el = $('<li class="selectable'+extra+'"><span class="label">'+ mod['label'] +'</span><span class="selector '+(mod['access'] == 'inherited' ? 'inherited' : 'checkable') + '" title="'+ modCheckboxTitle +'"></span></li>');
 					$el.acldata('uri', mod.uri);
-					if (mod['has-inherited']) {
-						// nothing
-					} else if (mod['has-access']) {
-						$('.selector', $el).click(function (e) {e.stopPropagation();Access2All($(this))});
-					} else if (mod['has-allaccess']) {
-						$('.selector', $el).click(function (e) {e.stopPropagation();Access2None($(this))});
-					} else {
-						$('.selector', $el).click(function (e) {e.stopPropagation();Access2All($(this))});
+					
+					switch (mod['access']) {
+						case 'full':
+							$('.selector', $el).click(function (e) {e.stopPropagation();Access2None($(this))});
+							break;
+						case 'partial':
+							$('.selector', $el).click(function (e) {e.stopPropagation();Access2All($(this))});
+							break;
+						case 'none':
+							// no access
+							$('.selector', $el).click(function (e) {e.stopPropagation();Access2All($(this))});
+							break;
 					}
+					
 					//Select module
 					$el.click(function() {
 						$('#aclModules .selectable').removeClass('selected');
@@ -114,134 +142,147 @@ define(['jquery', 'context', 'i18n'], function($, context, __){
     }
 
     function loadActions(role, module, successCallback) {
-	$.ajax({
-		type: "POST",
-		url: context.root_url + "funcAcl/Admin/getActions",
-		data: 'role='+role+'&module='+module,
-		dataType: 'json',
-		success: function(data) {
-			$('#aclActions ul.group-list').empty();
-			var nballaccess = 0;
-			for (e in data) {
-				var act = data[e];
-				var extra = '';
+		$.ajax({
+			type: "POST",
+			url: context.root_url + "funcAcl/Admin/getActions",
+			data: 'role='+role+'&module='+module,
+			dataType: 'json',
+			success: function(data) {
+				$('#aclActions ul.group-list').empty();
+				for (e in data) {
+					var act = data[e];
+					
+					var extra = '';
+					switch (act['access']) {
+						case 'inherited':
+							actCheckBoxTitle = __('Inherited access to the action');
+							break;
+						case 'full':
+							extra = ' has-allaccess';
+							actCheckBoxTitle = __('Revoke access rights to the action');
+							break;
+						default:
+							// no access
+							actCheckBoxTitle = __('Grant access rights to the action');
+					}
+					
+					var $el = $('<li class="selectable'+extra+'"><span class="label">'+ e +'</span><span class="selector '+(act['access'] == 'inherited' ? 'inherited' : 'checkable')+'" title="'+ actCheckBoxTitle +'"></span></li>');
+					$el.acldata('uri', act.uri);
 
-				if (act['has-allaccess'] || act['has-access']) {
-					extra = ' has-allaccess';
-					nballaccess++;
+					switch (act['access']) {
+						case 'full':
+							$('.selector', $el).click(function (e) {e.stopPropagation();Access2None($(this))});
+							break;
+						case 'none':
+							// no access
+							$('.selector', $el).click(function (e) {e.stopPropagation();Access2All($(this))});
+							break;
+					}
+					
+					//Select action
+					//$el.click(function() {
+					//	$('#aclActions .selectable').removeClass('selected');
+					//	$(this).toggleClass('selected');
+					//});
+					$el.appendTo($('#aclActions ul.group-list'));
 				}
 				
-				var actCheckBoxTitle = (extra === ' has-allaccess') ? __('Revoke access rights to the action') : __('Grant access rights to the action');
-				
-				var $el = $('<li class="selectable'+extra+'"><span class="label">'+ e +'</span><span class="selector '+(act['has-inherited'] ? 'inherited' : 'checkable')+'" title="'+ actCheckBoxTitle +'"></span></li>');
-				$el.acldata('uri', act.uri);
-				
-				if (act['has-inherited']) {
-					// nothing
-				} else if ($el.hasClass('has-allaccess')) {
-					$('.selector', $el).click(function (e) {e.stopPropagation();Access2None($(this))});
-				} else {
-					$('.selector', $el).click(function (e) {e.stopPropagation();Access2All($(this))});
+				if (typeof successCallback !== 'undefined'){
+					successCallback();
 				}
-				//Select action
-				$el.click(function() {
-					$('#aclActions .selectable').removeClass('selected');
-					$(this).toggleClass('selected');
+			}
+		});
+    }
+
+		    function Access2All(el) {
+				// Act
+				var uri = $(el).closest('li').removeClass('has-access')
+						.addClass('has-allaccess').acldata('uri');
+				actOnUri(uri, 'add', $('#roles').val());
+				el.unbind('click').click(function(e) {
+					e.stopPropagation();
+					Access2None($(this))
 				});
-				$el.appendTo($('#aclActions ul.group-list'));
 			}
-			
-			if (typeof successCallback !== 'undefined'){
-				successCallback();
+
+			function Access2None(el) {
+				// Act
+				var uri = $(el).closest('li').removeClass('has-access')
+						.removeClass('has-allaccess').acldata('uri');
+				actOnUri(uri, 'remove', $('#roles').val());
+				el.unbind('click').click(function(e) {
+					e.stopPropagation();
+					Access2All($(this))
+				});
 			}
+
+	function actOnUri(uri, act, role) {
+	  var type = uri.split('#')[1].split('_')[0];
+		var action = '';
+		switch (type) {
+			case 'e':
+				action = 'Extension';
+				break;
+	
+			case 'm':
+				action = 'Module';
+				break;
+	
+			case 'a':
+				action = 'Action';
+				break;
 		}
-	});
-}
-
-    function Access2All(el) {
-	//Act
-	var uri = $(el).closest('li').removeClass('has-access').addClass('has-allaccess').acldata('uri');
-	actOnUri(uri, 'add', $('#roles').val());
-	el.unbind('click').click(function (e) {e.stopPropagation();Access2None($(this))});
-    }
-
-    function Access2None(el) {
-	//Act
-	var uri = $(el).closest('li').removeClass('has-access').removeClass('has-allaccess').acldata('uri');
-	actOnUri(uri, 'remove', $('#roles').val());
-	el.unbind('click').click(function (e) {e.stopPropagation();Access2All($(this))});
-    }
-
-function actOnUri(uri, act, role) {
-  var type = uri.split('#')[1].split('_')[0];
-	var action = '';
-	switch (type) {
-		case 'e':
-			action = 'Extension';
-			break;
-
-		case 'm':
-			action = 'Module';
-			break;
-
-		case 'a':
-			action = 'Action';
-			break;
-	}
-	switch (act) {
-		case 'add':
-			action = "add"+action+"Access";
-			break;
-
-		case 'remove':
-			action = "remove"+action+"Access";
-			break;
-
-		case 'mod2act':
-			action = "moduleTo"+action+"Access";
-			break;
-
-		case 'mod2acts':
-			action = "moduleToActionsAccess";
-			break;
-
-		case 'acts2mod':
-			action = "actionsToModuleAccess";
-			break;
-	}
-	//Do act
-	$.ajax({
-		type: "POST",
-		url: context.root_url + "funcAcl/Admin/" + action,
-		data: 'role='+role+'&uri='+uri,
-		dataType: 'json',
-		success: function(data) {
-			
-			var open = $('#aclModules .group.expendable.open').index();
-			var $el = $('#aclModules .selected');
-			var elidx;
-                        
-			if ($el.length) {
-				uri = $el.acldata('uri');
-				elidx = $el.index();
-			} else elidx = -1;
-			
-			// update GUI
-			loadModules($('#roles').val(), function() {
-				
-				if (open >= 0){
-					$('#aclModules .group.expendable:eq('+open+')').removeClass('closed')
-																   .addClass('open')
-																   .find('.group-title').addClass('open');
-				}
-				
-				if (elidx >= 0) {
-					$('#aclModules .open li:eq('+elidx+')').addClass('selected');
-					loadActions($('#roles').val(), uri);
-				}
-			});
+		switch (act) {
+			case 'add':
+				action = "add"+action+"Access";
+				break;
+	
+			case 'remove':
+				action = "remove"+action+"Access";
+				break;
 		}
-	});
+		//Do act
+		$.ajax({
+			type: "POST",
+			url: context.root_url + "funcAcl/Admin/" + action,
+			data: 'role='+role+'&uri='+uri,
+			dataType: 'json',
+			success: function(data) {
+				
+				var open = [];
+				$('#aclModules .group.expendable.open').each(function() {open.push($(this).index())});
+				
+				var $el = $('#aclModules .selected');
+				var elidx;
+				var selectedUri = null;
+	                        
+				if ($el.length) {
+					selectedUri = $el.acldata('uri');
+					elidx = $el.index();
+				} else elidx = -1;
+				
+				// update GUI
+				loadModules($('#roles').val(), function() {
+
+					for (var i in open) {
+						$('#aclModules .group.expendable:eq('+open[i]+')').removeClass('closed')
+						   .addClass('open')
+						   .find('.group-title').addClass('open');
+					}
+					
+					if (selectedUri != null) {
+						$('#aclModules .open li').each(function() {
+							if ($(this).acldata('uri') == selectedUri) {
+								$(this).addClass('selected');
+							}
+						});
+						loadActions($('#roles').val(), selectedUri);
+						//$('#aclModules .open li:eq('+elidx+')').addClass('selected');
+						//loadActions($('#roles').val(), uri);
+					}
+				});
+			}
+		});
     }
     
     return {
