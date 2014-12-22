@@ -56,12 +56,14 @@ class funcAcl_models_classes_ExtensionAccessService
 		$extManager = common_ext_ExtensionsManager::singleton();
 		$extension = $extManager->getExtensionById($extId);
 		$role = new core_kernel_classes_Resource($roleUri);
-		
-		// Clean the role about this extension.
-		$this->remove($role->getUri(), $accessUri);
 
-		$role->setPropertyValue(new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS), $accessUri);
-		funcAcl_helpers_Cache::flushExtensionAccess($extId);
+		$values = $role->getPropertyValues(new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS));
+		if (!in_array($accessUri, $values)) {
+		    $role->setPropertyValue(new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS), $accessUri);
+		    funcAcl_helpers_Cache::flushExtensionAccess($extId);
+		} else {
+		    common_Logger::w('Tried to regrant access for role '.$role->getUri().' to extension '.$accessUri);
+		}
         
     }
 
@@ -80,13 +82,15 @@ class funcAcl_models_classes_ExtensionAccessService
 		$uri = explode('#', $accessUri);
 		list($type, $extId) = explode('_', $uri[1]);
 		
-		// Remove the access to the module for this role.
+		// Remove the access to the extension for this role.
 		$extManager = common_ext_ExtensionsManager::singleton();
 		$extension = $extManager->getExtensionById($extId);
 		$role = new core_kernel_classes_Resource($roleUri);
 		
 		$role->removePropertyValues(new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS), array('pattern' => $accessUri));
+		funcAcl_helpers_Cache::flushExtensionAccess($extId);
 		
+		// also remove access to all the controllers
 		$moduleAccessProperty = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
 		$moduleAccessService = funcAcl_models_classes_ModuleAccessService::singleton();
 		$grantedModules = $role->getPropertyValues($moduleAccessProperty);
@@ -100,7 +104,6 @@ class funcAcl_models_classes_ExtensionAccessService
 				$moduleAccessService->remove($role->getUri(), $gM->getUri());
 			}
 		}
-		funcAcl_helpers_Cache::flushExtensionAccess($extId);
 		
     }
 
