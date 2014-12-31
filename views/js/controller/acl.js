@@ -49,7 +49,7 @@ define(['jquery', 'context', 'i18n'], function($, context, __){
 				}
 				
 				var $group = $('<li class="group expendable closed'+extra+'"><div class="group-title"><span class="ui-icon ui-icon-triangle-1-e"/><span class="title">'+ ext['label'] +'</span>'
-						+ '<span class="selector all '+(ext['access'] == 'inherited' ? 'inherited' : 'checkable')+'" title="' + groupCheckboxTitle + '"></span></div><ul></ul></li>');
+						+ '<span class="selector all '+(ext['access'] == 'inherited' ? 'has-inherited' : 'checkable')+'" title="' + groupCheckboxTitle + '"></span></div><ul></ul></li>');
 				$group.acldata('uri', ext.uri);
 				
 				switch (ext['access']) {
@@ -107,7 +107,7 @@ define(['jquery', 'context', 'i18n'], function($, context, __){
 							break;
 					}
 					
-					var $el = $('<li class="selectable'+extra+'"><span class="label">'+ mod['label'] +'</span><span class="selector '+(mod['access'] == 'inherited' ? 'inherited' : 'checkable') + '" title="'+ modCheckboxTitle +'"></span></li>');
+					var $el = $('<li class="selectable'+extra+'"><span class="label">'+ mod['label'] +'</span><span class="selector '+(mod['access'] == 'inherited' ? 'has-inherited' : 'checkable') + '" title="'+ modCheckboxTitle +'"></span></li>');
 					$el.acldata('uri', mod.uri);
 					
 					switch (mod['access']) {
