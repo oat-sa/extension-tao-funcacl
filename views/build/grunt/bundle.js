@@ -12,7 +12,7 @@ module.exports = function(grunt) {
     /**
      * Remove bundled and bundling files
      */
-    clean.funcaclbundle = [out,  root + '/funcAcl/views/js/controllers.min.js'];
+    clean.funcaclbundle = [out];
 
     /**
      * Compile tao files into a bundle
