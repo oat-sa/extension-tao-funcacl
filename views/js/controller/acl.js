@@ -166,7 +166,7 @@ define(['jquery', 'context', 'i18n'], function($, context, __){
 							actCheckBoxTitle = __('Grant access rights to the action');
 					}
 					
-					var $el = $('<li class="selectable'+extra+'"><span class="label">'+ e +'</span><span class="selector '+(act['access'] == 'inherited' ? 'inherited' : 'checkable')+'" title="'+ actCheckBoxTitle +'"></span></li>');
+					var $el = $('<li class="selectable'+extra+'"><span class="label">'+ e +'</span><span class="selector '+(act['access'] == 'inherited' ? 'has-inherited' : 'checkable')+'" title="'+ actCheckBoxTitle +'"></span></li>');
 					$el.acldata('uri', act.uri);
 
 					switch (act['access']) {
