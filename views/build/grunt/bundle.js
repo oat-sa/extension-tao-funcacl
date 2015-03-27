@@ -7,7 +7,7 @@ module.exports = function(grunt) {
     var root        = grunt.option('root');
     var libs        = grunt.option('mainlibs');
     var ext         = require(root + '/tao/views/build/tasks/helpers/extensions')(grunt, root);
-    var out         = 'output/funcAcl';
+    var out         = 'output';
 
     /**
      * Remove bundled and bundling files
@@ -36,8 +36,8 @@ module.exports = function(grunt) {
      */
     copy.funcaclbundle = {
         files: [
-            { src: [ out + '/controller/routes.js'],  dest: root + '/funcAcl/views/js/controllers.min.js' },
-            { src: [ out + '/controller/routes.js.map'],  dest: root + '/funcAcl/views/js/controllers.min.js.map' }
+            { src: [ out + '/funcAcl/controller/routes.js'],  dest: root + '/funcAcl/views/js/controllers.min.js' },
+            { src: [ out + '/funcAcl/controller/routes.js.map'],  dest: root + '/funcAcl/views/js/controllers.min.js.map' }
         ]
     };
 
