@@ -1,4 +1,4 @@
-define(['jquery', 'context', 'i18n'], function($, context, __){
+define(['jquery', 'context', 'util/encode', 'i18n'], function($, context, encode, __){
     
     $.fn.acldata = function(key, val){
             if (typeof val !== 'undefined'){
@@ -22,7 +22,7 @@ define(['jquery', 'context', 'i18n'], function($, context, __){
 		dataType: 'json',
 		success: function(data) {
 			for (var r in data['includedRoles']) {
-				var $role = $('<li>'+ data['includedRoles'][r] +'</li>');
+				var $role = $('<li>'+ encode.html(data['includedRoles'][r]) +'</li>');
 				$role.appendTo($('#aclRoles ul.included-roles'));
 			}
 			for (var e in data['extensions']) {
