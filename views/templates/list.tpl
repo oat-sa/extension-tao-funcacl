@@ -12,7 +12,7 @@ use oat\tao\helpers\Template;
                 <select id="roles" name="roles" size="1">
                     <option value=""><?= __('Roles') ?>...</option>
                     <?php foreach (get_data('roles') as $r): ?>
-                        <option value="<?= $r['id'] ?>"><?= $r['label'] ?></option>
+                        <option value="<?= $r['id'] ?>"><?= _dh($r['label']) ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
