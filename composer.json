@@ -55,6 +55,11 @@
     	"tao-extension-name" : "funcAcl"
     },
     "minimum-stability" : "dev",
+    "autoload" : {
+		"psr-4" : {
+			"oat\\funcAcl\\scripts\\" : "scripts"
+		}
+	},
     "require": {
         "oat-sa/oatbox-extension-installer": "dev-master"
     }
