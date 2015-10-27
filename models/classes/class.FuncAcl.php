@@ -146,23 +146,4 @@ class funcAcl_models_classes_FuncAcl
         }
     }
     
-    private function findExtensionId($controllerClass) {
-        if (strpos($controllerClass, '\\') === false) {
-            $parts = explode('_', $controllerClass);
-            if (count($parts) == 3) {
-                return $parts[0];
-            } else {
-                throw common_exception_Error('Unknown controller '.$controllerClass);
-            }
-        } else {
-            foreach (common_ext_ExtensionsManager::singleton()->getEnabledExtensions() as $ext) {
-                foreach ($ext->getManifest()->getRoutes() as $routePrefix => $namespace) {
-                    if (is_string($namespace) && substr($controllerClass, 0, strlen($namespace)) == $namespace) {
-                        return $ext->getId();
-                    }
-                }
-            }
-            throw new common_exception_Error('Unknown controller '.$controllerClass);
-        }
-    }
 }
