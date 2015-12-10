@@ -81,32 +81,63 @@ class funcAcl_models_classes_FuncAcl
     }
     
     public function applyRule(AccessRule $rule) {
-        $filter = $rule->getMask();
         if ($rule->isGrant()) {
+            $filter = $rule->getMask();
             $accessService = funcAcl_models_classes_AccessService::singleton();
-            if (isset($filter['act']) && isset($filter['mod']) && isset($filter['ext'])) {
-                $accessService->grantActionAccess($rule->getRole(), $filter['ext'], $filter['mod'], $filter['act']);
-            } elseif (isset($filter['mod']) && isset($filter['ext'])) {
-                $accessService->grantModuleAccess($rule->getRole(), $filter['ext'], $filter['mod']);
-            } elseif (isset($filter['ext'])) {
-                $accessService->grantExtensionAccess($rule->getRole(), $filter['ext']);
-            } elseif (isset($filter['controller'])) {
-                $extension = funcAcl_helpers_Map::getExtensionFromController($filter['controller']);
-                $shortName = strpos($filter['controller'], '\\') !== false
-                    ? substr($filter['controller'], strrpos($filter['controller'], '\\')+1)
-                    : substr($filter['controller'], strrpos($filter['controller'], '_')+1)
-                ;
-                $accessService->grantModuleAccess($rule->getRole(), $extension, $shortName);
-            } elseif (isset($filter['act']) && strpos($filter['act'], '@') !== false) {
-                list($controller, $action) = explode('@', $filter['act'], 2);
-                $extension = funcAcl_helpers_Map::getExtensionFromController($controller);
-                $shortName = strpos($controller, '\\') !== false
-                    ? substr($controller, strrpos($controller, '\\')+1)
-                    : substr($controller, strrpos($controller, '_')+1)
-                ;
-                $accessService->grantActionAccess($rule->getRole(), $extension, $shortName, $action);
+            
+            // string masks
+            if (is_string($filter)) {
+                if (strpos($filter, '@') !== false) {
+                    list($controller, $action) = explode('@', $filter, 2);
+                } else {
+                    $controller = $filter;
+                    $action = null;
+                }
+                if (class_exists($controller)) {
+                    $extension = funcAcl_helpers_Map::getExtensionFromController($controller);
+                    $shortName = strpos($controller, '\\') !== false
+                        ? substr($controller, strrpos($controller, '\\')+1)
+                        : substr($controller, strrpos($controller, '_')+1);
+                    
+                    if (is_null($action)) {
+                        // grant controller
+                        $accessService->grantModuleAccess($rule->getRole(), $extension, $shortName);
+                    } else {
+                        // grant action
+                        $accessService->grantActionAccess($rule->getRole(), $extension, $shortName, $action);
+                    }
+                } else {
+                    common_Logger::w('Unknown controller '.$controller);
+                }
+                
+            /// array masks
+            } elseif (is_array($filter)) {
+                if (isset($filter['act']) && isset($filter['mod']) && isset($filter['ext'])) {
+                    $accessService->grantActionAccess($rule->getRole(), $filter['ext'], $filter['mod'], $filter['act']);
+                } elseif (isset($filter['mod']) && isset($filter['ext'])) {
+                    $accessService->grantModuleAccess($rule->getRole(), $filter['ext'], $filter['mod']);
+                } elseif (isset($filter['ext'])) {
+                    $accessService->grantExtensionAccess($rule->getRole(), $filter['ext']);
+                } elseif (isset($filter['controller'])) {
+                    $extension = funcAcl_helpers_Map::getExtensionFromController($filter['controller']);
+                    $shortName = strpos($filter['controller'], '\\') !== false
+                        ? substr($filter['controller'], strrpos($filter['controller'], '\\')+1)
+                        : substr($filter['controller'], strrpos($filter['controller'], '_')+1)
+                    ;
+                    $accessService->grantModuleAccess($rule->getRole(), $extension, $shortName);
+                } elseif (isset($filter['act']) && strpos($filter['act'], '@') !== false) {
+                    list($controller, $action) = explode('@', $filter['act'], 2);
+                    $extension = funcAcl_helpers_Map::getExtensionFromController($controller);
+                    $shortName = strpos($controller, '\\') !== false
+                        ? substr($controller, strrpos($controller, '\\')+1)
+                        : substr($controller, strrpos($controller, '_')+1)
+                    ;
+                    $accessService->grantActionAccess($rule->getRole(), $extension, $shortName, $action);
+                } else {
+                    common_Logger::w('Uninterpretable filter in '.__CLASS__);
+                }
             } else {
-                common_Logger::w('Uninterpretable filter in '.__CLASS__);
+                common_Logger::w('Uninterpretable filtertype '.gettype($filter));
             }
         } else {
             common_Logger::w('Only grant rules accepted in '.__CLASS__);
