@@ -1,4 +1,5 @@
 <?php
+use oat\oatbox\service\ServiceManager;
 use oat\tao\helpers\ControllerHelper;
 /**  
  * This program is free software; you can redistribute it and/or
@@ -57,7 +58,7 @@ class funcAcl_helpers_Cache
      * @return common_cache_Cache
      */
     private static function getCacheImplementation(){
-    	return common_cache_FileCache::singleton();
+    	return ServiceManager::getServiceManager()->get('generis/cache');
     }
 
     /**
@@ -92,12 +93,9 @@ class funcAcl_helpers_Cache
             $extension = funcAcl_helpers_Map::getUriForExtension($extId);
             $module = funcAcl_helpers_Map::getUriForController($controllerClassName);
             
-            $serial = self::buildModuleSerial(new core_kernel_classes_Resource($module));
             $roleClass = new core_kernel_classes_Class(CLASS_ROLE);
             $accessProperty = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
-            $actionIdentifierProperty = new core_kernel_classes_Property(PROPERTY_ACL_COMPONENT_ID);
-            $memberOfProperty = new core_kernel_classes_Property(PROPERTY_ACL_ACTION_MEMBEROF);
-            
+
             $returnValue = array('module' => array(), 'actions' => array());
             
             // roles by extensions
