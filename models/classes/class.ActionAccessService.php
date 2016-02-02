@@ -54,8 +54,8 @@ class funcAcl_models_classes_ActionAccessService
 		
 		$role = new core_kernel_classes_Resource($roleUri);
 		$module = new core_kernel_classes_Resource($this->makeEMAUri($ext, $mod));
-		$actionAccessProperty = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
-		$moduleAccessProperty = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
+		$actionAccessProperty = new core_kernel_classes_Property(funcAcl_models_classes_AccessService::PROPERTY_ACL_GRANTACCESS);
+		$moduleAccessProperty = new core_kernel_classes_Property(funcAcl_models_classes_AccessService::PROPERTY_ACL_GRANTACCESS);
 		
 		$values = $role->getPropertyValues($actionAccessProperty);
 		if (!in_array($accessUri, $values)) {
@@ -83,7 +83,7 @@ class funcAcl_models_classes_ActionAccessService
 		list($type, $ext, $mod, $act) = explode('_', $uri[1]);
 		
 		$role = new core_kernel_classes_Class($roleUri);
-		$actionAccessProperty = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
+		$actionAccessProperty = new core_kernel_classes_Property(funcAcl_models_classes_AccessService::PROPERTY_ACL_GRANTACCESS);
 		
 		$module = new core_kernel_classes_Resource($this->makeEMAUri($ext, $mod));
 		$controllerClassName = funcAcl_helpers_Map::getControllerFromUri($module->getUri());

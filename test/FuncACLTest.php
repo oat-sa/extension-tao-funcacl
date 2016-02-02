@@ -60,8 +60,8 @@ class FuncACLTest extends TaoPhpUnitTestRunner {
 		$this->assertTrue(LoginService::startSession($generisUser));
 
 		// -- Test uri creation
-		$emauri = FUNCACL_NS . '#a_tao_Users_add';
-		$emaurimod = FUNCACL_NS . '#m_tao_Users';
+		$emauri = funcAcl_models_classes_AccessService::FUNCACL_NS . '#a_tao_Users_add';
+		$emaurimod = funcAcl_models_classes_AccessService::FUNCACL_NS . '#m_tao_Users';
 		$makeemauri = funcAcl_models_classes_AccessService::singleton()->makeEMAUri('tao', 'Users', 'add');
 		$makeemaurimod = funcAcl_models_classes_AccessService::singleton()->makeEMAUri('tao', 'Users');
 		$this->assertEquals($emauri, $makeemauri);
