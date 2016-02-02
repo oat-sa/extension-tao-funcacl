@@ -40,7 +40,7 @@ class funcAcl_models_classes_Initialisation
             if (empty($managementRole)) {
                 // try to discover it.
                 foreach ($foundManagementRoles as $mR) {
-                    $moduleURIs = $mR->getPropertyValues(new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS));
+                    $moduleURIs = $mR->getPropertyValues(new core_kernel_classes_Property(funcAcl_models_classes_AccessService::PROPERTY_ACL_GRANTACCESS));
         
                     foreach ($moduleURIs as $moduleURI) {
                         $uri = explode('#', $moduleURI);

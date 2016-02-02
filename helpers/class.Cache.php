@@ -94,7 +94,7 @@ class funcAcl_helpers_Cache
             $module = funcAcl_helpers_Map::getUriForController($controllerClassName);
             
             $roleClass = new core_kernel_classes_Class(CLASS_ROLE);
-            $accessProperty = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
+            $accessProperty = new core_kernel_classes_Property(funcAcl_models_classes_AccessService::PROPERTY_ACL_GRANTACCESS);
 
             $returnValue = array('module' => array(), 'actions' => array());
             
@@ -147,7 +147,7 @@ class funcAcl_helpers_Cache
             $aclExtUri = funcAcl_models_classes_AccessService::singleton()->makeEMAUri($extId);
             $roleClass = new core_kernel_classes_Class(CLASS_ROLE);
             $roles = $roleClass->searchInstances(array(
-                PROPERTY_ACL_GRANTACCESS => $aclExtUri
+                funcAcl_models_classes_AccessService::PROPERTY_ACL_GRANTACCESS => $aclExtUri
             ), array(
                 'recursive' => true,
                 'like' => false

@@ -52,7 +52,7 @@ class funcAcl_models_classes_ModuleAccessService
         
 		$module = new core_kernel_classes_Resource($accessUri);
 		$role = new core_kernel_classes_Resource($roleUri);
-		$moduleAccessProperty = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
+		$moduleAccessProperty = new core_kernel_classes_Property(funcAcl_models_classes_AccessService::PROPERTY_ACL_GRANTACCESS);
 		
 		$values = $role->getPropertyValues($moduleAccessProperty);
 		if (!in_array($module->getUri(), $values)) {
@@ -77,7 +77,7 @@ class funcAcl_models_classes_ModuleAccessService
     {
         $module = new core_kernel_classes_Resource($accessUri);
 		$role = new core_kernel_classes_Class($roleUri);
-		$accessProperty = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
+		$accessProperty = new core_kernel_classes_Property(funcAcl_models_classes_AccessService::PROPERTY_ACL_GRANTACCESS);
 		
 		// Retrieve the module ID.
 		$uri = explode('#', $module->getUri());

@@ -21,6 +21,7 @@
 use oat\tao\model\accessControl\func\FuncAccessControl;
 use oat\tao\model\accessControl\func\AccessRule;
 use oat\oatbox\user\User;
+use oat\oatbox\service\ConfigurableService;
 
 /**
  * Proxy for the Acl Implementation
@@ -29,15 +30,9 @@ use oat\oatbox\user\User;
  * @author Joel Bout, <joel@taotesting.com>
  * @package tao
  */
-class funcAcl_models_classes_FuncAcl
+class funcAcl_models_classes_FuncAcl extends ConfigurableService
     implements FuncAccessControl
 {
-    /**
-     * Ensrue constants are loaded
-     */
-    public function __construct() {
-        common_ext_ExtensionsManager::singleton()->getExtensionById('funcAcl');
-    }
     
     /**
      * (non-PHPdoc)

@@ -57,9 +57,9 @@ class funcAcl_models_classes_ExtensionAccessService
 		$extension = $extManager->getExtensionById($extId);
 		$role = new core_kernel_classes_Resource($roleUri);
 
-		$values = $role->getPropertyValues(new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS));
+		$values = $role->getPropertyValues(new core_kernel_classes_Property(funcAcl_models_classes_AccessService::PROPERTY_ACL_GRANTACCESS));
 		if (!in_array($accessUri, $values)) {
-		    $role->setPropertyValue(new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS), $accessUri);
+		    $role->setPropertyValue(new core_kernel_classes_Property(funcAcl_models_classes_AccessService::PROPERTY_ACL_GRANTACCESS), $accessUri);
 		    funcAcl_helpers_Cache::flushExtensionAccess($extId);
 		} else {
 		    common_Logger::w('Tried to regrant access for role '.$role->getUri().' to extension '.$accessUri);
@@ -87,11 +87,11 @@ class funcAcl_models_classes_ExtensionAccessService
 		$extension = $extManager->getExtensionById($extId);
 		$role = new core_kernel_classes_Resource($roleUri);
 		
-		$role->removePropertyValues(new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS), array('pattern' => $accessUri));
+		$role->removePropertyValues(new core_kernel_classes_Property(funcAcl_models_classes_AccessService::PROPERTY_ACL_GRANTACCESS), array('pattern' => $accessUri));
 		funcAcl_helpers_Cache::flushExtensionAccess($extId);
 		
 		// also remove access to all the controllers
-		$moduleAccessProperty = new core_kernel_classes_Property(PROPERTY_ACL_GRANTACCESS);
+		$moduleAccessProperty = new core_kernel_classes_Property(funcAcl_models_classes_AccessService::PROPERTY_ACL_GRANTACCESS);
 		$moduleAccessService = funcAcl_models_classes_ModuleAccessService::singleton();
 		$grantedModules = $role->getPropertyValues($moduleAccessProperty);
 		
