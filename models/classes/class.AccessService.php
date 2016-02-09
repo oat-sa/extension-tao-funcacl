@@ -30,6 +30,9 @@
  */
 class funcAcl_models_classes_AccessService extends tao_models_classes_GenerisService
 {
+    const FUNCACL_NS = 'http://www.tao.lu/Ontologies/taoFuncACL.rdf';
+
+    const PROPERTY_ACL_GRANTACCESS = 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#GrantAccess';
     
     public function grantExtensionAccess(core_kernel_classes_Resource $role, $ext) {
         $accessUri = $this->makeEMAUri($ext);
@@ -75,7 +78,7 @@ class funcAcl_models_classes_AccessService extends tao_models_classes_GenerisSer
     {
         $returnValue = (string) '';
         
-        $returnValue = FUNCACL_NS . '#';
+        $returnValue = self::FUNCACL_NS . '#';
         if (! is_null($act)) {
             $type = 'a';
         } else {
