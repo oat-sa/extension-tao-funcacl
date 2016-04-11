@@ -32,7 +32,7 @@ class Updater extends \common_ext_ExtensionUpdater
      */
     public function update($initialVersion) {
         
-        $this->skip('0','2.7.1');
+        $this->skip('0','2.7.2');
 
 
 		return null;
