@@ -26,7 +26,7 @@ module.exports = function(grunt) {
             modules : [{
                 name: 'funcAcl/controller/routes',
                 include : ext.getExtensionsControllers(['funcAcl']),
-                exclude : ['mathJax', 'mediaElement'].concat(libs)
+                exclude : ['mathJax'].concat(libs)
             }]
         }
     };
