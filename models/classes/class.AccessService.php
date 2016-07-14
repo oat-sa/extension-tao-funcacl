@@ -19,6 +19,7 @@
  *               
  * 
  */
+use oat\oatbox\event\EventManagerAwareTrait;
 
 /**
  * mother class for access operations
@@ -33,7 +34,9 @@ class funcAcl_models_classes_AccessService extends tao_models_classes_GenerisSer
     const FUNCACL_NS = 'http://www.tao.lu/Ontologies/taoFuncACL.rdf';
 
     const PROPERTY_ACL_GRANTACCESS = 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#GrantAccess';
-    
+
+    use EventManagerAwareTrait;
+
     public function grantExtensionAccess(core_kernel_classes_Resource $role, $ext) {
         $accessUri = $this->makeEMAUri($ext);
         funcAcl_models_classes_ExtensionAccessService::singleton()->add($role->getUri(), $accessUri);
@@ -99,4 +102,3 @@ class funcAcl_models_classes_AccessService extends tao_models_classes_GenerisSer
     }
 }
 
-?>

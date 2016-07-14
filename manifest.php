@@ -30,7 +30,7 @@ return array(
     'label' => 'Functionality ACL',
 	'description' => 'Functionality Access Control Layer',
     'license' => 'GPL-2.0',
-    'version' => '2.8.0',
+    'version' => '2.9.0',
 	'author' => 'Open Assessment Technologies, CRP Henri Tudor',
 	'requires' => array(
 	    'tao' => '>=2.7'
@@ -43,7 +43,8 @@ return array(
 			dirname(__FILE__). '/models/ontology/taofuncacl.rdf'
 		),
 	    'php' => array(
-	        dirname(__FILE__). '/scripts/install/setFuncAclImpl.php'
+            dirname(__FILE__) . '/scripts/install/setFuncAclImpl.php',
+            'oat\\funcAcl\\scripts\\install\\registerEvents'
 	    ),
 	),
 	'update' => 'oat\\funcAcl\\scripts\\update\\Updater',

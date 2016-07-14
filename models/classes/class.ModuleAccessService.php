@@ -18,6 +18,8 @@
  *               
  * 
  */
+use oat\funcAcl\model\event\AccessRightAddedEvent;
+use oat\funcAcl\model\event\AccessRightRemovedEvent;
 
 /**
  * access operation for modules
@@ -31,20 +33,14 @@
 class funcAcl_models_classes_ModuleAccessService
     extends funcAcl_models_classes_AccessService
 {
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
-
-    // --- OPERATIONS ---
 
     /**
      * Short description of method add
      *
      * @access public
      * @author Jehan Bihin, <jehan.bihin@tudor.lu>
-     * @param  string roleUri
-     * @param  string accessUri
+     * @param  string $roleUri
+     * @param  string $accessUri
      * @return mixed
      */
     public function add($roleUri, $accessUri)
@@ -57,6 +53,7 @@ class funcAcl_models_classes_ModuleAccessService
 		$values = $role->getPropertyValues($moduleAccessProperty);
 		if (!in_array($module->getUri(), $values)) {
 		    $role->setPropertyValue($moduleAccessProperty, $module->getUri());
+            $this->getEventManager()->trigger(new AccessRightAddedEvent($roleUri, $accessUri));
             funcAcl_helpers_Cache::cacheModule($module);
 		} else {
 		    common_Logger::w('Tried to add role '.$role->getUri().' again to controller '.$accessUri);
@@ -69,8 +66,8 @@ class funcAcl_models_classes_ModuleAccessService
      *
      * @access public
      * @author Jehan Bihin, <jehan.bihin@tudor.lu>
-     * @param  string roleUri
-     * @param  string accessUri
+     * @param  string $roleUri
+     * @param  string $accessUri
      * @return mixed
      */
     public function remove($roleUri, $accessUri)
@@ -94,7 +91,8 @@ class funcAcl_models_classes_ModuleAccessService
 		    foreach (funcAcl_helpers_Model::getModules($extId) as $eModule) {
 		        if (!$module->equals($eModule)) {
 		            $this->add($roleUri, $eModule->getUri());
-		            //$role->setPropertyValue($accessProperty, $eModule->getUri());
+                    $this->getEventManager()->trigger(new AccessRightRemovedEvent($roleUri, $eModule->getUri()));
+                    //$role->setPropertyValue($accessProperty, $eModule->getUri());
 		        }
 		    }
             //funcAcl_helpers_Cache::flushExtensionAccess($extId);
@@ -103,8 +101,11 @@ class funcAcl_models_classes_ModuleAccessService
 		
 		// Remove the access to the module for this role.
 		$role->removePropertyValue($accessProperty, $module->getUri());
-		
-		funcAcl_helpers_Cache::cacheModule($module);
+
+        $this->getEventManager()->trigger(new AccessRightRemovedEvent($roleUri, $accessUri));
+
+
+        funcAcl_helpers_Cache::cacheModule($module);
 				
 		// Remove the access to the actions corresponding to the module for this role.
 		foreach (funcAcl_helpers_Model::getActions($module) as $actionResource) {
