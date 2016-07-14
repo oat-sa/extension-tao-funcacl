@@ -18,6 +18,8 @@
  *               
  * 
  */
+use oat\funcAcl\model\event\AccessRightAddedEvent;
+use oat\funcAcl\model\event\AccessRightRemovedEvent;
 
 /**
  * access operation for extensions
@@ -43,8 +45,8 @@ class funcAcl_models_classes_ExtensionAccessService
      *
      * @access public
      * @author Jehan Bihin, <jehan.bihin@tudor.lu>
-     * @param  string roleUri
-     * @param  string accessUri
+     * @param  string $roleUri
+     * @param  string $accessUri
      * @return mixed
      */
     public function add($roleUri, $accessUri)
@@ -60,7 +62,8 @@ class funcAcl_models_classes_ExtensionAccessService
 		$values = $role->getPropertyValues(new core_kernel_classes_Property(funcAcl_models_classes_AccessService::PROPERTY_ACL_GRANTACCESS));
 		if (!in_array($accessUri, $values)) {
 		    $role->setPropertyValue(new core_kernel_classes_Property(funcAcl_models_classes_AccessService::PROPERTY_ACL_GRANTACCESS), $accessUri);
-		    funcAcl_helpers_Cache::flushExtensionAccess($extId);
+            $this->getEventManager()->trigger(new AccessRightAddedEvent($roleUri, $accessUri));
+            funcAcl_helpers_Cache::flushExtensionAccess($extId);
 		} else {
 		    common_Logger::w('Tried to regrant access for role '.$role->getUri().' to extension '.$accessUri);
 		}
@@ -72,8 +75,8 @@ class funcAcl_models_classes_ExtensionAccessService
      *
      * @access public
      * @author Jehan Bihin, <jehan.bihin@tudor.lu>
-     * @param  string roleUri
-     * @param  string accessUri
+     * @param  string $roleUri
+     * @param  string $accessUri
      * @return mixed
      */
     public function remove($roleUri, $accessUri)
@@ -88,7 +91,7 @@ class funcAcl_models_classes_ExtensionAccessService
 		$role = new core_kernel_classes_Resource($roleUri);
 		
 		$role->removePropertyValues(new core_kernel_classes_Property(funcAcl_models_classes_AccessService::PROPERTY_ACL_GRANTACCESS), array('pattern' => $accessUri));
-		funcAcl_helpers_Cache::flushExtensionAccess($extId);
+        funcAcl_helpers_Cache::flushExtensionAccess($extId);
 		
 		// also remove access to all the controllers
 		$moduleAccessProperty = new core_kernel_classes_Property(funcAcl_models_classes_AccessService::PROPERTY_ACL_GRANTACCESS);
@@ -102,7 +105,8 @@ class funcAcl_models_classes_ExtensionAccessService
 			
 			if ($extId == $ext){
 				$moduleAccessService->remove($role->getUri(), $gM->getUri());
-			}
+                $this->getEventManager()->trigger(new AccessRightRemovedEvent($roleUri, $accessUri));
+            }
 		}
 		
     }

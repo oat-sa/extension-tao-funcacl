@@ -20,7 +20,6 @@
  */
 use oat\funcAcl\model\event\AccessRightAddedEvent;
 use oat\funcAcl\model\event\AccessRightRemovedEvent;
-use oat\oatbox\event\EventManagerAwareTrait;
 
 /**
  * access operation for modules
@@ -34,7 +33,6 @@ use oat\oatbox\event\EventManagerAwareTrait;
 class funcAcl_models_classes_ModuleAccessService
     extends funcAcl_models_classes_AccessService
 {
-    use EventManagerAwareTrait;
 
     /**
      * Short description of method add
@@ -93,7 +91,8 @@ class funcAcl_models_classes_ModuleAccessService
 		    foreach (funcAcl_helpers_Model::getModules($extId) as $eModule) {
 		        if (!$module->equals($eModule)) {
 		            $this->add($roleUri, $eModule->getUri());
-		            //$role->setPropertyValue($accessProperty, $eModule->getUri());
+                    $this->getEventManager()->trigger(new AccessRightRemovedEvent($roleUri, $eModule->getUri()));
+                    //$role->setPropertyValue($accessProperty, $eModule->getUri());
 		        }
 		    }
             //funcAcl_helpers_Cache::flushExtensionAccess($extId);
