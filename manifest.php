@@ -30,10 +30,11 @@ return array(
     'label' => 'Functionality ACL',
 	'description' => 'Functionality Access Control Layer',
     'license' => 'GPL-2.0',
-    'version' => '2.9.0',
+    'version' => '2.9.1',
 	'author' => 'Open Assessment Technologies, CRP Henri Tudor',
 	'requires' => array(
-	    'tao' => '>=2.7'
+        'tao' => '>=2.7',
+        'taoEventLog' => '>=0.2.0'
     ),
 	'models' => array(
 		'http://www.tao.lu/Ontologies/taoFuncACL.rdf'
