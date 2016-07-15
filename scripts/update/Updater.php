@@ -21,20 +21,13 @@
 
 namespace oat\funcAcl\scripts\update;
 
-
-class Updater extends \common_ext_ExtensionUpdater 
+class Updater extends \common_ext_ExtensionUpdater
 {
-
-	/**
-     * 
-     * @param string $currentVersion
-     * @return string $versionUpdatedTo
+    /**
+     * @param string $initialVersion
+     * @return void
      */
     public function update($initialVersion) {
-        
-        $this->skip('0','2.8.0');
-
-
-		return null;
-	}
+        $this->skip('0', '2.9.3');
+    }
 }

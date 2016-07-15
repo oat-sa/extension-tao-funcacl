@@ -18,6 +18,8 @@
  *               
  * 
  */
+use oat\funcAcl\model\event\AccessRightAddedEvent;
+use oat\funcAcl\model\event\AccessRightRemovedEvent;
 
 /**
  * access operation for actions
@@ -28,15 +30,8 @@
  * @since 2.2
  
  */
-class funcAcl_models_classes_ActionAccessService
-    extends funcAcl_models_classes_AccessService
+class funcAcl_models_classes_ActionAccessService extends funcAcl_models_classes_AccessService
 {
-    // --- ASSOCIATIONS ---
-
-
-    // --- ATTRIBUTES ---
-
-    // --- OPERATIONS ---
 
     /**
      * Short description of method add
@@ -60,7 +55,8 @@ class funcAcl_models_classes_ActionAccessService
 		$values = $role->getPropertyValues($actionAccessProperty);
 		if (!in_array($accessUri, $values)) {
 		    $role->setPropertyValue($actionAccessProperty, $accessUri);
-		    $controllerClassName = funcAcl_helpers_Map::getControllerFromUri($module->getUri());
+            $this->getEventManager()->trigger(new AccessRightAddedEvent($roleUri, $accessUri));
+            $controllerClassName = funcAcl_helpers_Map::getControllerFromUri($module->getUri());
 		    funcAcl_helpers_Cache::flushControllerAccess($controllerClassName);
 		} else {
 		    common_Logger::w('Tried to regrant access for role '.$role->getUri().' to action '.$accessUri);
@@ -99,12 +95,15 @@ class funcAcl_models_classes_ActionAccessService
 		    foreach (funcAcl_helpers_Model::getActions($module) as $action) {
 		        if ($action->getUri() != $accessUri) {
 		            $this->add($roleUri, $action->getUri());
-		        }
+                    $this->getEventManager()->trigger(new AccessRightAddedEvent($roleUri, $action->getUri()));
+                }
 		    }
 		    
 		} elseif (isset($controllerAccess['actions'][$act]) && in_array($roleUri, $controllerAccess['actions'][$act])) {
 		    // remove action only
 		    $role->removePropertyValues($actionAccessProperty, array('pattern' => $accessUri));
+            $this->getEventManager()->trigger(new AccessRightRemovedEvent($roleUri, $accessUri));
+
             funcAcl_helpers_Cache::flushControllerAccess($controllerClassName);
 		}
     }
