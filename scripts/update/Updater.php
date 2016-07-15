@@ -21,12 +21,6 @@
 
 namespace oat\funcAcl\scripts\update;
 
-
-use oat\funcAcl\model\event\AccessRightAddedEvent;
-use oat\funcAcl\model\event\AccessRightRemovedEvent;
-use oat\oatbox\event\EventManager;
-use oat\taoEventLog\model\LoggerService;
-
 class Updater extends \common_ext_ExtensionUpdater
 {
 
@@ -36,23 +30,6 @@ class Updater extends \common_ext_ExtensionUpdater
      */
     public function update($initialVersion) {
         
-        $this->skip('0','2.8.0');
-
-        if ($this->isVersion('2.8.0')) {
-
-            /** @var EventManager $eventManager */
-            $eventManager = $this->getServiceManager()->get(EventManager::CONFIG_ID);
-
-            $eventManager->attach(AccessRightAddedEvent::class, [LoggerService::class, 'logEvent']);
-            $eventManager->attach(AccessRightRemovedEvent::class, [LoggerService::class, 'logEvent']);
-
-            $this->getServiceManager()->register(EventManager::CONFIG_ID, $eventManager);
-
-            $this->setVersion('2.9.0');
-        }
-
-        $this->skip('2.9.0', '2.9.1');
-
-
+        $this->skip('0', '3.0.0');
     }
 }
