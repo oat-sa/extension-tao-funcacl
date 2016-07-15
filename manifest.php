@@ -43,8 +43,7 @@ return array(
 			dirname(__FILE__). '/models/ontology/taofuncacl.rdf'
 		),
 	    'php' => array(
-            dirname(__FILE__) . '/scripts/install/setFuncAclImpl.php',
-            'oat\\funcAcl\\scripts\\install\\registerEvents'
+            dirname(__FILE__) . '/scripts/install/setFuncAclImpl.php'
 	    ),
 	),
 	'update' => 'oat\\funcAcl\\scripts\\update\\Updater',
