@@ -1,6 +1,11 @@
 <?php
+
+namespace oat\funcAcl\helpers;
+
 use oat\oatbox\service\ServiceManager;
 use oat\tao\helpers\ControllerHelper;
+use oat\funcAcl\model\AccessService;
+
 /**  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,14 +27,14 @@ use oat\tao\helpers\ControllerHelper;
  */
 
 /**
- * Short description of class funcAcl_helpers_Cache
+ * Short description of class CacheHelper
  *
  * @access public
  * @author Jerome Bogaerts, <jerome@taotesting.com>
  * @package tao
  
  */
-class funcAcl_helpers_Cache
+class CacheHelper
 {
     // --- ASSOCIATIONS ---
 
@@ -71,7 +76,7 @@ class funcAcl_helpers_Cache
      */
     public static function cacheModule( core_kernel_classes_Resource $module)
     {
-        $controllerClassName = funcAcl_helpers_Map::getControllerFromUri($module->getUri());
+        $controllerClassName = MapHelper::getControllerFromUri($module->getUri());
         self::flushControllerAccess($controllerClassName);
         self::getControllerAccess($controllerClassName);
     }
@@ -89,12 +94,12 @@ class funcAcl_helpers_Cache
             $returnValue = self::getCacheImplementation()->get(self::SERIAL_PREFIX_MODULE.$controllerClassName);
         } catch (common_cache_Exception $e) {
             
-            $extId = funcAcl_helpers_Map::getExtensionFromController($controllerClassName);
-            $extension = funcAcl_helpers_Map::getUriForExtension($extId);
-            $module = funcAcl_helpers_Map::getUriForController($controllerClassName);
+            $extId = MapHelper::getExtensionFromController($controllerClassName);
+            $extension = MapHelper::getUriForExtension($extId);
+            $module = MapHelper::getUriForController($controllerClassName);
             
             $roleClass = new core_kernel_classes_Class(CLASS_ROLE);
-            $accessProperty = new core_kernel_classes_Property(funcAcl_models_classes_AccessService::PROPERTY_ACL_GRANTACCESS);
+            $accessProperty = new core_kernel_classes_Property(AccessService::PROPERTY_ACL_GRANTACCESS);
 
             $returnValue = array('module' => array(), 'actions' => array());
             
@@ -120,12 +125,12 @@ class funcAcl_helpers_Cache
             
             // roles by action
             foreach (ControllerHelper::getActions($controllerClassName) as $actionName) {
-                $actionUri = funcAcl_helpers_Map::getUriForAction($controllerClassName, $actionName);
+                $actionUri = MapHelper::getUriForAction($controllerClassName, $actionName);
                 $rolesForAction = $roleClass->searchInstances(array(
                     $accessProperty->getUri() => $actionUri
                 ), array('recursive' => true, 'like' => false));
                 if (!empty($rolesForAction)) {
-                    $actionName = funcAcl_helpers_Map::getActionFromUri($actionUri);
+                    $actionName = MapHelper::getActionFromUri($actionUri);
                     $returnValue['actions'][$actionName] = array();
                     foreach ($rolesForAction as $roleResource) {
                         $returnValue['actions'][$actionName][] = $roleResource->getUri();
@@ -144,10 +149,10 @@ class funcAcl_helpers_Cache
             $returnValue = self::getCacheImplementation()->get(self::CACHE_PREFIX_EXTENSION.$extId);
         } catch (common_cache_Exception $e) {
             $returnValue = array();
-            $aclExtUri = funcAcl_models_classes_AccessService::singleton()->makeEMAUri($extId);
+            $aclExtUri = AccessService::singleton()->makeEMAUri($extId);
             $roleClass = new core_kernel_classes_Class(CLASS_ROLE);
             $roles = $roleClass->searchInstances(array(
-                funcAcl_models_classes_AccessService::PROPERTY_ACL_GRANTACCESS => $aclExtUri
+                AccessService::PROPERTY_ACL_GRANTACCESS => $aclExtUri
             ), array(
                 'recursive' => true,
                 'like' => false

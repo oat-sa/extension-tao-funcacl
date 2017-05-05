@@ -19,7 +19,10 @@
  * 
  */
 
+namespace oat\funcAcl\helpers;
+
 use oat\tao\model\accessControl\func\FuncHelper;
+use oat\funcAcl\model\AccessService;
 
 /**
  * Helper to map URIs to controllers
@@ -28,11 +31,11 @@ use oat\tao\model\accessControl\func\FuncHelper;
  * @author Joel Bout <joel@taotesting.com>
  * @package tao
  */
-class funcAcl_helpers_Map
+class MapHelper
 {
     
     public static function getUriForExtension($extId) {
-        return funcAcl_models_classes_AccessService::singleton()->makeEMAUri($extId);
+        return AccessService::singleton()->makeEMAUri($extId);
     }
     
     public static function getUriForController($controllerClassName) {
@@ -41,7 +44,7 @@ class funcAcl_helpers_Map
             ? substr($controllerClassName, strrpos($controllerClassName, '\\')+1)
             : substr($controllerClassName, strrpos($controllerClassName, '_')+1)
         ;
-        return funcAcl_models_classes_AccessService::singleton()->makeEMAUri($extension, $shortName);
+        return AccessService::singleton()->makeEMAUri($extension, $shortName);
     }
 
     public static function getUriForAction($controllerClassName, $actionName) {
@@ -50,7 +53,7 @@ class funcAcl_helpers_Map
             ? substr($controllerClassName, strrpos($controllerClassName, '\\')+1)
             : substr($controllerClassName, strrpos($controllerClassName, '_')+1)
         ;
-        return funcAcl_models_classes_AccessService::singleton()->makeEMAUri($extension, $shortName, $actionName);
+        return AccessService::singleton()->makeEMAUri($extension, $shortName, $actionName);
     }
 
     public static function getControllerFromUri($uri) {

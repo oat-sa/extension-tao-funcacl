@@ -1,6 +1,12 @@
 <?php
 use oat\tao\helpers\ControllerHelper;
-/*  
+use oat\funcAcl\model\AccessService;
+use oat\funcAcl\model\ActionAccessService;
+use oat\funcAcl\model\ExtensionAccessService;
+use oat\funcAcl\model\ModuleAccessService;
+use oat\funcAcl\helpers\CacheHelper;
+use oat\funcAcl\helpers\MapHelper;
+/*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -123,8 +129,8 @@ class funcAcl_actions_Admin extends tao_actions_CommonModule {
     }
     
     protected function buildExtensionData(common_ext_Extension $extension, $roleUri, $includedRoleUris) {
-        $extAccess = funcAcl_helpers_Cache::getExtensionAccess($extension->getId());
-        $extAclUri = funcAcl_models_classes_AccessService::singleton()->makeEMAUri($extension->getId());
+        $extAccess = CacheHelper::getExtensionAccess($extension->getId());
+        $extAclUri = AccessService::singleton()->makeEMAUri($extension->getId());
         $atLeastOneAccess = false;
         $allAccess = in_array($roleUri, $extAccess);
         $inherited = count(array_intersect($includedRoleUris, $extAccess)) > 0;
@@ -155,9 +161,9 @@ class funcAcl_actions_Admin extends tao_actions_CommonModule {
 
     protected function buildControllerData($controllerClassName, $roleUri, $includedRoleUris) {
         
-        $modUri = funcAcl_helpers_Map::getUriForController($controllerClassName);
+        $modUri = MapHelper::getUriForController($controllerClassName);
         
-        $moduleAccess = funcAcl_helpers_Cache::getControllerAccess($controllerClassName);
+        $moduleAccess = CacheHelper::getControllerAccess($controllerClassName);
         $uri = explode('#', $modUri);
         list($type, $extId, $modId) = explode('_', $uri[1]);
         
@@ -200,12 +206,12 @@ class funcAcl_actions_Admin extends tao_actions_CommonModule {
             }
             $module = new core_kernel_classes_Resource($this->getRequestParameter('module'));
             
-            $controllerClassName = funcAcl_helpers_Map::getControllerFromUri($module->getUri());
-            $controllerAccess = funcAcl_helpers_Cache::getControllerAccess($controllerClassName);
+            $controllerClassName = MapHelper::getControllerFromUri($module->getUri());
+            $controllerAccess = CacheHelper::getControllerAccess($controllerClassName);
             
             $actions = array();
             foreach (ControllerHelper::getActions($controllerClassName) as $actionName) {
-                $uri = funcAcl_helpers_Map::getUriForAction($controllerClassName, $actionName);
+                $uri = MapHelper::getUriForAction($controllerClassName, $actionName);
                 $part = explode('#', $uri);
                 list($type, $extId, $modId, $actId) = explode('_', $part[1]);
                 
@@ -238,7 +244,7 @@ class funcAcl_actions_Admin extends tao_actions_CommonModule {
         else{
             $role = $this->getRequestParameter('role');
             $uri = $this->getRequestParameter('uri');
-            $extensionService = funcAcl_models_classes_ExtensionAccessService::singleton();
+            $extensionService = ExtensionAccessService::singleton();
             $extensionService->remove($role, $uri);
             echo json_encode(array('uri' => $uri));    
         }
@@ -251,7 +257,7 @@ class funcAcl_actions_Admin extends tao_actions_CommonModule {
         else{
             $role = $this->getRequestParameter('role');
             $uri = $this->getRequestParameter('uri');
-            $extensionService = funcAcl_models_classes_ExtensionAccessService::singleton();
+            $extensionService = ExtensionAccessService::singleton();
             $extensionService->add($role, $uri);
             echo json_encode(array('uri' => $uri));
         }
@@ -263,7 +269,7 @@ class funcAcl_actions_Admin extends tao_actions_CommonModule {
         } else {
             $role = $this->getRequestParameter('role');
             $uri = $this->getRequestParameter('uri');
-            $moduleService = funcAcl_models_classes_ModuleAccessService::singleton();
+            $moduleService = ModuleAccessService::singleton();
             $moduleService->remove($role, $uri);
             echo json_encode(array('uri' => $uri));    
         }
@@ -276,7 +282,7 @@ class funcAcl_actions_Admin extends tao_actions_CommonModule {
         else{
             $role = $this->getRequestParameter('role');
             $uri = $this->getRequestParameter('uri');
-            $moduleService = funcAcl_models_classes_ModuleAccessService::singleton();
+            $moduleService = ModuleAccessService::singleton();
             $moduleService->add($role, $uri);
             echo json_encode(array('uri' => $uri));    
         }
@@ -289,7 +295,7 @@ class funcAcl_actions_Admin extends tao_actions_CommonModule {
         else{
             $role = $this->getRequestParameter('role');
             $uri = $this->getRequestParameter('uri');
-            $actionService = funcAcl_models_classes_ActionAccessService::singleton();
+            $actionService = ActionAccessService::singleton();
             $actionService->remove($role, $uri);
             echo json_encode(array('uri' => $uri));    
         }
@@ -302,7 +308,7 @@ class funcAcl_actions_Admin extends tao_actions_CommonModule {
         else{
             $role = $this->getRequestParameter('role');
             $uri = $this->getRequestParameter('uri');
-            $actionService = funcAcl_models_classes_ActionAccessService::singleton();
+            $actionService = ActionAccessService::singleton();
             $actionService->add($role, $uri);
             echo json_encode(array('uri' => $uri));    
         }

@@ -18,8 +18,12 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
  * 
  */
-use oat\tao\model\accessControl\func\FuncHelper;
+
+namespace oat\funcAcl\helpers;
+
 use oat\tao\helpers\ControllerHelper;
+use oat\funcAcl\model\AccessService;
+
 
 /**
  * Helper to read/write the action/module model
@@ -29,7 +33,7 @@ use oat\tao\helpers\ControllerHelper;
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
  * @package tao
  */
-class funcAcl_helpers_Model
+class ModelHelper
 {
 
     /**
@@ -48,7 +52,7 @@ class funcAcl_helpers_Model
                 ? substr($controllerClassName, strrpos($controllerClassName, '\\')+1)
                 : substr($controllerClassName, strrpos($controllerClassName, '_')+1)
             ;
-            $uri = funcAcl_models_classes_AccessService::singleton()->makeEMAUri($extensionId, $shortName);
+            $uri = AccessService::singleton()->makeEMAUri($extensionId, $shortName);
             $returnValue[$uri] = new core_kernel_classes_Resource($uri);
         }
         return (array) $returnValue;
@@ -65,10 +69,10 @@ class funcAcl_helpers_Model
     public static function getActions( core_kernel_classes_Resource $module)
     {
         $returnValue = array();
-        $controllerClassName = funcAcl_helpers_Map::getControllerFromUri($module->getUri());
+        $controllerClassName = MapHelper::getControllerFromUri($module->getUri());
         try {
             foreach (ControllerHelper::getActions($controllerClassName) as $actionName) {
-                $uri = funcAcl_helpers_Map::getUriForAction($controllerClassName, $actionName);
+                $uri = MapHelper::getUriForAction($controllerClassName, $actionName);
                 $returnValue[$uri] = new core_kernel_classes_Resource($uri);
             }
         } catch (ReflectionException $e) {

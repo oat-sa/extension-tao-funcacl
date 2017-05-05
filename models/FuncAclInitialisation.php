@@ -18,6 +18,10 @@
  * 
  */
 
+namespace oat\funcAcl\model;
+
+use oat\funcAcl\helpers\CacheHelper;
+
 /**
  * Initialise the FuncAcl Model
  *
@@ -26,7 +30,7 @@
  * @package tao
  
  */
-class funcAcl_models_classes_Initialisation
+class FuncAclInitialisation
 {
     public static function run() {
         // We get all the management roles and the extension they belong to.
@@ -40,7 +44,7 @@ class funcAcl_models_classes_Initialisation
             if (empty($managementRole)) {
                 // try to discover it.
                 foreach ($foundManagementRoles as $mR) {
-                    $moduleURIs = $mR->getPropertyValues(new core_kernel_classes_Property(funcAcl_models_classes_AccessService::PROPERTY_ACL_GRANTACCESS));
+                    $moduleURIs = $mR->getPropertyValues(new core_kernel_classes_Property(AccessService::PROPERTY_ACL_GRANTACCESS));
         
                     foreach ($moduleURIs as $moduleURI) {
                         $uri = explode('#', $moduleURI);
@@ -59,13 +63,13 @@ class funcAcl_models_classes_Initialisation
             }
         }
          
-        funcAcl_helpers_Cache::flush();
+        CacheHelper::flush();
         
         foreach (common_ext_ExtensionsManager::singleton()->getInstalledExtensions() as $extension) {
             if ($extension->getId() != 'generis') {
                 // 2. Grant access to Management Role.
                 if (!empty($managementRolesByExtension[$extension->getId()])) {
-                    $extAccessService = funcAcl_models_classes_ExtensionAccessService::singleton();
+                    $extAccessService = ExtensionAccessService::singleton();
                     $extAccessService->add($managementRolesByExtension[$extension->getId()]->getUri(), $extAccessService->makeEMAUri($extension->getId()));
                 }
                 else {

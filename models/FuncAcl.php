@@ -18,6 +18,10 @@
  * 
  */
 
+namespace oat\funcAcl\model;
+
+use oat\funcAcl\helpers\CacheHelper;
+use oat\funcAcl\helpers\MapHelper;
 use oat\tao\model\accessControl\func\FuncAccessControl;
 use oat\tao\model\accessControl\func\AccessRule;
 use oat\oatbox\user\User;
@@ -30,7 +34,7 @@ use oat\oatbox\service\ConfigurableService;
  * @author Joel Bout, <joel@taotesting.com>
  * @package tao
  */
-class funcAcl_models_classes_FuncAcl extends ConfigurableService
+class FuncAcl extends ConfigurableService
     implements FuncAccessControl
 {
     
@@ -41,7 +45,7 @@ class funcAcl_models_classes_FuncAcl extends ConfigurableService
     public function accessPossible(User $user, $controller, $action) {
         $userRoles = $user->getRoles();
         try {
-            $controllerAccess = funcAcl_helpers_Cache::getControllerAccess($controller);
+            $controllerAccess = CacheHelper::getControllerAccess($controller);
             $allowedRoles = isset($controllerAccess['actions'][$action])
                 ? array_merge($controllerAccess['module'], $controllerAccess['actions'][$action])
                 : $controllerAccess['module'];
@@ -70,14 +74,14 @@ class funcAcl_models_classes_FuncAcl extends ConfigurableService
      */
     public function hasAccess($action, $controller, $extension, $parameters = array()) {
         $user = common_session_SessionManager::getSession()->getUser();
-        $uri = funcAcl_models_classes_ModuleAccessService::singleton()->makeEMAUri($extension, $controller);
-        $controllerClassName = funcAcl_helpers_Map::getControllerFromUri($uri);
+        $uri = ModuleAccessService::singleton()->makeEMAUri($extension, $controller);
+        $controllerClassName = MapHelper::getControllerFromUri($uri);
         return self::accessPossible($user, $controllerClassName, $action);
     }
     
     public function applyRule(AccessRule $rule) {
         if ($rule->isGrant()) {
-            $accessService = funcAcl_models_classes_AccessService::singleton();
+            $accessService = AccessService::singleton();
             $elements = $this->evalFilterMask($rule->getMask());
             
             switch (count($elements)) {
@@ -104,7 +108,7 @@ class funcAcl_models_classes_FuncAcl extends ConfigurableService
     
     public function revokeRule(AccessRule $rule) {
         if ($rule->isGrant()) {
-            $accessService = funcAcl_models_classes_AccessService::singleton();
+            $accessService = AccessService::singleton();
             $elements = $this->evalFilterMask($rule->getMask());
             
             switch (count($elements)) {
@@ -144,7 +148,7 @@ class funcAcl_models_classes_FuncAcl extends ConfigurableService
                 $action = null;
             }
             if (class_exists($controller)) {
-                $extension = funcAcl_helpers_Map::getExtensionFromController($controller);
+                $extension = MapHelper::getExtensionFromController($controller);
                 $shortName = strpos($controller, '\\') !== false
                     ? substr($controller, strrpos($controller, '\\')+1)
                     : substr($controller, strrpos($controller, '_')+1);
@@ -169,7 +173,7 @@ class funcAcl_models_classes_FuncAcl extends ConfigurableService
             } elseif (isset($mask['ext'])) {
                 return array($mask['ext']);
             } elseif (isset($mask['controller'])) {
-                $extension = funcAcl_helpers_Map::getExtensionFromController($mask['controller']);
+                $extension = MapHelper::getExtensionFromController($mask['controller']);
                 $shortName = strpos($mask['controller'], '\\') !== false
                     ? substr($mask['controller'], strrpos($mask['controller'], '\\')+1)
                     : substr($mask['controller'], strrpos($mask['controller'], '_')+1)
@@ -177,7 +181,7 @@ class funcAcl_models_classes_FuncAcl extends ConfigurableService
                 return array($extension, $shortName);
             } elseif (isset($mask['act']) && strpos($mask['act'], '@') !== false) {
                 list($controller, $action) = explode('@', $mask['act'], 2);
-                $extension = funcAcl_helpers_Map::getExtensionFromController($controller);
+                $extension = MapHelper::getExtensionFromController($controller);
                 $shortName = strpos($controller, '\\') !== false
                     ? substr($controller, strrpos($controller, '\\')+1)
                     : substr($controller, strrpos($controller, '_')+1)
