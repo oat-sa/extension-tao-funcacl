@@ -51,6 +51,9 @@ return array(
     'acl' => array(
         array('grant', 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#FuncAclManagerRole', array('ext'=>'funcAcl')),
     ),
+    'routes' => array(
+        '/funcAcl' => 'oat\\funcAcl\\controller'
+    ),
 	'optimizableClasses' => array(
 		'http://www.tao.lu/Ontologies/taoFuncACL.rdf#Extension'
 	),
@@ -76,5 +79,9 @@ return array(
 	
 	 	#TPL PATH the path to the templates
 	 	'TPL_PATH'	=> $extpath."views".DIRECTORY_SEPARATOR."templates".DIRECTORY_SEPARATOR,
-	 )
+    ),
+    'extra' => array(
+        'structures' => dirname(__FILE__).DIRECTORY_SEPARATOR.'controller'.DIRECTORY_SEPARATOR.'structures.xml',
+    ),
+
 );
