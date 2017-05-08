@@ -22,7 +22,7 @@
 
 namespace oat\funcAcl\scripts;
 
-use oat\funcAcl\model\FuncAclInitialisation;
+use oat\funcAcl\models\FuncAclInitialisation;
 
 /**
  * The taoPrepareActions script aims at updating the Extension model in the Ontology

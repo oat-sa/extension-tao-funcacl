@@ -22,7 +22,7 @@
 namespace oat\funcAcl\helpers;
 
 use oat\tao\helpers\ControllerHelper;
-use oat\funcAcl\model\AccessService;
+use oat\funcAcl\models\AccessService;
 
 
 /**

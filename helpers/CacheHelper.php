@@ -4,7 +4,7 @@ namespace oat\funcAcl\helpers;
 
 use oat\oatbox\service\ServiceManager;
 use oat\tao\helpers\ControllerHelper;
-use oat\funcAcl\model\AccessService;
+use oat\funcAcl\models\AccessService;
 
 /**  
  * This program is free software; you can redistribute it and/or

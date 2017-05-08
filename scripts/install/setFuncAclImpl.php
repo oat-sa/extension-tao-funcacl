@@ -20,7 +20,7 @@
 
 use oat\tao\model\accessControl\func\AclProxy;
 use oat\tao\model\accessControl\func\AccessRule;
-use oat\funcAcl\model\FuncAcl;
+use oat\funcAcl\models\FuncAcl;
 
 $impl = new FuncAcl();
 

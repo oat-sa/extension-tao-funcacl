@@ -19,10 +19,10 @@
  * 
  */
 
-namespace oat\funcAcl\model;
+namespace oat\funcAcl\models;
 
-use oat\funcAcl\model\event\AccessRightAddedEvent;
-use oat\funcAcl\model\event\AccessRightRemovedEvent;
+use oat\funcAcl\models\event\AccessRightAddedEvent;
+use oat\funcAcl\models\event\AccessRightRemovedEvent;
 use oat\funcAcl\helpers\CacheHelper;
 
 /**

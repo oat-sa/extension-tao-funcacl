@@ -1,10 +1,10 @@
 <?php
 use oat\oatbox\user\LoginService;
 use oat\tao\test\TaoPhpUnitTestRunner;
-use oat\funcAcl\model\AccessService;
-use oat\funcAcl\model\ActionAccessService;
-use oat\funcAcl\model\FuncAcl;
-use oat\funcAcl\model\ModuleAccessService;
+use oat\funcAcl\models\AccessService;
+use oat\funcAcl\models\ActionAccessService;
+use oat\funcAcl\models\FuncAcl;
+use oat\funcAcl\models\ModuleAccessService;
 use oat\funcAcl\helpers\CacheHelper;
 
 include_once dirname(__FILE__) . '/../includes/raw_start.php';

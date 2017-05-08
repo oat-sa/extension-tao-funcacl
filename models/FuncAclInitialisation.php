@@ -18,7 +18,7 @@
  * 
  */
 
-namespace oat\funcAcl\model;
+namespace oat\funcAcl\models;
 
 use oat\funcAcl\helpers\CacheHelper;
 

@@ -2,10 +2,10 @@
 namespace oat\funcAcl\controller;
 
 use oat\tao\helpers\ControllerHelper;
-use oat\funcAcl\model\AccessService;
-use oat\funcAcl\model\ActionAccessService;
-use oat\funcAcl\model\ExtensionAccessService;
-use oat\funcAcl\model\ModuleAccessService;
+use oat\funcAcl\models\AccessService;
+use oat\funcAcl\models\ActionAccessService;
+use oat\funcAcl\models\ExtensionAccessService;
+use oat\funcAcl\models\ModuleAccessService;
 use oat\funcAcl\helpers\CacheHelper;
 use oat\funcAcl\helpers\MapHelper;
 /*

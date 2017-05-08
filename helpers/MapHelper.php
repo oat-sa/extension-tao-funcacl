@@ -22,7 +22,7 @@
 namespace oat\funcAcl\helpers;
 
 use oat\tao\model\accessControl\func\FuncHelper;
-use oat\funcAcl\model\AccessService;
+use oat\funcAcl\models\AccessService;
 
 /**
  * Helper to map URIs to controllers

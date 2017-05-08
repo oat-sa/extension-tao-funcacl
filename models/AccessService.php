@@ -20,7 +20,7 @@
  * 
  */
 
-namespace oat\funcAcl\model;
+namespace oat\funcAcl\models;
 
 use oat\oatbox\event\EventManagerAwareTrait;
 

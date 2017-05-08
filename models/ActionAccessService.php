@@ -19,12 +19,12 @@
  * 
  */
 
-namespace oat\funcAcl\model;
+namespace oat\funcAcl\models;
 
 use oat\funcAcl\helpers\MapHelper;
 use oat\funcAcl\helpers\ModelHelper;
-use oat\funcAcl\model\event\AccessRightAddedEvent;
-use oat\funcAcl\model\event\AccessRightRemovedEvent;
+use oat\funcAcl\models\event\AccessRightAddedEvent;
+use oat\funcAcl\models\event\AccessRightRemovedEvent;
 use oat\funcAcl\helpers\CacheHelper;
 
 /**
