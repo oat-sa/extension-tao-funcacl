@@ -44,8 +44,8 @@ class ActionAccessService extends AccessService
      *
      * @access public
      * @author Jehan Bihin, <jehan.bihin@tudor.lu>
-     * @param  string roleUri
-     * @param  string accessUri
+     * @param  string $roleUri
+     * @param  string $accessUri
      * @return mixed
      */
     public function add($roleUri, $accessUri)
@@ -53,10 +53,10 @@ class ActionAccessService extends AccessService
 		$uri = explode('#', $accessUri);
 		list($type, $ext, $mod, $act) = explode('_', $uri[1]);
 		
-		$role = new core_kernel_classes_Resource($roleUri);
-		$module = new core_kernel_classes_Resource($this->makeEMAUri($ext, $mod));
-		$actionAccessProperty = new core_kernel_classes_Property(static::PROPERTY_ACL_GRANTACCESS);
-		$moduleAccessProperty = new core_kernel_classes_Property(static::PROPERTY_ACL_GRANTACCESS);
+		$role = new \core_kernel_classes_Resource($roleUri);
+		$module = new \core_kernel_classes_Resource($this->makeEMAUri($ext, $mod));
+		$actionAccessProperty = new \core_kernel_classes_Property(static::PROPERTY_ACL_GRANTACCESS);
+		$moduleAccessProperty = new \core_kernel_classes_Property(static::PROPERTY_ACL_GRANTACCESS);
 		
 		$values = $role->getPropertyValues($actionAccessProperty);
 		if (!in_array($accessUri, $values)) {
@@ -65,7 +65,7 @@ class ActionAccessService extends AccessService
             $controllerClassName = MapHelper::getControllerFromUri($module->getUri());
 		    CacheHelper::flushControllerAccess($controllerClassName);
 		} else {
-		    common_Logger::w('Tried to regrant access for role '.$role->getUri().' to action '.$accessUri);
+		    \common_Logger::w('Tried to regrant access for role '.$role->getUri().' to action '.$accessUri);
 		}
     }
 
@@ -74,8 +74,8 @@ class ActionAccessService extends AccessService
      *
      * @access public
      * @author Jehan Bihin, <jehan.bihin@tudor.lu>
-     * @param  string roleUri
-     * @param  string accessUri
+     * @param  string $roleUri
+     * @param  string $accessUri
      * @return mixed
      */
     public function remove($roleUri, $accessUri)
@@ -84,10 +84,10 @@ class ActionAccessService extends AccessService
 		$uri = explode('#', $accessUri);
 		list($type, $ext, $mod, $act) = explode('_', $uri[1]);
 		
-		$role = new core_kernel_classes_Class($roleUri);
-		$actionAccessProperty = new core_kernel_classes_Property(static::PROPERTY_ACL_GRANTACCESS);
+		$role = new \core_kernel_classes_Class($roleUri);
+		$actionAccessProperty = new \core_kernel_classes_Property(static::PROPERTY_ACL_GRANTACCESS);
 		
-		$module = new core_kernel_classes_Resource($this->makeEMAUri($ext, $mod));
+		$module = new \core_kernel_classes_Resource($this->makeEMAUri($ext, $mod));
 		$controllerClassName = MapHelper::getControllerFromUri($module->getUri());
 		
 		// access via controller?

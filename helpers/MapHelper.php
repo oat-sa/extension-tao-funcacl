@@ -72,17 +72,17 @@ class MapHelper
             if (count($parts) == 3) {
                 return $parts[0];
             } else {
-                throw new common_exception_Error('Unknown controller '.$controllerClass);
+                throw new \common_exception_Error('Unknown controller '.$controllerClass);
             }
         } else {
-            foreach (common_ext_ExtensionsManager::singleton()->getEnabledExtensions() as $ext) {
+            foreach (\common_ext_ExtensionsManager::singleton()->getEnabledExtensions() as $ext) {
                 foreach ($ext->getManifest()->getRoutes() as $routePrefix => $namespace) {
                     if (is_string($namespace) && substr($controllerClass, 0, strlen($namespace)) == $namespace) {
                         return $ext->getId();
                     }
                 }
             }
-            throw new common_exception_Error('Unknown controller '.$controllerClass);
+            throw new \common_exception_Error('Unknown controller '.$controllerClass);
         }
     }
 }

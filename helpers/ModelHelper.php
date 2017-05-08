@@ -41,7 +41,7 @@ class ModelHelper
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  string extensionID
+     * @param  string $extensionID
      * @return array
      */
     public static function getModules($extensionId)
@@ -53,7 +53,7 @@ class ModelHelper
                 : substr($controllerClassName, strrpos($controllerClassName, '_')+1)
             ;
             $uri = AccessService::singleton()->makeEMAUri($extensionId, $shortName);
-            $returnValue[$uri] = new core_kernel_classes_Resource($uri);
+            $returnValue[$uri] = new \core_kernel_classes_Resource($uri);
         }
         return (array) $returnValue;
     }
@@ -63,19 +63,19 @@ class ModelHelper
      *
      * @access public
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource module
+     * @param  Resource $module
      * @return array
      */
-    public static function getActions( core_kernel_classes_Resource $module)
+    public static function getActions(\core_kernel_classes_Resource $module)
     {
         $returnValue = array();
         $controllerClassName = MapHelper::getControllerFromUri($module->getUri());
         try {
             foreach (ControllerHelper::getActions($controllerClassName) as $actionName) {
                 $uri = MapHelper::getUriForAction($controllerClassName, $actionName);
-                $returnValue[$uri] = new core_kernel_classes_Resource($uri);
+                $returnValue[$uri] = new \core_kernel_classes_Resource($uri);
             }
-        } catch (ReflectionException $e) {
+        } catch (\ReflectionException $e) {
             // unknown controller, no actions returned
         }
         return (array) $returnValue;

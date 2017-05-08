@@ -60,7 +60,7 @@ class CacheHelper
 
     /**
      * Returns the funcACL Cache implementation
-     * @return common_cache_Cache
+     * @return \common_cache_Cache
      */
     private static function getCacheImplementation(){
     	return ServiceManager::getServiceManager()->get('generis/cache');
@@ -71,10 +71,10 @@ class CacheHelper
      *
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  Resource module
+     * @param  Resource $module
      * @return void
      */
-    public static function cacheModule( core_kernel_classes_Resource $module)
+    public static function cacheModule(\core_kernel_classes_Resource $module)
     {
         $controllerClassName = MapHelper::getControllerFromUri($module->getUri());
         self::flushControllerAccess($controllerClassName);
@@ -92,14 +92,14 @@ class CacheHelper
     {
         try{
             $returnValue = self::getCacheImplementation()->get(self::SERIAL_PREFIX_MODULE.$controllerClassName);
-        } catch (common_cache_Exception $e) {
+        } catch (\common_cache_Exception $e) {
             
             $extId = MapHelper::getExtensionFromController($controllerClassName);
             $extension = MapHelper::getUriForExtension($extId);
             $module = MapHelper::getUriForController($controllerClassName);
             
-            $roleClass = new core_kernel_classes_Class(CLASS_ROLE);
-            $accessProperty = new core_kernel_classes_Property(AccessService::PROPERTY_ACL_GRANTACCESS);
+            $roleClass = new \core_kernel_classes_Class(CLASS_ROLE);
+            $accessProperty = new \core_kernel_classes_Property(AccessService::PROPERTY_ACL_GRANTACCESS);
 
             $returnValue = array('module' => array(), 'actions' => array());
             
@@ -147,10 +147,10 @@ class CacheHelper
     {
         try{
             $returnValue = self::getCacheImplementation()->get(self::CACHE_PREFIX_EXTENSION.$extId);
-        } catch (common_cache_Exception $e) {
+        } catch (\common_cache_Exception $e) {
             $returnValue = array();
             $aclExtUri = AccessService::singleton()->makeEMAUri($extId);
-            $roleClass = new core_kernel_classes_Class(CLASS_ROLE);
+            $roleClass = new \core_kernel_classes_Class(CLASS_ROLE);
             $roles = $roleClass->searchInstances(array(
                 AccessService::PROPERTY_ACL_GRANTACCESS => $aclExtUri
             ), array(
@@ -183,10 +183,10 @@ class CacheHelper
      *
      * @access private
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  Resource module
+     * @param  Resource $module
      * @return string
      */
-    private static function buildModuleSerial( core_kernel_classes_Resource $module)
+    private static function buildModuleSerial(\core_kernel_classes_Resource $module)
     {
         $returnValue = (string) '';
 
@@ -204,10 +204,10 @@ class CacheHelper
      *
      * @access public
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  Resource module
+     * @param  Resource $module
      * @return void
      */
-    public static function removeModule( core_kernel_classes_Resource $module)
+    public static function removeModule(\core_kernel_classes_Resource $module)
     {
         
         self::getCacheImplementation()->remove(self::buildModuleSerial($module));

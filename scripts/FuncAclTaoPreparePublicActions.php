@@ -33,8 +33,7 @@ use oat\funcAcl\model\FuncAclInitialisation;
  * @package tao
  
  */
-class FuncAclTaoPreparePublicActions
-    extends tao_scripts_Runner
+class FuncAclTaoPreparePublicActions extends \tao_scripts_Runner
 {
 
     public function preRun()

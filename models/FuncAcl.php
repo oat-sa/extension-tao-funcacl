@@ -34,8 +34,7 @@ use oat\oatbox\service\ConfigurableService;
  * @author Joel Bout, <joel@taotesting.com>
  * @package tao
  */
-class FuncAcl extends ConfigurableService
-    implements FuncAccessControl
+class FuncAcl extends ConfigurableService implements FuncAccessControl
 {
     
     /**
@@ -52,10 +51,10 @@ class FuncAcl extends ConfigurableService
             
             $accessAllowed = count(array_intersect($userRoles, $allowedRoles)) > 0;
             if (!$accessAllowed) {
-                common_Logger::i('Access denied to '.$controller.'@'.$action.' for user \''.$user->getIdentifier().'\'');
+                \common_Logger::i('Access denied to '.$controller.'@'.$action.' for user \''.$user->getIdentifier().'\'');
             }
-        } catch (ReflectionException $e) {
-            common_Logger::i('Unknown controller '.$controller);
+        } catch (\ReflectionException $e) {
+            \common_Logger::i('Unknown controller '.$controller);
             $accessAllowed = false;
         }
         
@@ -73,7 +72,7 @@ class FuncAcl extends ConfigurableService
      * @deprecated
      */
     public function hasAccess($action, $controller, $extension, $parameters = array()) {
-        $user = common_session_SessionManager::getSession()->getUser();
+        $user = \common_session_SessionManager::getSession()->getUser();
         $uri = ModuleAccessService::singleton()->makeEMAUri($extension, $controller);
         $controllerClassName = MapHelper::getControllerFromUri($uri);
         return self::accessPossible($user, $controllerClassName, $action);
@@ -102,7 +101,7 @@ class FuncAcl extends ConfigurableService
             }
             
         } else {
-            common_Logger::w('Only grant rules accepted in '.__CLASS__);
+            \common_Logger::w('Only grant rules accepted in '.__CLASS__);
         }
     }
     
@@ -128,7 +127,7 @@ class FuncAcl extends ConfigurableService
                     // fail silently warning should already be send
             }
         } else {
-            common_Logger::w('Only grant rules accepted in '.__CLASS__);
+            \common_Logger::w('Only grant rules accepted in '.__CLASS__);
         }
     }
     
@@ -161,7 +160,7 @@ class FuncAcl extends ConfigurableService
                     return array($extension, $shortName, $action);
                 }
             } else {
-                common_Logger::w('Unknown controller '.$controller);
+                \common_Logger::w('Unknown controller '.$controller);
             }
         
             /// array masks
@@ -188,10 +187,10 @@ class FuncAcl extends ConfigurableService
                     ;
                 return array($extension, $shortName, $action);
             } else {
-                common_Logger::w('Uninterpretable filter in '.__CLASS__);
+                \common_Logger::w('Uninterpretable filter in '.__CLASS__);
             }
         } else {
-            common_Logger::w('Uninterpretable filtertype '.gettype($mask));
+            \common_Logger::w('Uninterpretable filtertype '.gettype($mask));
         }
         return array();
     }

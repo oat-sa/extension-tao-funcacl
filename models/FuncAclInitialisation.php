@@ -34,17 +34,17 @@ class FuncAclInitialisation
 {
     public static function run() {
         // We get all the management roles and the extension they belong to.
-        $managementRoleClass = new core_kernel_classes_Class(CLASS_MANAGEMENTROLE);
+        $managementRoleClass = new \core_kernel_classes_Class(CLASS_MANAGEMENTROLE);
         $foundManagementRoles = $managementRoleClass->getInstances(true);
         $managementRolesByExtension = array();
          
-        foreach (common_ext_ExtensionsManager::singleton()->getInstalledExtensions() as $extension) {
+        foreach (\common_ext_ExtensionsManager::singleton()->getInstalledExtensions() as $extension) {
             $managementRole = $extension->getManagementRole();
              
             if (empty($managementRole)) {
                 // try to discover it.
                 foreach ($foundManagementRoles as $mR) {
-                    $moduleURIs = $mR->getPropertyValues(new core_kernel_classes_Property(AccessService::PROPERTY_ACL_GRANTACCESS));
+                    $moduleURIs = $mR->getPropertyValues(new \core_kernel_classes_Property(AccessService::PROPERTY_ACL_GRANTACCESS));
         
                     foreach ($moduleURIs as $moduleURI) {
                         $uri = explode('#', $moduleURI);
@@ -65,7 +65,7 @@ class FuncAclInitialisation
          
         CacheHelper::flush();
         
-        foreach (common_ext_ExtensionsManager::singleton()->getInstalledExtensions() as $extension) {
+        foreach (\common_ext_ExtensionsManager::singleton()->getInstalledExtensions() as $extension) {
             if ($extension->getId() != 'generis') {
                 // 2. Grant access to Management Role.
                 if (!empty($managementRolesByExtension[$extension->getId()])) {
@@ -73,7 +73,7 @@ class FuncAclInitialisation
                     $extAccessService->add($managementRolesByExtension[$extension->getId()]->getUri(), $extAccessService->makeEMAUri($extension->getId()));
                 }
                 else {
-                    common_Logger::i('Management Role not found for extension ' . $extension->getId());
+                    \common_Logger::i('Management Role not found for extension ' . $extension->getId());
                 }
             }
         }
