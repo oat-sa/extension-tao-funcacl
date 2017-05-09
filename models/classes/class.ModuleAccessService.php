@@ -101,19 +101,13 @@ class funcAcl_models_classes_ModuleAccessService
 		
 		// Remove the access to the module for this role.
 		$role->removePropertyValue($accessProperty, $module->getUri());
-
         $this->getEventManager()->trigger(new AccessRightRemovedEvent($roleUri, $accessUri));
+        funcAcl_helpers_Cache::flushControllerAccess($module);
 
-
-        funcAcl_helpers_Cache::cacheModule($module);
-				
 		// Remove the access to the actions corresponding to the module for this role.
 		foreach (funcAcl_helpers_Model::getActions($module) as $actionResource) {
 		    funcAcl_models_classes_ActionAccessService::singleton()->remove($role->getUri(), $actionResource->getUri());
 		}
-		
-		funcAcl_helpers_Cache::cacheModule($module);
-        
     }
 
 }
