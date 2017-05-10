@@ -14,28 +14,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2015 (original work) Open Assessment Technologies SA;
- *
+ * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  *
  */
 
-namespace oat\funcAcl\scripts\update;
+/**
+ * Proxy for the Acl Implementation
+ *
+ * @access public
+ * @author Joel Bout, <joel@taotesting.com>
+ * @package tao
+ */
+class funcAcl_models_classes_FuncAcl extends \oat\funcAcl\models\FuncAcl {
 
-use oat\funcAcl\models\FuncAcl;
-use oat\tao\model\accessControl\func\AclProxy;
-
-class Updater extends \common_ext_ExtensionUpdater
-{
-    /**
-     * @param string $initialVersion
-     * @return void
-     */
-    public function update($initialVersion) {
-        $this->skip('0', '3.0.0');
-
-        if ($this->isVersion('3.0.0')) {
-            $this->getServiceManager()->register(AclProxy::SERVICE_ID, new FuncAcl());
-            $this->setVersion('4.0.0');
-        }
-    }
 }
