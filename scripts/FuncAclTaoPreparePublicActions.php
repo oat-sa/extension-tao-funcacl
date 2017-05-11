@@ -20,6 +20,10 @@
  * 
  */
 
+namespace oat\funcAcl\scripts;
+
+use oat\funcAcl\models\FuncAclInitialisation;
+
 /**
  * The taoPrepareActions script aims at updating the Extension model in the Ontology
  * depending on Action classes found in the extension at the file system level.
@@ -29,8 +33,7 @@
  * @package tao
  
  */
-class funcAcl_scripts_TaoPreparePublicActions
-    extends tao_scripts_Runner
+class FuncAclTaoPreparePublicActions extends \tao_scripts_Runner
 {
 
     public function preRun()
@@ -47,7 +50,7 @@ class funcAcl_scripts_TaoPreparePublicActions
      */
     public function run()
     {
-        funcAcl_models_classes_Initialisation::run();
+        FuncAclInitialisation::run();
     }
 
     public function postRun()

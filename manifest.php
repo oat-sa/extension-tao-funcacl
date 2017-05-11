@@ -30,7 +30,7 @@ return array(
     'label' => 'Functionality ACL',
 	'description' => 'Functionality Access Control Layer',
     'license' => 'GPL-2.0',
-    'version' => '3.0.0',
+    'version' => '4.0.0',
 	'author' => 'Open Assessment Technologies, CRP Henri Tudor',
 	'requires' => array(
         'tao' => '>=9.0',
@@ -50,6 +50,9 @@ return array(
 	'managementRole' => 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#FuncAclManagerRole',
     'acl' => array(
         array('grant', 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#FuncAclManagerRole', array('ext'=>'funcAcl')),
+    ),
+    'routes' => array(
+        '/funcAcl' => 'oat\\funcAcl\\controller'
     ),
 	'optimizableClasses' => array(
 		'http://www.tao.lu/Ontologies/taoFuncACL.rdf#Extension'
@@ -76,5 +79,9 @@ return array(
 	
 	 	#TPL PATH the path to the templates
 	 	'TPL_PATH'	=> $extpath."views".DIRECTORY_SEPARATOR."templates".DIRECTORY_SEPARATOR,
-	 )
+    ),
+    'extra' => array(
+        'structures' => dirname(__FILE__).DIRECTORY_SEPARATOR.'controller'.DIRECTORY_SEPARATOR.'structures.xml',
+    ),
+
 );

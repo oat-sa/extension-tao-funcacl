@@ -57,8 +57,7 @@
     "minimum-stability" : "dev",
     "autoload" : {
 		"psr-4" : {
-			"oat\\funcAcl\\scripts\\" : "scripts",
-			"oat\\funcAcl\\model\\" : "models/classes/"
+			"oat\\funcAcl\\": ""
 		}
 	},
     "require": {

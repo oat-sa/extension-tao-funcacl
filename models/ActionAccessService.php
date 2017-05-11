@@ -18,8 +18,14 @@
  *               
  * 
  */
-use oat\funcAcl\model\event\AccessRightAddedEvent;
-use oat\funcAcl\model\event\AccessRightRemovedEvent;
+
+namespace oat\funcAcl\models;
+
+use oat\funcAcl\helpers\MapHelper;
+use oat\funcAcl\helpers\ModelHelper;
+use oat\funcAcl\models\event\AccessRightAddedEvent;
+use oat\funcAcl\models\event\AccessRightRemovedEvent;
+use oat\funcAcl\helpers\CacheHelper;
 
 /**
  * access operation for actions
@@ -30,7 +36,7 @@ use oat\funcAcl\model\event\AccessRightRemovedEvent;
  * @since 2.2
  
  */
-class funcAcl_models_classes_ActionAccessService extends funcAcl_models_classes_AccessService
+class ActionAccessService extends AccessService
 {
 
     /**
@@ -38,8 +44,8 @@ class funcAcl_models_classes_ActionAccessService extends funcAcl_models_classes_
      *
      * @access public
      * @author Jehan Bihin, <jehan.bihin@tudor.lu>
-     * @param  string roleUri
-     * @param  string accessUri
+     * @param  string $roleUri
+     * @param  string $accessUri
      * @return mixed
      */
     public function add($roleUri, $accessUri)
@@ -47,19 +53,19 @@ class funcAcl_models_classes_ActionAccessService extends funcAcl_models_classes_
 		$uri = explode('#', $accessUri);
 		list($type, $ext, $mod, $act) = explode('_', $uri[1]);
 		
-		$role = new core_kernel_classes_Resource($roleUri);
-		$module = new core_kernel_classes_Resource($this->makeEMAUri($ext, $mod));
-		$actionAccessProperty = new core_kernel_classes_Property(funcAcl_models_classes_AccessService::PROPERTY_ACL_GRANTACCESS);
-		$moduleAccessProperty = new core_kernel_classes_Property(funcAcl_models_classes_AccessService::PROPERTY_ACL_GRANTACCESS);
+		$role = new \core_kernel_classes_Resource($roleUri);
+		$module = new \core_kernel_classes_Resource($this->makeEMAUri($ext, $mod));
+		$actionAccessProperty = new \core_kernel_classes_Property(static::PROPERTY_ACL_GRANTACCESS);
+		$moduleAccessProperty = new \core_kernel_classes_Property(static::PROPERTY_ACL_GRANTACCESS);
 		
 		$values = $role->getPropertyValues($actionAccessProperty);
 		if (!in_array($accessUri, $values)) {
 		    $role->setPropertyValue($actionAccessProperty, $accessUri);
             $this->getEventManager()->trigger(new AccessRightAddedEvent($roleUri, $accessUri));
-            $controllerClassName = funcAcl_helpers_Map::getControllerFromUri($module->getUri());
-		    funcAcl_helpers_Cache::flushControllerAccess($controllerClassName);
+            $controllerClassName = MapHelper::getControllerFromUri($module->getUri());
+		    CacheHelper::flushControllerAccess($controllerClassName);
 		} else {
-		    common_Logger::w('Tried to regrant access for role '.$role->getUri().' to action '.$accessUri);
+		    \common_Logger::w('Tried to regrant access for role '.$role->getUri().' to action '.$accessUri);
 		}
     }
 
@@ -68,8 +74,8 @@ class funcAcl_models_classes_ActionAccessService extends funcAcl_models_classes_
      *
      * @access public
      * @author Jehan Bihin, <jehan.bihin@tudor.lu>
-     * @param  string roleUri
-     * @param  string accessUri
+     * @param  string $roleUri
+     * @param  string $accessUri
      * @return mixed
      */
     public function remove($roleUri, $accessUri)
@@ -78,21 +84,21 @@ class funcAcl_models_classes_ActionAccessService extends funcAcl_models_classes_
 		$uri = explode('#', $accessUri);
 		list($type, $ext, $mod, $act) = explode('_', $uri[1]);
 		
-		$role = new core_kernel_classes_Class($roleUri);
-		$actionAccessProperty = new core_kernel_classes_Property(funcAcl_models_classes_AccessService::PROPERTY_ACL_GRANTACCESS);
+		$role = new \core_kernel_classes_Class($roleUri);
+		$actionAccessProperty = new \core_kernel_classes_Property(static::PROPERTY_ACL_GRANTACCESS);
 		
-		$module = new core_kernel_classes_Resource($this->makeEMAUri($ext, $mod));
-		$controllerClassName = funcAcl_helpers_Map::getControllerFromUri($module->getUri());
+		$module = new \core_kernel_classes_Resource($this->makeEMAUri($ext, $mod));
+		$controllerClassName = MapHelper::getControllerFromUri($module->getUri());
 		
 		// access via controller?
-		$controllerAccess = funcAcl_helpers_Cache::getControllerAccess($controllerClassName);
+		$controllerAccess = CacheHelper::getControllerAccess($controllerClassName);
 		if (in_array($roleUri, $controllerAccess['module'])) {
 
 		    // remove access to controller
-		    funcAcl_models_classes_ModuleAccessService::singleton()->remove($roleUri, $module->getUri());
+		    ModuleAccessService::singleton()->remove($roleUri, $module->getUri());
 		
 		    // add access to all other actions
-		    foreach (funcAcl_helpers_Model::getActions($module) as $action) {
+		    foreach (ModelHelper::getActions($module) as $action) {
 		        if ($action->getUri() != $accessUri) {
 		            $this->add($roleUri, $action->getUri());
                     $this->getEventManager()->trigger(new AccessRightAddedEvent($roleUri, $action->getUri()));
@@ -104,7 +110,7 @@ class funcAcl_models_classes_ActionAccessService extends funcAcl_models_classes_
 		    $role->removePropertyValues($actionAccessProperty, array('pattern' => $accessUri));
             $this->getEventManager()->trigger(new AccessRightRemovedEvent($roleUri, $accessUri));
 
-            funcAcl_helpers_Cache::flushControllerAccess($controllerClassName);
+            CacheHelper::flushControllerAccess($controllerClassName);
 		}
     }
 }

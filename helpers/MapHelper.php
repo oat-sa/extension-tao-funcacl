@@ -19,7 +19,10 @@
  * 
  */
 
+namespace oat\funcAcl\helpers;
+
 use oat\tao\model\accessControl\func\FuncHelper;
+use oat\funcAcl\models\AccessService;
 
 /**
  * Helper to map URIs to controllers
@@ -28,11 +31,11 @@ use oat\tao\model\accessControl\func\FuncHelper;
  * @author Joel Bout <joel@taotesting.com>
  * @package tao
  */
-class funcAcl_helpers_Map
+class MapHelper
 {
     
     public static function getUriForExtension($extId) {
-        return funcAcl_models_classes_AccessService::singleton()->makeEMAUri($extId);
+        return AccessService::singleton()->makeEMAUri($extId);
     }
     
     public static function getUriForController($controllerClassName) {
@@ -41,7 +44,7 @@ class funcAcl_helpers_Map
             ? substr($controllerClassName, strrpos($controllerClassName, '\\')+1)
             : substr($controllerClassName, strrpos($controllerClassName, '_')+1)
         ;
-        return funcAcl_models_classes_AccessService::singleton()->makeEMAUri($extension, $shortName);
+        return AccessService::singleton()->makeEMAUri($extension, $shortName);
     }
 
     public static function getUriForAction($controllerClassName, $actionName) {
@@ -50,7 +53,7 @@ class funcAcl_helpers_Map
             ? substr($controllerClassName, strrpos($controllerClassName, '\\')+1)
             : substr($controllerClassName, strrpos($controllerClassName, '_')+1)
         ;
-        return funcAcl_models_classes_AccessService::singleton()->makeEMAUri($extension, $shortName, $actionName);
+        return AccessService::singleton()->makeEMAUri($extension, $shortName, $actionName);
     }
 
     public static function getControllerFromUri($uri) {
@@ -69,17 +72,17 @@ class funcAcl_helpers_Map
             if (count($parts) == 3) {
                 return $parts[0];
             } else {
-                throw new common_exception_Error('Unknown controller '.$controllerClass);
+                throw new \common_exception_Error('Unknown controller '.$controllerClass);
             }
         } else {
-            foreach (common_ext_ExtensionsManager::singleton()->getEnabledExtensions() as $ext) {
+            foreach (\common_ext_ExtensionsManager::singleton()->getEnabledExtensions() as $ext) {
                 foreach ($ext->getManifest()->getRoutes() as $routePrefix => $namespace) {
                     if (is_string($namespace) && substr($controllerClass, 0, strlen($namespace)) == $namespace) {
                         return $ext->getId();
                     }
                 }
             }
-            throw new common_exception_Error('Unknown controller '.$controllerClass);
+            throw new \common_exception_Error('Unknown controller '.$controllerClass);
         }
     }
 }

@@ -20,8 +20,9 @@
 
 use oat\tao\model\accessControl\func\AclProxy;
 use oat\tao\model\accessControl\func\AccessRule;
+use oat\funcAcl\models\FuncAcl;
 
-$impl = new funcAcl_models_classes_FuncAcl();
+$impl = new FuncAcl();
 
 $exts = common_ext_ExtensionsManager::singleton()->getInstalledExtensions();
 foreach ($exts as $extension) {
