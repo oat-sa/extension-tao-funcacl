@@ -17,7 +17,7 @@
  * Copyright (c) 2016 (original work) Open Assessment Technologies SA
  *
  */
-namespace oat\funcAcl\model\event;
+namespace oat\funcAcl\models\event;
 
 use JsonSerializable;
 use oat\oatbox\event\Event;

@@ -1,6 +1,14 @@
 <?php
+namespace oat\funcAcl\controller;
+
 use oat\tao\helpers\ControllerHelper;
-/*  
+use oat\funcAcl\models\AccessService;
+use oat\funcAcl\models\ActionAccessService;
+use oat\funcAcl\models\ExtensionAccessService;
+use oat\funcAcl\models\ModuleAccessService;
+use oat\funcAcl\helpers\CacheHelper;
+use oat\funcAcl\helpers\MapHelper;
+/*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -31,7 +39,7 @@ use oat\tao\helpers\ControllerHelper;
  
  *
  */
-class funcAcl_actions_Admin extends tao_actions_CommonModule {
+class Admin extends \tao_actions_CommonModule {
     
     /**
      * Access to this functionality is inherited from
@@ -77,7 +85,7 @@ class funcAcl_actions_Admin extends tao_actions_CommonModule {
      * @return void
      */
     public function index(){
-        $rolesc = new core_kernel_classes_Class(CLASS_ROLE);
+        $rolesc = new \core_kernel_classes_Class(CLASS_ROLE);
         $roles = array();
         foreach ($rolesc->getInstances(true) as $id => $r) {
             $roles[] = array('id' => $id, 'label' => $r->getLabel());
@@ -91,17 +99,17 @@ class funcAcl_actions_Admin extends tao_actions_CommonModule {
     }
 
     public function getModules() {
-        if (!tao_helpers_Request::isAjax()){
-            throw new Exception("wrong request mode");
+        if (!\tao_helpers_Request::isAjax()){
+            throw new \Exception("wrong request mode");
         } else {
-            $role = new core_kernel_classes_Class($this->getRequestParameter('role'));
+            $role = new \core_kernel_classes_Class($this->getRequestParameter('role'));
             
             $included = array();
-            foreach (tao_models_classes_RoleService::singleton()->getIncludedRoles($role) as $includedRole) {
+            foreach (\tao_models_classes_RoleService::singleton()->getIncludedRoles($role) as $includedRole) {
                 $included[$includedRole->getUri()] = $includedRole->getLabel();
             }
             
-            $extManager = common_ext_ExtensionsManager::singleton();
+            $extManager = \common_ext_ExtensionsManager::singleton();
 
             $extData = array();
             foreach ($extManager->getInstalledExtensions() as $extension){
@@ -122,9 +130,9 @@ class funcAcl_actions_Admin extends tao_actions_CommonModule {
         }
     }
     
-    protected function buildExtensionData(common_ext_Extension $extension, $roleUri, $includedRoleUris) {
-        $extAccess = funcAcl_helpers_Cache::getExtensionAccess($extension->getId());
-        $extAclUri = funcAcl_models_classes_AccessService::singleton()->makeEMAUri($extension->getId());
+    protected function buildExtensionData(\common_ext_Extension $extension, $roleUri, $includedRoleUris) {
+        $extAccess = CacheHelper::getExtensionAccess($extension->getId());
+        $extAclUri = AccessService::singleton()->makeEMAUri($extension->getId());
         $atLeastOneAccess = false;
         $allAccess = in_array($roleUri, $extAccess);
         $inherited = count(array_intersect($includedRoleUris, $extAccess)) > 0;
@@ -155,9 +163,9 @@ class funcAcl_actions_Admin extends tao_actions_CommonModule {
 
     protected function buildControllerData($controllerClassName, $roleUri, $includedRoleUris) {
         
-        $modUri = funcAcl_helpers_Map::getUriForController($controllerClassName);
+        $modUri = MapHelper::getUriForController($controllerClassName);
         
-        $moduleAccess = funcAcl_helpers_Cache::getControllerAccess($controllerClassName);
+        $moduleAccess = CacheHelper::getControllerAccess($controllerClassName);
         $uri = explode('#', $modUri);
         list($type, $extId, $modId) = explode('_', $uri[1]);
         
@@ -190,22 +198,22 @@ class funcAcl_actions_Admin extends tao_actions_CommonModule {
      */
     public function getActions()
     {
-        if (!tao_helpers_Request::isAjax()) {
-            throw new Exception("wrong request mode");
+        if (!\tao_helpers_Request::isAjax()) {
+            throw new \Exception("wrong request mode");
         } else {
-            $role = new core_kernel_classes_Resource($this->getRequestParameter('role'));
+            $role = new \core_kernel_classes_Resource($this->getRequestParameter('role'));
             $included = array();
-            foreach (tao_models_classes_RoleService::singleton()->getIncludedRoles($role) as $includedRole) {
+            foreach (\tao_models_classes_RoleService::singleton()->getIncludedRoles($role) as $includedRole) {
                 $included[] = $includedRole->getUri();
             }
-            $module = new core_kernel_classes_Resource($this->getRequestParameter('module'));
+            $module = new \core_kernel_classes_Resource($this->getRequestParameter('module'));
             
-            $controllerClassName = funcAcl_helpers_Map::getControllerFromUri($module->getUri());
-            $controllerAccess = funcAcl_helpers_Cache::getControllerAccess($controllerClassName);
+            $controllerClassName = MapHelper::getControllerFromUri($module->getUri());
+            $controllerAccess = CacheHelper::getControllerAccess($controllerClassName);
             
             $actions = array();
             foreach (ControllerHelper::getActions($controllerClassName) as $actionName) {
-                $uri = funcAcl_helpers_Map::getUriForAction($controllerClassName, $actionName);
+                $uri = MapHelper::getUriForAction($controllerClassName, $actionName);
                 $part = explode('#', $uri);
                 list($type, $extId, $modId, $actId) = explode('_', $part[1]);
                 
@@ -232,77 +240,77 @@ class funcAcl_actions_Admin extends tao_actions_CommonModule {
     }
 
     public function removeExtensionAccess() {
-        if (!tao_helpers_Request::isAjax()){
-            throw new Exception("wrong request mode");
+        if (!\tao_helpers_Request::isAjax()){
+            throw new \Exception("wrong request mode");
         }
         else{
             $role = $this->getRequestParameter('role');
             $uri = $this->getRequestParameter('uri');
-            $extensionService = funcAcl_models_classes_ExtensionAccessService::singleton();
+            $extensionService = ExtensionAccessService::singleton();
             $extensionService->remove($role, $uri);
             echo json_encode(array('uri' => $uri));    
         }
     }
 
     public function addExtensionAccess() {
-        if (!tao_helpers_Request::isAjax()){
-            throw new Exception("wrong request mode");
+        if (!\tao_helpers_Request::isAjax()){
+            throw new \Exception("wrong request mode");
         }
         else{
             $role = $this->getRequestParameter('role');
             $uri = $this->getRequestParameter('uri');
-            $extensionService = funcAcl_models_classes_ExtensionAccessService::singleton();
+            $extensionService = ExtensionAccessService::singleton();
             $extensionService->add($role, $uri);
             echo json_encode(array('uri' => $uri));
         }
     }
 
     public function removeModuleAccess() {
-        if (!tao_helpers_Request::isAjax()) {
-            throw new Exception("wrong request mode");
+        if (!\tao_helpers_Request::isAjax()) {
+            throw new \Exception("wrong request mode");
         } else {
             $role = $this->getRequestParameter('role');
             $uri = $this->getRequestParameter('uri');
-            $moduleService = funcAcl_models_classes_ModuleAccessService::singleton();
+            $moduleService = ModuleAccessService::singleton();
             $moduleService->remove($role, $uri);
             echo json_encode(array('uri' => $uri));    
         }
     }
 
     public function addModuleAccess() {
-        if (!tao_helpers_Request::isAjax()){
+        if (!\tao_helpers_Request::isAjax()){
             throw new Exception("wrong request mode");
         }
         else{
             $role = $this->getRequestParameter('role');
             $uri = $this->getRequestParameter('uri');
-            $moduleService = funcAcl_models_classes_ModuleAccessService::singleton();
+            $moduleService = ModuleAccessService::singleton();
             $moduleService->add($role, $uri);
             echo json_encode(array('uri' => $uri));    
         }
     }
 
     public function removeActionAccess() {
-        if (!tao_helpers_Request::isAjax()){
+        if (!\tao_helpers_Request::isAjax()){
             throw new Exception("wrong request mode");
         }
         else{
             $role = $this->getRequestParameter('role');
             $uri = $this->getRequestParameter('uri');
-            $actionService = funcAcl_models_classes_ActionAccessService::singleton();
+            $actionService = ActionAccessService::singleton();
             $actionService->remove($role, $uri);
             echo json_encode(array('uri' => $uri));    
         }
     }
 
     public function addActionAccess() {
-        if (!tao_helpers_Request::isAjax()){
+        if (!\tao_helpers_Request::isAjax()){
             throw new Exception("wrong request mode");
         }
         else{
             $role = $this->getRequestParameter('role');
             $uri = $this->getRequestParameter('uri');
-            $actionService = funcAcl_models_classes_ActionAccessService::singleton();
+            $actionService = ActionAccessService::singleton();
             $actionService->add($role, $uri);
             echo json_encode(array('uri' => $uri));    
         }

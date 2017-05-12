@@ -1,6 +1,11 @@
 <?php
 use oat\oatbox\user\LoginService;
 use oat\tao\test\TaoPhpUnitTestRunner;
+use oat\funcAcl\models\AccessService;
+use oat\funcAcl\models\ActionAccessService;
+use oat\funcAcl\models\FuncAcl;
+use oat\funcAcl\models\ModuleAccessService;
+use oat\funcAcl\helpers\CacheHelper;
 
 include_once dirname(__FILE__) . '/../includes/raw_start.php';
 
@@ -60,14 +65,14 @@ class FuncACLTest extends TaoPhpUnitTestRunner {
 		$this->assertTrue(LoginService::startSession($generisUser));
 
 		// -- Test uri creation
-		$emauri = funcAcl_models_classes_AccessService::FUNCACL_NS . '#a_tao_Users_add';
-		$emaurimod = funcAcl_models_classes_AccessService::FUNCACL_NS . '#m_tao_Users';
-		$makeemauri = funcAcl_models_classes_AccessService::singleton()->makeEMAUri('tao', 'Users', 'add');
-		$makeemaurimod = funcAcl_models_classes_AccessService::singleton()->makeEMAUri('tao', 'Users');
+		$emauri = AccessService::FUNCACL_NS . '#a_tao_Users_add';
+		$emaurimod = AccessService::FUNCACL_NS . '#m_tao_Users';
+		$makeemauri = AccessService::singleton()->makeEMAUri('tao', 'Users', 'add');
+		$makeemaurimod = AccessService::singleton()->makeEMAUri('tao', 'Users');
 		$this->assertEquals($emauri, $makeemauri);
 		$this->assertEquals($emaurimod, $makeemaurimod);
 
-		$funcAclImp = new funcAcl_models_classes_FuncAcl();
+		$funcAclImp = new FuncAcl();
 		
 		// -- Try to access a restricted action
 		$this->assertFalse($funcAclImp->hasAccess('add', 'Users', 'tao'));
@@ -81,7 +86,7 @@ class FuncACLTest extends TaoPhpUnitTestRunner {
 		
 		// -- Try to access a unrestricted action
 		// Add access for this action to the Manager role.
-		funcAcl_models_classes_ActionAccessService::singleton()->add($this->testRole->getUri(), $makeemauri);
+		ActionAccessService::singleton()->add($this->testRole->getUri(), $makeemauri);
 		
 		// Add the Manager role the the currently tested user
 		tao_models_classes_UserService::singleton()->attachRole($this->user, $this->testRole);
@@ -93,21 +98,21 @@ class FuncACLTest extends TaoPhpUnitTestRunner {
 		$this->assertTrue($funcAclImp->hasAccess('add', 'Users', 'tao'));
 
 		// Remove the access to this action from the Manager role
-		funcAcl_models_classes_ActionAccessService::singleton()->remove($this->testRole->getUri(), $makeemauri);
+		ActionAccessService::singleton()->remove($this->testRole->getUri(), $makeemauri);
 		
 		// We should not have access anymore to this action with the Manager role
 		$this->assertFalse($funcAclImp->hasAccess('add', 'Users', 'tao'));
 		
 		// -- Give access to the entire module and try to access the previously tested action
-		funcAcl_models_classes_ModuleAccessService::singleton()->add($this->testRole->getUri(), $makeemaurimod);
+		ModuleAccessService::singleton()->add($this->testRole->getUri(), $makeemaurimod);
 		$this->assertTrue($funcAclImp->hasAccess('add', 'Users', 'tao'));
 		
 		// -- Remove the entire module access and try again
-		funcAcl_models_classes_ModuleAccessService::singleton()->remove($this->testRole->getUri(), $makeemaurimod);
+		ModuleAccessService::singleton()->remove($this->testRole->getUri(), $makeemaurimod);
 		$this->assertFalse($funcAclImp->hasAccess('add', 'Users', 'tao'));
 		
 		// reset
-		funcAcl_models_classes_ModuleAccessService::singleton()->add($this->testRole->getUri(), $makeemaurimod);
+		ModuleAccessService::singleton()->add($this->testRole->getUri(), $makeemaurimod);
 		
 		// Unattach role from user
 		tao_models_classes_UserService::singleton()->unnatachRole($this->user, $this->testRole);
@@ -115,7 +120,7 @@ class FuncACLTest extends TaoPhpUnitTestRunner {
 	}
 	
 	public function testACLCache(){
-		$moduleCache = funcAcl_helpers_Cache::getControllerAccess('tao_actions_Users');
+		$moduleCache = CacheHelper::getControllerAccess('tao_actions_Users');
 		$this->assertTrue(is_array($moduleCache));
 	}
 }

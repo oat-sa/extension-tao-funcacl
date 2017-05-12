@@ -21,4 +21,4 @@
  */
 require_once dirname(__FILE__) .'/../includes/raw_start.php';
 
-new funcAcl_scripts_TaoPreparePublicActions(array('parameters' => array()));
+new \oat\funcAcl\scripts\FuncAclTaoPreparePublicActions(array('parameters' => array()));

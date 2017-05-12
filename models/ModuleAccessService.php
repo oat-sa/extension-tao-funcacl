@@ -18,8 +18,12 @@
  *               
  * 
  */
-use oat\funcAcl\model\event\AccessRightAddedEvent;
-use oat\funcAcl\model\event\AccessRightRemovedEvent;
+namespace oat\funcAcl\models;
+
+use oat\funcAcl\helpers\CacheHelper;
+use oat\funcAcl\helpers\ModelHelper;
+use oat\funcAcl\models\event\AccessRightAddedEvent;
+use oat\funcAcl\models\event\AccessRightRemovedEvent;
 
 /**
  * access operation for modules
@@ -30,8 +34,7 @@ use oat\funcAcl\model\event\AccessRightRemovedEvent;
  * @since 2.2
  
  */
-class funcAcl_models_classes_ModuleAccessService
-    extends funcAcl_models_classes_AccessService
+class ModuleAccessService extends AccessService
 {
 
     /**
@@ -46,17 +49,17 @@ class funcAcl_models_classes_ModuleAccessService
     public function add($roleUri, $accessUri)
     {
         
-		$module = new core_kernel_classes_Resource($accessUri);
-		$role = new core_kernel_classes_Resource($roleUri);
-		$moduleAccessProperty = new core_kernel_classes_Property(funcAcl_models_classes_AccessService::PROPERTY_ACL_GRANTACCESS);
+		$module = new \core_kernel_classes_Resource($accessUri);
+		$role = new \core_kernel_classes_Resource($roleUri);
+		$moduleAccessProperty = new \core_kernel_classes_Property(static::PROPERTY_ACL_GRANTACCESS);
 		
 		$values = $role->getPropertyValues($moduleAccessProperty);
 		if (!in_array($module->getUri(), $values)) {
 		    $role->setPropertyValue($moduleAccessProperty, $module->getUri());
             $this->getEventManager()->trigger(new AccessRightAddedEvent($roleUri, $accessUri));
-            funcAcl_helpers_Cache::cacheModule($module);
+            CacheHelper::cacheModule($module);
 		} else {
-		    common_Logger::w('Tried to add role '.$role->getUri().' again to controller '.$accessUri);
+		    \common_Logger::w('Tried to add role '.$role->getUri().' again to controller '.$accessUri);
 		}
         
     }
@@ -72,30 +75,30 @@ class funcAcl_models_classes_ModuleAccessService
      */
     public function remove($roleUri, $accessUri)
     {
-        $module = new core_kernel_classes_Resource($accessUri);
-		$role = new core_kernel_classes_Class($roleUri);
-		$accessProperty = new core_kernel_classes_Property(funcAcl_models_classes_AccessService::PROPERTY_ACL_GRANTACCESS);
+        $module = new \core_kernel_classes_Resource($accessUri);
+		$role = new \core_kernel_classes_Class($roleUri);
+		$accessProperty = new \core_kernel_classes_Property(static::PROPERTY_ACL_GRANTACCESS);
 		
 		// Retrieve the module ID.
 		$uri = explode('#', $module->getUri());
 		list($type, $extId, $modId) = explode('_', $uri[1]);
 		
 		// access via extension?
-		$extAccess = funcAcl_helpers_Cache::getExtensionAccess($extId);
+		$extAccess = CacheHelper::getExtensionAccess($extId);
 		if (in_array($roleUri, $extAccess)) {
 		    // remove access to extension
             $extUri = $this->makeEMAUri($extId);
-		    funcAcl_models_classes_ExtensionAccessService::singleton()->remove($roleUri, $extUri);
+		    ExtensionAccessService::singleton()->remove($roleUri, $extUri);
 		    
 		    // add access to all other controllers
-		    foreach (funcAcl_helpers_Model::getModules($extId) as $eModule) {
+		    foreach (ModelHelper::getModules($extId) as $eModule) {
 		        if (!$module->equals($eModule)) {
 		            $this->add($roleUri, $eModule->getUri());
                     $this->getEventManager()->trigger(new AccessRightRemovedEvent($roleUri, $eModule->getUri()));
                     //$role->setPropertyValue($accessProperty, $eModule->getUri());
 		        }
 		    }
-            //funcAcl_helpers_Cache::flushExtensionAccess($extId);
+            //CacheHelper::flushExtensionAccess($extId);
 		}
 		
 		
@@ -105,14 +108,14 @@ class funcAcl_models_classes_ModuleAccessService
         $this->getEventManager()->trigger(new AccessRightRemovedEvent($roleUri, $accessUri));
 
 
-        funcAcl_helpers_Cache::cacheModule($module);
+        CacheHelper::cacheModule($module);
 				
 		// Remove the access to the actions corresponding to the module for this role.
-		foreach (funcAcl_helpers_Model::getActions($module) as $actionResource) {
-		    funcAcl_models_classes_ActionAccessService::singleton()->remove($role->getUri(), $actionResource->getUri());
+		foreach (ModelHelper::getActions($module) as $actionResource) {
+		    ActionAccessService::singleton()->remove($role->getUri(), $actionResource->getUri());
 		}
 		
-		funcAcl_helpers_Cache::cacheModule($module);
+		CacheHelper::cacheModule($module);
         
     }
 

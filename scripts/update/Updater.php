@@ -21,6 +21,9 @@
 
 namespace oat\funcAcl\scripts\update;
 
+use oat\funcAcl\models\FuncAcl;
+use oat\tao\model\accessControl\func\AclProxy;
+
 class Updater extends \common_ext_ExtensionUpdater
 {
     /**
@@ -29,5 +32,10 @@ class Updater extends \common_ext_ExtensionUpdater
      */
     public function update($initialVersion) {
         $this->skip('0', '3.0.0');
+
+        if ($this->isVersion('3.0.0')) {
+            $this->getServiceManager()->register(AclProxy::SERVICE_ID, new FuncAcl());
+            $this->setVersion('4.0.0');
+        }
     }
 }
