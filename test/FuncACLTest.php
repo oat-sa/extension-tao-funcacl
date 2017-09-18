@@ -40,7 +40,7 @@ class FuncACLTest extends TaoPhpUnitTestRunner {
         
         $userService = tao_models_classes_UserService::singleton();
         $roleService = tao_models_classes_RoleService::singleton();
-		$baseRole = new core_kernel_classes_Resource(TaoOntology::INSTANCE_ROLE_BACKOFFICE);
+		$baseRole = new core_kernel_classes_Resource(TaoOntology::PROPERTY_INSTANCE_ROLE_BACKOFFICE);
 		$this->testRole = $roleService->addRole('testrole', $baseRole);
 		$this->user = $userService->addUser('testcase', 'testcase');
 		$userService->attachRole($this->user, $this->testRole);

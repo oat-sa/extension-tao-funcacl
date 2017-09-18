@@ -35,7 +35,7 @@ class FuncAclInitialisation
 {
     public static function run() {
         // We get all the management roles and the extension they belong to.
-        $managementRoleClass = new \core_kernel_classes_Class(TaoOntology::CLASS_MANAGEMENT_ROLE);
+        $managementRoleClass = new \core_kernel_classes_Class(TaoOntology::CLASS_URI_MANAGEMENT_ROLE);
         $foundManagementRoles = $managementRoleClass->getInstances(true);
         $managementRolesByExtension = array();
          
