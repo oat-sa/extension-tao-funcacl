@@ -37,35 +37,23 @@ class AccessService extends \tao_models_classes_GenerisService
     const FUNCACL_NS = 'http://www.tao.lu/Ontologies/taoFuncACL.rdf';
 
     const PROPERTY_ACL_GRANTACCESS = 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#GrantAccess';
+    const PROPERTY_ACL_DENYACCESS = 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#DenyAccess';
 
     use EventManagerAwareTrait;
 
-    public function grantExtensionAccess(\core_kernel_classes_Resource $role, $ext) {
-        $accessUri = $this->makeEMAUri($ext);
-        ExtensionAccessService::singleton()->add($role->getUri(), $accessUri);
-    }
-
-    public function grantModuleAccess(\core_kernel_classes_Resource $role, $ext, $mod) {
-        $accessUri = $this->makeEMAUri($ext, $mod);
-        ModuleAccessService::singleton()->add($role->getUri(), $accessUri);
-    }
-    
-    public function grantActionAccess(\core_kernel_classes_Resource $role, $ext, $mod, $act) {
+    public function setAccess(
+        $access = self::PROPERTY_ACL_GRANTACCESS,
+        \core_kernel_classes_Resource $role,
+        $ext, $mod = null, $act = null
+    ) {
         $accessUri = $this->makeEMAUri($ext, $mod, $act);
-        ActionAccessService::singleton()->add($role->getUri(), $accessUri);
+        ActionAccessService::singleton()->add($role->getUri(), $accessUri, $access);
     }
 
-    public function revokeExtensionAccess(\core_kernel_classes_Resource $role, $ext) {
-        $accessUri = $this->makeEMAUri($ext);
-        ExtensionAccessService::singleton()->remove($role->getUri(), $accessUri);
-    }
-    
-    public function revokeModuleAccess(\core_kernel_classes_Resource $role, $ext, $mod) {
-        $accessUri = $this->makeEMAUri($ext, $mod);
-        ModuleAccessService::singleton()->remove($role->getUri(), $accessUri);
-    }
-    
-    public function revokeActionAccess(\core_kernel_classes_Resource $role, $ext, $mod, $act) {
+    public function revokeAccess(
+        \core_kernel_classes_Resource $role,
+        $ext, $mod = null, $act = null
+    ) {
         $accessUri = $this->makeEMAUri($ext, $mod, $act);
         ActionAccessService::singleton()->remove($role->getUri(), $accessUri);
     }
@@ -82,8 +70,6 @@ class AccessService extends \tao_models_classes_GenerisService
      */
     public function makeEMAUri($ext, $mod = null, $act = null)
     {
-        $returnValue = (string) '';
-        
         $returnValue = self::FUNCACL_NS . '#';
         if (! is_null($act)) {
             $type = 'a';
@@ -101,7 +87,7 @@ class AccessService extends \tao_models_classes_GenerisService
         if (! is_null($act)) {
             $returnValue .= '_' . $act;
         }
-        return (string) $returnValue;
+        return $returnValue;
     }
 }
 

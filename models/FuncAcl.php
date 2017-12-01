@@ -77,65 +77,76 @@ class FuncAcl extends ConfigurableService implements FuncAccessControl
         $controllerClassName = MapHelper::getControllerFromUri($uri);
         return self::accessPossible($user, $controllerClassName, $action);
     }
-    
-    public function applyRule(AccessRule $rule) {
-        if ($rule->isGrant()) {
-            $accessService = AccessService::singleton();
+
+    private function getRuledPath(AccessRule $rule) {
+        $extension = $shortName = $action = null;
+        if ($rule->isGrant() || $rule->isDeny()) {
             $elements = $this->evalFilterMask($rule->getMask());
-            
-            switch (count($elements)) {
-                case 1 :
-                    $extension = reset($elements);
-                    $accessService->grantExtensionAccess($rule->getRole(), $extension);
-                    break;
-                case 2 :
-                    list($extension, $shortName) = $elements;
-                    $accessService->grantModuleAccess($rule->getRole(), $extension, $shortName);
-                    break;
-                case 3 :
-                    list($extension, $shortName, $action) = $elements;
-                    $accessService->grantActionAccess($rule->getRole(), $extension, $shortName, $action);
-                    break;
-                default :
-                    // fail silently warning should already be send
+
+            if (count($elements) && count($elements) <= 3) {
+                switch (count($elements)) {
+                    case 1 :
+                        $extension = reset($elements);
+                        break;
+                    case 2 :
+                        list($extension, $shortName) = $elements;
+                        break;
+                    case 3 :
+                        list($extension, $shortName, $action) = $elements;
+                        break;
+                }
+            } else {
+                throw new \common_exception_Error('Incorrect AccessRule in '.__CLASS__);
             }
-            
         } else {
-            \common_Logger::w('Only grant rules accepted in '.__CLASS__);
+            throw new \common_exception_Error('Only grant or deny rules accepted in '.__CLASS__);
+        }
+
+        return [$extension, $shortName, $action];
+    }
+
+    /**
+     * Add new access rule (it could be rule with access or deny)
+     * @param AccessRule $rule
+     */
+    public function applyRule(AccessRule $rule) {
+        try {
+            list($extension, $shortName, $action) = $this->getRuledPath($rule);
+            $accessService = AccessService::singleton();
+            $access = $rule->isGrant()
+                ? $accessService::PROPERTY_ACL_GRANTACCESS
+                : $accessService::PROPERTY_ACL_DENYACCESS;
+
+            $accessService->setAccess($access,
+                $rule->getRole(),
+                $extension,
+                $shortName,
+                $action);
+        } catch (\common_exception_Error $e) {
+            \common_Logger::w($e->getMessage());
         }
     }
-    
+
+    /**
+     * Revoke all rules (access and deny)
+     * @param AccessRule $rule
+     */
     public function revokeRule(AccessRule $rule) {
-        if ($rule->isGrant()) {
+        try {
+            list($extension, $shortName, $action) = $this->getRuledPath($rule);
             $accessService = AccessService::singleton();
-            $elements = $this->evalFilterMask($rule->getMask());
-            
-            switch (count($elements)) {
-                case 1 :
-                    $extension = reset($elements);
-                    $accessService->revokeExtensionAccess($rule->getRole(), $extension);
-                    break;
-                case 2 :
-                    list($extension, $shortName) = $elements;
-                    $accessService->revokeModuleAccess($rule->getRole(), $extension, $shortName);
-                    break;
-                case 3 :
-                    list($extension, $shortName, $action) = $elements;
-                    $accessService->revokeActionAccess($rule->getRole(), $extension, $shortName, $action);
-                    break;
-                default :
-                    // fail silently warning should already be send
-            }
-        } else {
-            \common_Logger::w('Only grant rules accepted in '.__CLASS__);
+            $accessService->revokeAccess($rule->getRole(), $extension, $shortName, $action);
+        } catch (\common_exception_Error $e) {
+            \common_Logger::w($e->getMessage());
         }
     }
     
     /**
      * Evaluate the mask to ACL components
-     * 
-     * @param mixed $mask
-     * @return string[] tao ACL components
+     *
+     * @param $mask
+     * @return array tao ACL components
+     * @throws \common_exception_Error
      */
     public function evalFilterMask($mask) {
         // string masks
