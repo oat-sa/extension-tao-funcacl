@@ -70,6 +70,7 @@ class FuncAcl extends ConfigurableService implements FuncAccessControl
      * @param array $parameters
      * @return boolean
      * @deprecated
+     * @throws \common_exception_Error
      */
     public function hasAccess($action, $controller, $extension, $parameters = array()) {
         $user = \common_session_SessionManager::getSession()->getUser();

@@ -90,9 +90,9 @@ class CacheHelper
      */
     public static function getControllerAccess($controllerClassName)
     {
-        try{
-            $returnValue = self::getCacheImplementation()->get(self::SERIAL_PREFIX_MODULE.$controllerClassName);
-        } catch (\common_cache_Exception $e) {
+//        try {
+//            $returnValue = self::getCacheImplementation()->get(self::SERIAL_PREFIX_MODULE.$controllerClassName);
+//        } catch (\common_cache_Exception $e) {
             
             $extId = MapHelper::getExtensionFromController($controllerClassName);
             $extension = MapHelper::getUriForExtension($extId);
@@ -100,28 +100,32 @@ class CacheHelper
             
             $roleClass = new \core_kernel_classes_Class(CLASS_ROLE);
             $accessProperty = new \core_kernel_classes_Property(AccessService::PROPERTY_ACL_GRANTACCESS);
+            $denyProperty = new \core_kernel_classes_Property(AccessService::PROPERTY_ACL_DENYACCESS);
 
             $returnValue = array('module' => array(), 'actions' => array());
             
-            // roles by extensions
+            // roles by extensions and controllers
             $roles = $roleClass->searchInstances(array(
-                    $accessProperty->getUri() => $extension
+                    $accessProperty->getUri() => [$extension, $module]
                 ), array(
-                    'recursive' => true, 'like' => false
+                    'recursive' => true, 'like' => false, 'chaining' => 'or'
             ));
             foreach ($roles as $grantedRole) {
                 $returnValue['module'][] = $grantedRole->getUri();
             }
-            
-            // roles by controller
-            $filters = array(
-                $accessProperty->getUri() => $module
-            );
-            $options = array('recursive' => true, 'like' => false);
-            
-            foreach ($roleClass->searchInstances($filters, $options) as $grantedRole){
-                $returnValue['module'][] = $grantedRole->getUri();
+
+            // exclude denied rules for extensions and controllers
+            $deniedRoles = [];
+            $roles = $roleClass->searchInstances(array(
+                $denyProperty->getUri() => [$extension, $module]
+            ), array(
+                'recursive' => true, 'like' => false, 'chaining' => 'or'
+            ));
+            foreach ($roles as $deniedRole) {
+                $deniedRoles[] = $deniedRole->getUri();
             }
+
+            $returnValue['module'] = array_diff($returnValue['module'], $deniedRoles);
             
             // roles by action
             foreach (ControllerHelper::getActions($controllerClassName) as $actionName) {
@@ -130,7 +134,6 @@ class CacheHelper
                     $accessProperty->getUri() => $actionUri
                 ), array('recursive' => true, 'like' => false));
                 if (!empty($rolesForAction)) {
-                    $actionName = MapHelper::getActionFromUri($actionUri);
                     $returnValue['actions'][$actionName] = array();
                     foreach ($rolesForAction as $roleResource) {
                         $returnValue['actions'][$actionName][] = $roleResource->getUri();
@@ -139,7 +142,7 @@ class CacheHelper
             }
             
             self::getCacheImplementation()->put($returnValue, self::SERIAL_PREFIX_MODULE.$controllerClassName);
-        }
+ //       }
         return $returnValue;
     }
     
