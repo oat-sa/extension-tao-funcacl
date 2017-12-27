@@ -1,6 +1,7 @@
 <?php
 namespace oat\funcAcl\controller;
 
+use oat\generis\model\GenerisRdf;
 use oat\tao\helpers\ControllerHelper;
 use oat\funcAcl\models\AccessService;
 use oat\funcAcl\models\ActionAccessService;
@@ -85,7 +86,7 @@ class Admin extends \tao_actions_CommonModule {
      * @return void
      */
     public function index(){
-        $rolesc = new \core_kernel_classes_Class(CLASS_ROLE);
+        $rolesc = new \core_kernel_classes_Class(GenerisRdf::CLASS_ROLE);
         $roles = array();
         foreach ($rolesc->getInstances(true) as $id => $r) {
             $roles[] = array('id' => $id, 'label' => $r->getLabel());

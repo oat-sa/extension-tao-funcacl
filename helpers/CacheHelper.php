@@ -2,6 +2,7 @@
 
 namespace oat\funcAcl\helpers;
 
+use oat\generis\model\GenerisRdf;
 use oat\oatbox\service\ServiceManager;
 use oat\tao\helpers\ControllerHelper;
 use oat\funcAcl\models\AccessService;
@@ -98,7 +99,7 @@ class CacheHelper
             $extension = MapHelper::getUriForExtension($extId);
             $module = MapHelper::getUriForController($controllerClassName);
             
-            $roleClass = new \core_kernel_classes_Class(CLASS_ROLE);
+            $roleClass = new \core_kernel_classes_Class(GenerisRdf::CLASS_ROLE);
             $accessProperty = new \core_kernel_classes_Property(AccessService::PROPERTY_ACL_GRANTACCESS);
 
             $returnValue = array('module' => array(), 'actions' => array());
@@ -150,7 +151,7 @@ class CacheHelper
         } catch (\common_cache_Exception $e) {
             $returnValue = array();
             $aclExtUri = AccessService::singleton()->makeEMAUri($extId);
-            $roleClass = new \core_kernel_classes_Class(CLASS_ROLE);
+            $roleClass = new \core_kernel_classes_Class(GenerisRdf::CLASS_ROLE);
             $roles = $roleClass->searchInstances(array(
                 AccessService::PROPERTY_ACL_GRANTACCESS => $aclExtUri
             ), array(

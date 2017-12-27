@@ -37,5 +37,7 @@ class Updater extends \common_ext_ExtensionUpdater
             $this->getServiceManager()->register(AclProxy::SERVICE_ID, new FuncAcl());
             $this->setVersion('4.0.0');
         }
+
+		$this->skip('4.0.0', '4.1.0');
     }
 }
