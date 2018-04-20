@@ -50,9 +50,6 @@ class FuncAcl extends ConfigurableService implements FuncAccessControl
                 : $controllerAccess['module'];
             
             $accessAllowed = count(array_intersect($userRoles, $allowedRoles)) > 0;
-            if (!$accessAllowed) {
-                \common_Logger::i('Access denied to '.$controller.'@'.$action.' for user \''.$user->getIdentifier().'\'');
-            }
         } catch (\ReflectionException $e) {
             \common_Logger::i('Unknown controller '.$controller);
             $accessAllowed = false;
