@@ -30,7 +30,7 @@ return array(
     'label' => 'Functionality ACL',
 	'description' => 'Functionality Access Control Layer',
     'license' => 'GPL-2.0',
-    'version' => '4.1.4',
+    'version' => '4.1.5',
 	'author' => 'Open Assessment Technologies, CRP Henri Tudor',
 	'requires' => array(
         	'tao' => '>=12.21.0',
