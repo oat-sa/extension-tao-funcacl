@@ -101,7 +101,7 @@ class Admin extends \tao_actions_CommonModule {
 
     public function getModules() {
         if (!\tao_helpers_Request::isAjax()){
-            throw new \Exception("wrong request mode");
+            throw new common_exception_BadRequest('wrong request mode');
         } else {
             $role = new \core_kernel_classes_Class($this->getRequestParameter('role'));
             
@@ -200,7 +200,7 @@ class Admin extends \tao_actions_CommonModule {
     public function getActions()
     {
         if (!\tao_helpers_Request::isAjax()) {
-            throw new \Exception("wrong request mode");
+            throw new common_exception_BadRequest('wrong request mode');
         } else {
             $role = new \core_kernel_classes_Resource($this->getRequestParameter('role'));
             $included = array();
@@ -242,7 +242,7 @@ class Admin extends \tao_actions_CommonModule {
 
     public function removeExtensionAccess() {
         if (!\tao_helpers_Request::isAjax()){
-            throw new \Exception("wrong request mode");
+            throw new common_exception_BadRequest('wrong request mode');
         }
         else{
             $role = $this->getRequestParameter('role');
@@ -255,7 +255,7 @@ class Admin extends \tao_actions_CommonModule {
 
     public function addExtensionAccess() {
         if (!\tao_helpers_Request::isAjax()){
-            throw new \Exception("wrong request mode");
+            throw new common_exception_BadRequest('wrong request mode');
         }
         else{
             $role = $this->getRequestParameter('role');
@@ -268,7 +268,7 @@ class Admin extends \tao_actions_CommonModule {
 
     public function removeModuleAccess() {
         if (!\tao_helpers_Request::isAjax()) {
-            throw new \Exception("wrong request mode");
+            throw new common_exception_BadRequest('wrong request mode');
         } else {
             $role = $this->getRequestParameter('role');
             $uri = $this->getRequestParameter('uri');
@@ -280,7 +280,7 @@ class Admin extends \tao_actions_CommonModule {
 
     public function addModuleAccess() {
         if (!\tao_helpers_Request::isAjax()){
-            throw new Exception("wrong request mode");
+            throw new common_exception_BadRequest('wrong request mode');
         }
         else{
             $role = $this->getRequestParameter('role');
@@ -293,7 +293,7 @@ class Admin extends \tao_actions_CommonModule {
 
     public function removeActionAccess() {
         if (!\tao_helpers_Request::isAjax()){
-            throw new Exception("wrong request mode");
+            throw new common_exception_BadRequest('wrong request mode');
         }
         else{
             $role = $this->getRequestParameter('role');
@@ -306,7 +306,7 @@ class Admin extends \tao_actions_CommonModule {
 
     public function addActionAccess() {
         if (!\tao_helpers_Request::isAjax()){
-            throw new Exception("wrong request mode");
+            throw new common_exception_BadRequest('wrong request mode');
         }
         else{
             $role = $this->getRequestParameter('role');
