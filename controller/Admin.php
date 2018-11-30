@@ -9,6 +9,8 @@ use oat\funcAcl\models\ExtensionAccessService;
 use oat\funcAcl\models\ModuleAccessService;
 use oat\funcAcl\helpers\CacheHelper;
 use oat\funcAcl\helpers\MapHelper;
+use common_exception_BadRequest;
+
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -99,9 +101,13 @@ class Admin extends \tao_actions_CommonModule {
         $this->setView('list.tpl');
     }
 
+    /**
+     * @throws \common_exception_Error
+     * @throws common_exception_BadRequest
+     */
     public function getModules() {
         if (!\tao_helpers_Request::isAjax()){
-            throw new \Exception("wrong request mode");
+            throw new common_exception_BadRequest('wrong request mode');
         } else {
             $role = new \core_kernel_classes_Class($this->getRequestParameter('role'));
             
@@ -195,12 +201,12 @@ class Admin extends \tao_actions_CommonModule {
     /**
      * Shows the access to the actions of a controller for a specific role
      * 
-     * @throws Exception
+     * @throws common_exception_BadRequest
      */
     public function getActions()
     {
         if (!\tao_helpers_Request::isAjax()) {
-            throw new \Exception("wrong request mode");
+            throw new common_exception_BadRequest('wrong request mode');
         } else {
             $role = new \core_kernel_classes_Resource($this->getRequestParameter('role'));
             $included = array();
@@ -240,9 +246,12 @@ class Admin extends \tao_actions_CommonModule {
         }
     }
 
+    /**
+     * @throws common_exception_BadRequest
+     */
     public function removeExtensionAccess() {
         if (!\tao_helpers_Request::isAjax()){
-            throw new \Exception("wrong request mode");
+            throw new common_exception_BadRequest('wrong request mode');
         }
         else{
             $role = $this->getRequestParameter('role');
@@ -253,9 +262,12 @@ class Admin extends \tao_actions_CommonModule {
         }
     }
 
+    /**
+     * @throws common_exception_BadRequest
+     */
     public function addExtensionAccess() {
         if (!\tao_helpers_Request::isAjax()){
-            throw new \Exception("wrong request mode");
+            throw new common_exception_BadRequest('wrong request mode');
         }
         else{
             $role = $this->getRequestParameter('role');
@@ -266,9 +278,12 @@ class Admin extends \tao_actions_CommonModule {
         }
     }
 
+    /**
+     * @throws common_exception_BadRequest
+     */
     public function removeModuleAccess() {
         if (!\tao_helpers_Request::isAjax()) {
-            throw new \Exception("wrong request mode");
+            throw new common_exception_BadRequest('wrong request mode');
         } else {
             $role = $this->getRequestParameter('role');
             $uri = $this->getRequestParameter('uri');
@@ -278,9 +293,12 @@ class Admin extends \tao_actions_CommonModule {
         }
     }
 
+    /**
+     * @throws common_exception_BadRequest
+     */
     public function addModuleAccess() {
         if (!\tao_helpers_Request::isAjax()){
-            throw new Exception("wrong request mode");
+            throw new common_exception_BadRequest('wrong request mode');
         }
         else{
             $role = $this->getRequestParameter('role');
@@ -291,9 +309,12 @@ class Admin extends \tao_actions_CommonModule {
         }
     }
 
+    /**
+     * @throws common_exception_BadRequest
+     */
     public function removeActionAccess() {
         if (!\tao_helpers_Request::isAjax()){
-            throw new Exception("wrong request mode");
+            throw new common_exception_BadRequest('wrong request mode');
         }
         else{
             $role = $this->getRequestParameter('role');
@@ -304,9 +325,12 @@ class Admin extends \tao_actions_CommonModule {
         }
     }
 
+    /**
+     * @throws common_exception_BadRequest
+     */
     public function addActionAccess() {
         if (!\tao_helpers_Request::isAjax()){
-            throw new Exception("wrong request mode");
+            throw new common_exception_BadRequest('wrong request mode');
         }
         else{
             $role = $this->getRequestParameter('role');
