@@ -32,6 +32,7 @@ use oat\funcAcl\models\ModuleAccessService;
 use oat\funcAcl\helpers\CacheHelper;
 use oat\funcAcl\helpers\MapHelper;
 use common_exception_BadRequest;
+use oat\tao\model\service\ApplicationService;
 
 /**
  * This controller provide the actions to manage the ACLs
@@ -95,40 +96,38 @@ class Admin extends \tao_actions_CommonModule {
 
     /**
      * @throws \common_exception_Error
+     * @throws \common_ext_ExtensionException
      * @throws common_exception_BadRequest
      */
     public function getModules()
     {
-        $this->defaultData();
-        if (!\tao_helpers_Request::isAjax()){
-            throw new common_exception_BadRequest('wrong request mode');
-        } else {
-            $role = new \core_kernel_classes_Class($this->getRequestParameter('role'));
+        $this->beforeAction();
+        $role = new \core_kernel_classes_Class($this->getRequestParameter('role'));
 
-            $included = array();
-            foreach (\tao_models_classes_RoleService::singleton()->getIncludedRoles($role) as $includedRole) {
-                $included[$includedRole->getUri()] = $includedRole->getLabel();
-            }
-
-            $extManager = \common_ext_ExtensionsManager::singleton();
-
-            $extData = array();
-            foreach ($extManager->getInstalledExtensions() as $extension){
-                if ($extension->getId() != 'generis') {
-                    $extData[] = $this->buildExtensionData($extension, $role->getUri(), array_keys($included));
-                }
-            }
-
-            usort($extData, function($a, $b) {
-                return strcmp($a['label'],$b['label']);
-            });
-
-
-            $this->returnJson(array(
-            	'extensions' => $extData,
-                'includedRoles' => $included
-            ));
+        $included = array();
+        foreach (\tao_models_classes_RoleService::singleton()->getIncludedRoles($role) as $includedRole) {
+            $included[$includedRole->getUri()] = $includedRole->getLabel();
         }
+
+        $extManager = \common_ext_ExtensionsManager::singleton();
+
+        $extData = array();
+        foreach ($extManager->getInstalledExtensions() as $extension){
+            if ($extension->getId() != 'generis') {
+                $extData[] = $this->buildExtensionData($extension, $role->getUri(), array_keys($included));
+            }
+        }
+
+        usort($extData, function($a, $b) {
+            return strcmp($a['label'],$b['label']);
+        });
+
+
+        $this->returnJson(array(
+            'extensions' => $extData,
+            'includedRoles' => $included,
+            'locked' => $this->isLocked(),
+        ));
     }
 
     protected function buildExtensionData(\common_ext_Extension $extension, $roleUri, $includedRoleUris) {
@@ -188,164 +187,183 @@ class Admin extends \tao_actions_CommonModule {
         return array(
             'uri' => $modUri,
             'label' => $modId,
-            'access' => $access
+            'access' => $access,
         );
+    }
+
+    /**
+     * @throws \common_ext_ExtensionException
+     * @throws common_exception_BadRequest
+     */
+    private function beforeAction()
+    {
+        $this->defaultData();
+        if (!\tao_helpers_Request::isAjax()) {
+            throw new common_exception_BadRequest('wrong request mode');
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    private function isLocked()
+    {
+        return !$this->getServiceLocator()->get(ApplicationService::SERVICE_ID)->isDebugMode();
+    }
+
+    /**
+     * @throws \common_exception_NotFound
+     */
+    private function prodLocker()
+    {
+        if ($this->isLocked()) {
+            throw new \common_exception_NotFound();
+        }
     }
 
     /**
      * Shows the access to the actions of a controller for a specific role
      *
+     * @throws \common_exception_Error
+     * @throws \common_ext_ExtensionException
      * @throws common_exception_BadRequest
      */
     public function getActions()
     {
-        $this->defaultData();
-        if (!\tao_helpers_Request::isAjax()) {
-            throw new common_exception_BadRequest('wrong request mode');
-        } else {
-            $role = new \core_kernel_classes_Resource($this->getRequestParameter('role'));
-            $included = array();
-            foreach (\tao_models_classes_RoleService::singleton()->getIncludedRoles($role) as $includedRole) {
-                $included[] = $includedRole->getUri();
-            }
-            $module = new \core_kernel_classes_Resource($this->getRequestParameter('module'));
-
-            $controllerClassName = MapHelper::getControllerFromUri($module->getUri());
-            $controllerAccess = CacheHelper::getControllerAccess($controllerClassName);
-
-            $actions = array();
-            foreach (ControllerHelper::getActions($controllerClassName) as $actionName) {
-                $uri = MapHelper::getUriForAction($controllerClassName, $actionName);
-                $part = explode('#', $uri);
-                list($type, $extId, $modId, $actId) = explode('_', $part[1]);
-
-                $allowedRoles = isset($controllerAccess['actions'][$actionName])
-                    ? array_merge($controllerAccess['module'], $controllerAccess['actions'][$actionName])
-                    : $controllerAccess['module'];
-
-                $access = count(array_intersect($included, $allowedRoles)) > 0
-                    ? self::ACCESS_INHERITED
-                    : (in_array($role->getUri(), $allowedRoles)
-                        ? self::ACCESS_FULL
-                        : self::ACCESS_NONE);
-
-                $actions[$actId] = array(
-                    'uri' => $uri,
-                    'access' => $access
-                );
-            }
-
-            ksort($actions);
-
-            $this->returnJson($actions);
+        $this->beforeAction();
+        $role = new \core_kernel_classes_Resource($this->getRequestParameter('role'));
+        $included = array();
+        foreach (\tao_models_classes_RoleService::singleton()->getIncludedRoles($role) as $includedRole) {
+            $included[] = $includedRole->getUri();
         }
+        $module = new \core_kernel_classes_Resource($this->getRequestParameter('module'));
+
+        $controllerClassName = MapHelper::getControllerFromUri($module->getUri());
+        $controllerAccess = CacheHelper::getControllerAccess($controllerClassName);
+
+        $actions = array();
+        foreach (ControllerHelper::getActions($controllerClassName) as $actionName) {
+            $uri = MapHelper::getUriForAction($controllerClassName, $actionName);
+            $part = explode('#', $uri);
+            list($type, $extId, $modId, $actId) = explode('_', $part[1]);
+
+            $allowedRoles = isset($controllerAccess['actions'][$actionName])
+                ? array_merge($controllerAccess['module'], $controllerAccess['actions'][$actionName])
+                : $controllerAccess['module'];
+
+            $access = count(array_intersect($included, $allowedRoles)) > 0
+                ? self::ACCESS_INHERITED
+                : (in_array($role->getUri(), $allowedRoles)
+                    ? self::ACCESS_FULL
+                    : self::ACCESS_NONE);
+
+            $actions[$actId] = array(
+                'uri' => $uri,
+                'access' => $access,
+                'locked' => $this->isLocked(),
+            );
+        }
+
+        ksort($actions);
+
+        $this->returnJson($actions);
     }
 
     /**
+     * @throws \common_exception_NotFound
+     * @throws \common_ext_ExtensionException
      * @throws common_exception_BadRequest
      */
     public function removeExtensionAccess()
     {
-        $this->defaultData();
-        if (!\tao_helpers_Request::isAjax()){
-            throw new common_exception_BadRequest('wrong request mode');
-        }
-        else{
-            $role = $this->getRequestParameter('role');
-            $uri = $this->getRequestParameter('uri');
-            $extensionService = ExtensionAccessService::singleton();
-            $extensionService->remove($role, $uri);
-            echo json_encode(array('uri' => $uri));
-        }
+        $this->beforeAction();
+        $this->prodLocker();
+        $role = $this->getRequestParameter('role');
+        $uri = $this->getRequestParameter('uri');
+        $extensionService = ExtensionAccessService::singleton();
+        $extensionService->remove($role, $uri);
+        echo json_encode(array('uri' => $uri));
     }
 
     /**
+     * @throws \common_exception_NotFound
+     * @throws \common_ext_ExtensionException
      * @throws common_exception_BadRequest
      */
     public function addExtensionAccess()
     {
-        $this->defaultData();
-        if (!\tao_helpers_Request::isAjax()){
-            throw new common_exception_BadRequest('wrong request mode');
-        }
-        else{
-            $role = $this->getRequestParameter('role');
-            $uri = $this->getRequestParameter('uri');
-            $extensionService = ExtensionAccessService::singleton();
-            $extensionService->add($role, $uri);
-            echo json_encode(array('uri' => $uri));
-        }
+        $this->beforeAction();
+        $this->prodLocker();
+        $role = $this->getRequestParameter('role');
+        $uri = $this->getRequestParameter('uri');
+        $extensionService = ExtensionAccessService::singleton();
+        $extensionService->add($role, $uri);
+        echo json_encode(array('uri' => $uri));
     }
 
     /**
+     * @throws \common_exception_NotFound
+     * @throws \common_ext_ExtensionException
      * @throws common_exception_BadRequest
      */
     public function removeModuleAccess()
     {
-        $this->defaultData();
-        if (!\tao_helpers_Request::isAjax()) {
-            throw new common_exception_BadRequest('wrong request mode');
-        } else {
-            $role = $this->getRequestParameter('role');
-            $uri = $this->getRequestParameter('uri');
-            $moduleService = ModuleAccessService::singleton();
-            $moduleService->remove($role, $uri);
-            echo json_encode(array('uri' => $uri));
-        }
+        $this->beforeAction();
+        $this->prodLocker();
+        $role = $this->getRequestParameter('role');
+        $uri = $this->getRequestParameter('uri');
+        $moduleService = ModuleAccessService::singleton();
+        $moduleService->remove($role, $uri);
+        echo json_encode(array('uri' => $uri));
+
     }
 
     /**
+     * @throws \common_exception_NotFound
+     * @throws \common_ext_ExtensionException
      * @throws common_exception_BadRequest
      */
     public function addModuleAccess()
     {
-        $this->defaultData();
-        if (!\tao_helpers_Request::isAjax()){
-            throw new common_exception_BadRequest('wrong request mode');
-        }
-        else{
-            $role = $this->getRequestParameter('role');
-            $uri = $this->getRequestParameter('uri');
-            $moduleService = ModuleAccessService::singleton();
-            $moduleService->add($role, $uri);
-            echo json_encode(array('uri' => $uri));
-        }
+        $this->beforeAction();
+        $this->prodLocker();
+        $role = $this->getRequestParameter('role');
+        $uri = $this->getRequestParameter('uri');
+        $moduleService = ModuleAccessService::singleton();
+        $moduleService->add($role, $uri);
+        echo json_encode(array('uri' => $uri));
     }
 
     /**
+     * @throws \common_exception_NotFound
+     * @throws \common_ext_ExtensionException
      * @throws common_exception_BadRequest
      */
     public function removeActionAccess()
     {
-        $this->defaultData();
-        if (!\tao_helpers_Request::isAjax()){
-            throw new common_exception_BadRequest('wrong request mode');
-        }
-        else{
-            $role = $this->getRequestParameter('role');
-            $uri = $this->getRequestParameter('uri');
-            $actionService = ActionAccessService::singleton();
-            $actionService->remove($role, $uri);
-            echo json_encode(array('uri' => $uri));
-        }
+        $this->beforeAction();
+        $this->prodLocker();
+        $role = $this->getRequestParameter('role');
+        $uri = $this->getRequestParameter('uri');
+        $actionService = ActionAccessService::singleton();
+        $actionService->remove($role, $uri);
+        echo json_encode(array('uri' => $uri));
     }
 
     /**
+     * @throws \common_exception_NotFound
+     * @throws \common_ext_ExtensionException
      * @throws common_exception_BadRequest
      */
     public function addActionAccess()
     {
-        $this->defaultData();
-        if (!\tao_helpers_Request::isAjax()){
-            throw new common_exception_BadRequest('wrong request mode');
-        }
-        else{
-            $role = $this->getRequestParameter('role');
-            $uri = $this->getRequestParameter('uri');
-            $actionService = ActionAccessService::singleton();
-            $actionService->add($role, $uri);
-            echo json_encode(array('uri' => $uri));
-        }
+        $this->beforeAction();
+        $this->prodLocker();
+        $role = $this->getRequestParameter('role');
+        $uri = $this->getRequestParameter('uri');
+        $actionService = ActionAccessService::singleton();
+        $actionService->add($role, $uri);
+        echo json_encode(array('uri' => $uri));
     }
 
 }

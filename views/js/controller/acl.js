@@ -47,9 +47,10 @@ define(['jquery', 'context', 'util/encode', 'i18n'], function($, context, encode
 						groupCheckboxTitle = __('Grant access rights to the entire extension');
 						break;
 				}
-				
+
 				var $group = $('<li class="group expendable closed'+extra+'"><div class="group-title"><span class="ui-icon ui-icon-triangle-1-e"/><span class="title">'+ ext['label'] +'</span>'
-						+ '<span class="selector all '+(ext['access'] == 'inherited' ? 'has-inherited' : 'checkable')+'" title="' + groupCheckboxTitle + '"></span></div><ul></ul></li>');
+					+ (data.locked ? '' : '<span class="selector all '+(ext['access'] == 'inherited' ? 'has-inherited' : 'checkable')+'" title="' + groupCheckboxTitle + '"></span>')
+					+ '</div><ul></ul></li>');
 				$group.acldata('uri', ext.uri);
 				
 				switch (ext['access']) {
@@ -107,7 +108,9 @@ define(['jquery', 'context', 'util/encode', 'i18n'], function($, context, encode
 							break;
 					}
 					
-					var $el = $('<li class="selectable'+extra+'"><span class="label">'+ mod['label'] +'</span><span class="selector '+(mod['access'] == 'inherited' ? 'has-inherited' : 'checkable') + '" title="'+ modCheckboxTitle +'"></span></li>');
+					var $el = $('<li class="selectable'+extra+'"><span class="label">'+ mod['label'] +'</span>'
+						+ (data.locked ? '' : '<span class="selector '+(mod['access'] == 'inherited' ? 'has-inherited' : 'checkable') + '" title="'+ modCheckboxTitle +'"></span>')
+						+'</li>');
 					$el.acldata('uri', mod.uri);
 					
 					switch (mod['access']) {
@@ -165,8 +168,10 @@ define(['jquery', 'context', 'util/encode', 'i18n'], function($, context, encode
 							// no access
 							actCheckBoxTitle = __('Grant access rights to the action');
 					}
-					
-					var $el = $('<li class="selectable'+extra+'"><span class="label">'+ e +'</span><span class="selector '+(act['access'] == 'inherited' ? 'has-inherited' : 'checkable')+'" title="'+ actCheckBoxTitle +'"></span></li>');
+
+					var $el = $('<li class="selectable'+extra+'"><span class="label">'+ e +'</span>'
+						+ (act['locked'] ? '' : '<span class="selector '+(act['access'] == 'inherited' ? 'has-inherited' : 'checkable')+'" title="'+ actCheckBoxTitle +'"></span>')
+						+ '</li>');
 					$el.acldata('uri', act.uri);
 
 					switch (act['access']) {
