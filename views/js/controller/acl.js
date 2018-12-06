@@ -27,7 +27,11 @@ define(['jquery', 'context', 'util/encode', 'i18n'], function($, context, encode
 			}
 			for (var e in data['extensions']) {
 				var ext = data['extensions'][e];
-				
+
+				if (data.locked && ext['access'] !== 'inherited') {
+				    continue; // for the dev mode show only the checked
+                }
+
 				switch (ext['access']) {
 					case 'inherited':
 						groupCheckboxTitle = __('Inherited access to the extension');
@@ -47,7 +51,6 @@ define(['jquery', 'context', 'util/encode', 'i18n'], function($, context, encode
 						groupCheckboxTitle = __('Grant access rights to the entire extension');
 						break;
 				}
-
 				var $group = $('<li class="group expendable closed'+extra+'"><div class="group-title"><span class="ui-icon ui-icon-triangle-1-e"/><span class="title">'+ ext['label'] +'</span>'
 					+ (data.locked ? '' : '<span class="selector all '+(ext['access'] == 'inherited' ? 'has-inherited' : 'checkable')+'" title="' + groupCheckboxTitle + '"></span>')
 					+ '</div><ul></ul></li>');
@@ -88,6 +91,11 @@ define(['jquery', 'context', 'util/encode', 'i18n'], function($, context, encode
 				});
 				for (var m in ext.modules) {
 					var mod = ext.modules[m];
+
+                    if (data.locked && ext['access'] !== 'inherited') {
+                        continue; // for the dev mode show only the checked
+                    }
+
 					switch (mod['access']) {
 						case 'inherited':
 							modCheckboxTitle = __('Inherited access to the controller');
@@ -154,7 +162,11 @@ define(['jquery', 'context', 'util/encode', 'i18n'], function($, context, encode
 				$('#aclActions ul.group-list').empty();
 				for (e in data) {
 					var act = data[e];
-					
+
+                    if (act['locked'] && (act['access'] !== 'inherited' || !e)) {
+                        continue; // for the dev mode show only the checked
+                    }
+
 					var extra = '';
 					switch (act['access']) {
 						case 'inherited':
