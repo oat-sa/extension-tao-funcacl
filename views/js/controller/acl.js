@@ -28,10 +28,9 @@ define(['jquery', 'context', 'util/encode', 'i18n'], function($, context, encode
 			for (var e in data['extensions']) {
 				var ext = data['extensions'][e];
 
-				if (data.locked && ext['access'] !== 'inherited') {
+				if (data.locked && ext['access'] === 'none') {
 				    continue; // for the dev mode show only the checked
                 }
-
 				switch (ext['access']) {
 					case 'inherited':
 						groupCheckboxTitle = __('Inherited access to the extension');
@@ -91,11 +90,9 @@ define(['jquery', 'context', 'util/encode', 'i18n'], function($, context, encode
 				});
 				for (var m in ext.modules) {
 					var mod = ext.modules[m];
-
-                    if (data.locked && ext['access'] !== 'inherited') {
+                    if (data.locked && mod['access'] === 'none') {
                         continue; // for the dev mode show only the checked
                     }
-
 					switch (mod['access']) {
 						case 'inherited':
 							modCheckboxTitle = __('Inherited access to the controller');
@@ -163,7 +160,7 @@ define(['jquery', 'context', 'util/encode', 'i18n'], function($, context, encode
 				for (e in data) {
 					var act = data[e];
 
-                    if (act['locked'] && (act['access'] !== 'inherited' || !e)) {
+                    if (act['locked'] && (act['access'] === 'none')) {
                         continue; // for the dev mode show only the checked
                     }
 
