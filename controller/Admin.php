@@ -208,8 +208,7 @@ class Admin extends \tao_actions_CommonModule {
      */
     private function isLocked()
     {
-        return true;
-        // return !$this->getServiceLocator()->get(ApplicationService::SERVICE_ID)->isDebugMode();
+        return !$this->getServiceLocator()->get(ApplicationService::SERVICE_ID)->isDebugMode();
     }
 
     /**
