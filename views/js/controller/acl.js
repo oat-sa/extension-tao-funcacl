@@ -50,7 +50,7 @@ define(['jquery', 'context', 'util/encode', 'i18n'], function($, context, encode
 						groupCheckboxTitle = __('Grant access rights to the entire extension');
 						break;
 				}
-				var $group = $('<li class="group expendable closed'+extra+'"><div class="group-title"><span class="ui-icon ui-icon-triangle-1-e"/><span class="title">'+ ext['label'] +'</span>'
+				var $group = $('<li class="group expendable closed'+extra+'"><div class="group-title"><span class="icon icon-right"/> <span class="title">'+ ext['label'] +'</span>'
 					+ (data.locked ? '' : '<span class="selector all '+(ext['access'] == 'inherited' ? 'has-inherited' : 'checkable')+'" title="' + groupCheckboxTitle + '"></span>')
 					+ '</div><ul></ul></li>');
 				$group.acldata('uri', ext.uri);
@@ -79,13 +79,13 @@ define(['jquery', 'context', 'util/encode', 'i18n'], function($, context, encode
 					if ($(this).parent().hasClass('open')){
 						$(this).removeClass('open');
 						$(this).parent().removeClass('open').addClass('closed');
-						$(this).find('.ui-icon').removeClass('ui-icon-triangle-1-s').addClass('ui-icon-triangle-1-e');
+                        $(this).find('.icon').removeClass('icon-down').addClass('icon-right');
 						$(this).parent().find('.selected').removeClass('selected');
 					}
 					else {
 						$(this).addClass('open');
 						$(this).parent().removeClass('closed').addClass('open');
-						$(this).find('.ui-icon').removeClass('ui-icon-triangle-1-e').addClass('ui-icon-triangle-1-s');
+                        $(this).find('.icon').removeClass('icon-right').addClass('icon-down');
 					}
 				});
 				for (var m in ext.modules) {
