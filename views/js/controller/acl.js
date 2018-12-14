@@ -27,7 +27,10 @@ define(['jquery', 'context', 'util/encode', 'i18n'], function($, context, encode
 			}
 			for (var e in data['extensions']) {
 				var ext = data['extensions'][e];
-				
+
+				if (data.locked && ext['access'] === 'none') {
+				    continue; // for the dev mode show only the checked
+                }
 				switch (ext['access']) {
 					case 'inherited':
 						groupCheckboxTitle = __('Inherited access to the extension');
@@ -47,9 +50,9 @@ define(['jquery', 'context', 'util/encode', 'i18n'], function($, context, encode
 						groupCheckboxTitle = __('Grant access rights to the entire extension');
 						break;
 				}
-				
-				var $group = $('<li class="group expendable closed'+extra+'"><div class="group-title"><span class="ui-icon ui-icon-triangle-1-e"/><span class="title">'+ ext['label'] +'</span>'
-						+ '<span class="selector all '+(ext['access'] == 'inherited' ? 'has-inherited' : 'checkable')+'" title="' + groupCheckboxTitle + '"></span></div><ul></ul></li>');
+				var $group = $('<li class="group expendable closed'+extra+'"><div class="group-title"><span class="icon icon-right"/> <span class="title">'+ ext['label'] +'</span>'
+					+ (data.locked ? '' : '<span class="selector all '+(ext['access'] == 'inherited' ? 'has-inherited' : 'checkable')+'" title="' + groupCheckboxTitle + '"></span>')
+					+ '</div><ul></ul></li>');
 				$group.acldata('uri', ext.uri);
 				
 				switch (ext['access']) {
@@ -76,17 +79,20 @@ define(['jquery', 'context', 'util/encode', 'i18n'], function($, context, encode
 					if ($(this).parent().hasClass('open')){
 						$(this).removeClass('open');
 						$(this).parent().removeClass('open').addClass('closed');
-						$(this).find('.ui-icon').removeClass('ui-icon-triangle-1-s').addClass('ui-icon-triangle-1-e');
+                        $(this).find('.icon').removeClass('icon-down').addClass('icon-right');
 						$(this).parent().find('.selected').removeClass('selected');
 					}
 					else {
 						$(this).addClass('open');
 						$(this).parent().removeClass('closed').addClass('open');
-						$(this).find('.ui-icon').removeClass('ui-icon-triangle-1-e').addClass('ui-icon-triangle-1-s');
+                        $(this).find('.icon').removeClass('icon-right').addClass('icon-down');
 					}
 				});
 				for (var m in ext.modules) {
 					var mod = ext.modules[m];
+                    if (data.locked && mod['access'] === 'none') {
+                        continue; // for the dev mode show only the checked
+                    }
 					switch (mod['access']) {
 						case 'inherited':
 							modCheckboxTitle = __('Inherited access to the controller');
@@ -107,7 +113,9 @@ define(['jquery', 'context', 'util/encode', 'i18n'], function($, context, encode
 							break;
 					}
 					
-					var $el = $('<li class="selectable'+extra+'"><span class="label">'+ mod['label'] +'</span><span class="selector '+(mod['access'] == 'inherited' ? 'has-inherited' : 'checkable') + '" title="'+ modCheckboxTitle +'"></span></li>');
+					var $el = $('<li class="selectable'+extra+'"><span class="label">'+ mod['label'] +'</span>'
+						+ (data.locked ? '' : '<span class="selector '+(mod['access'] == 'inherited' ? 'has-inherited' : 'checkable') + '" title="'+ modCheckboxTitle +'"></span>')
+						+'</li>');
 					$el.acldata('uri', mod.uri);
 					
 					switch (mod['access']) {
@@ -151,7 +159,11 @@ define(['jquery', 'context', 'util/encode', 'i18n'], function($, context, encode
 				$('#aclActions ul.group-list').empty();
 				for (e in data) {
 					var act = data[e];
-					
+
+                    if (act['locked'] && (act['access'] === 'none')) {
+                        continue; // for the dev mode show only the checked
+                    }
+
 					var extra = '';
 					switch (act['access']) {
 						case 'inherited':
@@ -165,8 +177,12 @@ define(['jquery', 'context', 'util/encode', 'i18n'], function($, context, encode
 							// no access
 							actCheckBoxTitle = __('Grant access rights to the action');
 					}
-					
-					var $el = $('<li class="selectable'+extra+'"><span class="label">'+ e +'</span><span class="selector '+(act['access'] == 'inherited' ? 'has-inherited' : 'checkable')+'" title="'+ actCheckBoxTitle +'"></span></li>');
+
+					var $el = $('<li class="selectable'+extra+'"'
+						+(act['locked'] ? ' style="cursor: default"' : '')
+						+'><span class="label">'+ e +'</span>'
+						+ (act['locked'] ? '' : '<span class="selector '+(act['access'] == 'inherited' ? 'has-inherited' : 'checkable')+'" title="'+ actCheckBoxTitle +'"></span>')
+						+ '</li>');
 					$el.acldata('uri', act.uri);
 
 					switch (act['access']) {
