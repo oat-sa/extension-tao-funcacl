@@ -65,24 +65,33 @@ class MapHelper
         list($type, $extension, $controller, $action) = explode('_', substr($uri, strpos($uri,'#')+1));
         return $action;
     }
-    
-    public static function getExtensionFromController($controllerClass) {
+
+    /**
+     * @param $controllerClass
+     * @return mixed
+     * @throws \common_exception_Error
+     */
+    public static function getExtensionFromController($controllerClass)
+    {
         if (strpos($controllerClass, '\\') === false) {
             $parts = explode('_', $controllerClass);
-            if (count($parts) == 3) {
+            if (count($parts) === 3) {
                 return $parts[0];
             } else {
-                throw new \common_exception_Error('Unknown controller '.$controllerClass);
+                throw new \common_exception_Error('Unknown controller ' . $controllerClass);
             }
         } else {
             foreach (\common_ext_ExtensionsManager::singleton()->getEnabledExtensions() as $ext) {
-                foreach ($ext->getManifest()->getRoutes() as $routePrefix => $namespace) {
-                    if (is_string($namespace) && substr($controllerClass, 0, strlen($namespace)) == $namespace) {
+                foreach ($ext->getManifest()->getRoutes() as $routePrefix => $route) {
+                    if (is_array($route) && array_key_exists('class', $route)) {
+                        $route = $route['class']::getControllerPrefix() ?: $route;
+                    }
+                    if (is_string($route) && substr($controllerClass, 0, strlen($route)) === $route) {
                         return $ext->getId();
                     }
                 }
             }
-            throw new \common_exception_Error('Unknown controller '.$controllerClass);
+            throw new \common_exception_Error('Unknown controller ' . $controllerClass);
         }
     }
 }
