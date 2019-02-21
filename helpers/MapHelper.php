@@ -84,7 +84,7 @@ class MapHelper
             foreach (\common_ext_ExtensionsManager::singleton()->getEnabledExtensions() as $ext) {
                 foreach ($ext->getManifest()->getRoutes() as $routePrefix => $route) {
                     if (is_array($route) && array_key_exists('class', $route)) {
-                        $route = (new $route['class'])->getControllerPrefix();
+                        $route = $route['class']::getControllerPrefix();
                     }
                     if (is_string($route) && substr($controllerClass, 0, strlen($route)) === $route) {
                         return $ext->getId();
