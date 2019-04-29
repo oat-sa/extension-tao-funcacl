@@ -1,0 +1,1 @@
+{"Actions":"Handlinger","Authoring":"Innhold","Available roles":"Tilgjengelige roller","Delete":"Slett","Export":"Eksporter","Import":"Importer","Modules":"Moduler","Move":"Flytt","New test":"Ny test","New test-taker":"Ny testkandidat","Properties":"Egenskaper","Roles":"Roller","Users":"Brukere"}

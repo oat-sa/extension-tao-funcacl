@@ -1,0 +1,65 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: TAO 3.3.0-sprint96\n"
+"PO-Revision-Date: 2019-04-25T01:12:44\n"
+"Last-Translator: TAO Translation Team <translation@tao.lu>\n"
+"MIME-Version: 1.0\n"
+"Language: ru-RU\n"
+"sourceLanguage: en-US\n"
+"targetLanguage: ru-RU\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Basepath: ../../\n"
+"X-Poedit-KeywordsList: __\n"
+"X-Poedit-SearchPath-0: .\n"
+
+msgid "Actions"
+msgstr "Действия"
+
+msgid "Available roles"
+msgstr "Доступные роли"
+
+msgid "Grant access rights to the action"
+msgstr "Дать права доступа на действие"
+
+msgid "Grant access rights to the entire controller"
+msgstr "Дать права доступа на полное управление"
+
+msgid "Grant access rights to the entire extension"
+msgstr "Дать права доступа на полное расширение"
+
+msgid "includes"
+msgstr "включает"
+
+msgid "Inherited access to the action"
+msgstr "Наследовать доступ на действие"
+
+msgid "Inherited access to the controller"
+msgstr "Наследованный доступ на управление"
+
+msgid "Inherited access to the extension"
+msgstr "Наследованный доступ на расширение"
+
+#, tao-public
+msgid "Manage Access Rights"
+msgstr "Управлять правами доступа"
+
+msgid "Modules"
+msgstr "Модули"
+
+msgid "Revoke access rights to the action"
+msgstr "Отозвать права доступа на действие"
+
+msgid "Revoke access rights to the entire controller"
+msgstr "Отозвать права доступа на полное управление"
+
+msgid "Revoke access rights to the entire extension"
+msgstr "Отозвать права доступа на полное расширение"
+
+msgid "Roles"
+msgstr "Роли"
+
+#, tao-public
+msgid "Users"
+msgstr "Пользователи"
+

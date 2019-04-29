@@ -1,12 +1,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TAO 3.3.0-sprint96\n"
-"PO-Revision-Date: 2019-04-25T01:04:44\n"
+"PO-Revision-Date: 2019-04-25T01:10:30\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
-"Language: nl-NL\n"
+"Language: zh-CN\n"
 "sourceLanguage: en-US\n"
-"targetLanguage: nl-NL\n"
+"targetLanguage: zh-CN\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../../\n"
@@ -14,52 +14,52 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 
 msgid "Actions"
-msgstr "Acties"
+msgstr ""
 
 msgid "Available roles"
-msgstr "Beschikbare rollen"
+msgstr ""
 
 msgid "Grant access rights to the action"
-msgstr "Geef toegangsrechten tot de actie"
+msgstr ""
 
 msgid "Grant access rights to the entire controller"
-msgstr "Verleen toegangsrechten tot de gehele controller"
+msgstr ""
 
 msgid "Grant access rights to the entire extension"
-msgstr "Verleen toegangsrechten tot de gehele uitbreiding"
+msgstr ""
 
 msgid "includes"
-msgstr "bevat"
+msgstr ""
 
 msgid "Inherited access to the action"
-msgstr "Geërfde toegang tot de actie"
+msgstr ""
 
 msgid "Inherited access to the controller"
-msgstr "Geërfde toegang tot de controller"
+msgstr ""
 
 msgid "Inherited access to the extension"
-msgstr "Geërfde toegang tot de uitbreiding"
+msgstr ""
 
 #, tao-public
 msgid "Manage Access Rights"
-msgstr "Beheer toegangsrechten"
+msgstr ""
 
 msgid "Modules"
-msgstr "Modules"
+msgstr ""
 
 msgid "Revoke access rights to the action"
-msgstr "Trek toegangsrechten in tot de actie"
+msgstr ""
 
 msgid "Revoke access rights to the entire controller"
-msgstr "Trek toegangsrechten in tot de gehele controller"
+msgstr ""
 
 msgid "Revoke access rights to the entire extension"
-msgstr "Trek toegangsrechten in tot de gehele uitbreiding"
+msgstr ""
 
 msgid "Roles"
-msgstr "Rollen"
+msgstr ""
 
 #, tao-public
 msgid "Users"
-msgstr "Gebruikers"
+msgstr ""
 
