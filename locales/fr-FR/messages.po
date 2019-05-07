@@ -1,12 +1,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TAO 3.3.0-sprint96\n"
-"PO-Revision-Date: 2019-04-25T01:04:44\n"
+"PO-Revision-Date: 2019-04-25T01:08:51\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
-"Language: nl-NL\n"
+"Language: fr-FR\n"
 "sourceLanguage: en-US\n"
-"targetLanguage: nl-NL\n"
+"targetLanguage: fr-FR\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../../\n"
@@ -14,52 +14,52 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 
 msgid "Actions"
-msgstr "Acties"
+msgstr "Actions"
 
 msgid "Available roles"
-msgstr "Beschikbare rollen"
+msgstr "Rôles disponibles"
 
 msgid "Grant access rights to the action"
-msgstr "Geef toegangsrechten tot de actie"
+msgstr "Accorder les droits d'accès pour cette action"
 
 msgid "Grant access rights to the entire controller"
-msgstr "Verleen toegangsrechten tot de gehele controller"
+msgstr "Accorder les droits d'accès pour le contrôleur entier"
 
 msgid "Grant access rights to the entire extension"
-msgstr "Verleen toegangsrechten tot de gehele uitbreiding"
+msgstr "Accorder les droits d'accès pour l'extension entière"
 
 msgid "includes"
-msgstr "bevat"
+msgstr "contient"
 
 msgid "Inherited access to the action"
-msgstr "Geërfde toegang tot de actie"
+msgstr "Accès hérité à l'action"
 
 msgid "Inherited access to the controller"
-msgstr "Geërfde toegang tot de controller"
+msgstr "Accès hérité au contrôleur"
 
 msgid "Inherited access to the extension"
-msgstr "Geërfde toegang tot de uitbreiding"
+msgstr "Accès hérité à l'extension"
 
 #, tao-public
 msgid "Manage Access Rights"
-msgstr "Beheer toegangsrechten"
+msgstr "Gérer les droits d'accès"
 
 msgid "Modules"
 msgstr "Modules"
 
 msgid "Revoke access rights to the action"
-msgstr "Trek toegangsrechten in tot de actie"
+msgstr "Révoquer les droits d'accès à l'action"
 
 msgid "Revoke access rights to the entire controller"
-msgstr "Trek toegangsrechten in tot de gehele controller"
+msgstr "Révoquer les droits d'accès au contrôleur entier"
 
 msgid "Revoke access rights to the entire extension"
-msgstr "Trek toegangsrechten in tot de gehele uitbreiding"
+msgstr "Révoquer les droits d'accès à l'extension entière"
 
 msgid "Roles"
-msgstr "Rollen"
+msgstr "Rôles"
 
 #, tao-public
 msgid "Users"
-msgstr "Gebruikers"
+msgstr "Utilisateurs"
 

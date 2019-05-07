@@ -1,12 +1,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TAO 3.3.0-sprint96\n"
-"PO-Revision-Date: 2019-04-25T01:04:44\n"
+"PO-Revision-Date: 2019-04-25T01:03:21\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
-"Language: nl-NL\n"
+"Language: ar-arb\n"
 "sourceLanguage: en-US\n"
-"targetLanguage: nl-NL\n"
+"targetLanguage: ar-arb\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../../\n"
@@ -14,52 +14,52 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 
 msgid "Actions"
-msgstr "Acties"
+msgstr "أفعال"
 
 msgid "Available roles"
-msgstr "Beschikbare rollen"
+msgstr "الأدوار المتاحة"
 
 msgid "Grant access rights to the action"
-msgstr "Geef toegangsrechten tot de actie"
+msgstr "منح حقوق الوصول إلى الإجراء"
 
 msgid "Grant access rights to the entire controller"
-msgstr "Verleen toegangsrechten tot de gehele controller"
+msgstr "منح حقوق الوصول إلى وحدة تحكم كاملة"
 
 msgid "Grant access rights to the entire extension"
-msgstr "Verleen toegangsrechten tot de gehele uitbreiding"
+msgstr "منح حقوق الوصول إلى الإمتداد بأكمله"
 
 msgid "includes"
-msgstr "bevat"
+msgstr "تضمين"
 
 msgid "Inherited access to the action"
-msgstr "Geërfde toegang tot de actie"
+msgstr "الوصول الموروث إلى الإجراء"
 
 msgid "Inherited access to the controller"
-msgstr "Geërfde toegang tot de controller"
+msgstr "وراثة الوصول إلى وحدة تحكم"
 
 msgid "Inherited access to the extension"
-msgstr "Geërfde toegang tot de uitbreiding"
+msgstr "وراثة الوصول إلى التمديد"
 
 #, tao-public
 msgid "Manage Access Rights"
-msgstr "Beheer toegangsrechten"
+msgstr "إدارة حقوق الوصول"
 
 msgid "Modules"
-msgstr "Modules"
+msgstr "الوحدات"
 
 msgid "Revoke access rights to the action"
-msgstr "Trek toegangsrechten in tot de actie"
+msgstr "إبطال حقوق الوصول إلى الإجراء"
 
 msgid "Revoke access rights to the entire controller"
-msgstr "Trek toegangsrechten in tot de gehele controller"
+msgstr "إبطال حقوق الوصول إلى وحدة التحكم بأكملها"
 
 msgid "Revoke access rights to the entire extension"
-msgstr "Trek toegangsrechten in tot de gehele uitbreiding"
+msgstr "إبطال حقوق الوصول إلى الإضافة بأكملها"
 
 msgid "Roles"
-msgstr "Rollen"
+msgstr "وظائف"
 
 #, tao-public
 msgid "Users"
-msgstr "Gebruikers"
+msgstr "المستخدمين"
 

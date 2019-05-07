@@ -1,12 +1,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TAO 3.3.0-sprint96\n"
-"PO-Revision-Date: 2019-04-25T01:04:44\n"
+"PO-Revision-Date: 2019-04-25T01:06:09\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
-"Language: nl-NL\n"
+"Language: hu-HU\n"
 "sourceLanguage: en-US\n"
-"targetLanguage: nl-NL\n"
+"targetLanguage: hu-HU\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../../\n"
@@ -14,52 +14,52 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 
 msgid "Actions"
-msgstr "Acties"
+msgstr "Műveletek"
 
 msgid "Available roles"
-msgstr "Beschikbare rollen"
+msgstr "Elérhető szerepek"
 
 msgid "Grant access rights to the action"
-msgstr "Geef toegangsrechten tot de actie"
+msgstr "Jog biztosítása a művelethez"
 
 msgid "Grant access rights to the entire controller"
-msgstr "Verleen toegangsrechten tot de gehele controller"
+msgstr "Jog biztosítása az egész szabályzóhoz"
 
 msgid "Grant access rights to the entire extension"
-msgstr "Verleen toegangsrechten tot de gehele uitbreiding"
+msgstr "Jog biztosítása az egész kiterjesztéshez"
 
 msgid "includes"
-msgstr "bevat"
+msgstr "magában foglalja"
 
 msgid "Inherited access to the action"
-msgstr "Geërfde toegang tot de actie"
+msgstr "Örökölt hozzáférés a művelethez"
 
 msgid "Inherited access to the controller"
-msgstr "Geërfde toegang tot de controller"
+msgstr "Örökölt hozzáférés a vezérlőhöz"
 
 msgid "Inherited access to the extension"
-msgstr "Geërfde toegang tot de uitbreiding"
+msgstr "Örökölt hozzáférés a kiterjesztéshez"
 
 #, tao-public
 msgid "Manage Access Rights"
-msgstr "Beheer toegangsrechten"
+msgstr "Jogosultságok karbantartása"
 
 msgid "Modules"
-msgstr "Modules"
+msgstr "Modulok"
 
 msgid "Revoke access rights to the action"
-msgstr "Trek toegangsrechten in tot de actie"
+msgstr "Hozzáférési jog visszavonása a művelethez"
 
 msgid "Revoke access rights to the entire controller"
-msgstr "Trek toegangsrechten in tot de gehele controller"
+msgstr "Hozzáférési jog visszavonása az egész vezérlőhöz"
 
 msgid "Revoke access rights to the entire extension"
-msgstr "Trek toegangsrechten in tot de gehele uitbreiding"
+msgstr "Hozzáférési jog visszavonása az egész kiterjesztéshez"
 
 msgid "Roles"
-msgstr "Rollen"
+msgstr "Szerepkörök"
 
 #, tao-public
 msgid "Users"
-msgstr "Gebruikers"
+msgstr "Felhasználók"
 
