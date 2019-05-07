@@ -1,12 +1,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TAO 3.3.0-sprint96\n"
-"PO-Revision-Date: 2019-04-25T01:04:44\n"
+"PO-Revision-Date: 2019-04-25T01:10:55\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
-"Language: nl-NL\n"
+"Language: ca-ES-valencia\n"
 "sourceLanguage: en-US\n"
-"targetLanguage: nl-NL\n"
+"targetLanguage: ca-ES-valencia\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../../\n"
@@ -14,52 +14,52 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 
 msgid "Actions"
-msgstr "Acties"
+msgstr "Accions"
 
 msgid "Available roles"
-msgstr "Beschikbare rollen"
+msgstr "Rols disponibles"
 
 msgid "Grant access rights to the action"
-msgstr "Geef toegangsrechten tot de actie"
+msgstr "Acorda drets d'accés per a l'acció"
 
 msgid "Grant access rights to the entire controller"
-msgstr "Verleen toegangsrechten tot de gehele controller"
+msgstr "Acorda drets d'accés per al controlador complet"
 
 msgid "Grant access rights to the entire extension"
-msgstr "Verleen toegangsrechten tot de gehele uitbreiding"
+msgstr "Acorda drets d'accés per a l'extensió completa"
 
 msgid "includes"
-msgstr "bevat"
+msgstr "conté"
 
 msgid "Inherited access to the action"
-msgstr "Geërfde toegang tot de actie"
+msgstr "Accés heretat per a l'acció"
 
 msgid "Inherited access to the controller"
-msgstr "Geërfde toegang tot de controller"
+msgstr "Accés heretat per al controlador"
 
 msgid "Inherited access to the extension"
-msgstr "Geërfde toegang tot de uitbreiding"
+msgstr "Accés heretat per a l'extensió"
 
 #, tao-public
 msgid "Manage Access Rights"
-msgstr "Beheer toegangsrechten"
+msgstr "Gestiona els drets d'accés"
 
 msgid "Modules"
-msgstr "Modules"
+msgstr "Mòduls"
 
 msgid "Revoke access rights to the action"
-msgstr "Trek toegangsrechten in tot de actie"
+msgstr "Revoca els drets d'accés per a l'acció"
 
 msgid "Revoke access rights to the entire controller"
-msgstr "Trek toegangsrechten in tot de gehele controller"
+msgstr "Revoca els drets d'accés per al controlador complet"
 
 msgid "Revoke access rights to the entire extension"
-msgstr "Trek toegangsrechten in tot de gehele uitbreiding"
+msgstr "Revoca els drets d'accés per a l'extensió completa"
 
 msgid "Roles"
-msgstr "Rollen"
+msgstr "Rols"
 
 #, tao-public
 msgid "Users"
-msgstr "Gebruikers"
+msgstr "Usuaris"
 
