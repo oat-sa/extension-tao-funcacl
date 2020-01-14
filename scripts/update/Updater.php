@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +31,8 @@ class Updater extends \common_ext_ExtensionUpdater
      * @param string $initialVersion
      * @return void
      */
-    public function update($initialVersion) {
+    public function update($initialVersion)
+    {
         $this->skip('0', '3.0.0');
 
         if ($this->isVersion('3.0.0')) {
@@ -38,6 +40,6 @@ class Updater extends \common_ext_ExtensionUpdater
             $this->setVersion('4.0.0');
         }
 
-		$this->skip('4.0.0', '5.3.2');
+        $this->skip('4.0.0', '5.3.2');
     }
 }

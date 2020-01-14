@@ -1,29 +1,29 @@
 <?php
-/**  
+
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- * 
+ *
  */
 
 namespace oat\funcAcl\helpers;
 
 use oat\tao\helpers\ControllerHelper;
 use oat\funcAcl\models\AccessService;
-
 
 /**
  * Helper to read/write the action/module model
@@ -46,11 +46,11 @@ class ModelHelper
      */
     public static function getModules($extensionId)
     {
-        $returnValue = array();
+        $returnValue = [];
         foreach (ControllerHelper::getControllers($extensionId) as $controllerClassName) {
             $shortName = strpos($controllerClassName, '\\') !== false
-                ? substr($controllerClassName, strrpos($controllerClassName, '\\')+1)
-                : substr($controllerClassName, strrpos($controllerClassName, '_')+1)
+                ? substr($controllerClassName, strrpos($controllerClassName, '\\') + 1)
+                : substr($controllerClassName, strrpos($controllerClassName, '_') + 1)
             ;
             $uri = AccessService::singleton()->makeEMAUri($extensionId, $shortName);
             $returnValue[$uri] = new \core_kernel_classes_Resource($uri);
@@ -68,7 +68,7 @@ class ModelHelper
      */
     public static function getActions(\core_kernel_classes_Resource $module)
     {
-        $returnValue = array();
+        $returnValue = [];
         $controllerClassName = MapHelper::getControllerFromUri($module->getUri());
         try {
             foreach (ControllerHelper::getActions($controllerClassName) as $actionName) {
@@ -80,5 +80,4 @@ class ModelHelper
         }
         return (array) $returnValue;
     }
-
 }
