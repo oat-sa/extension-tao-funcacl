@@ -25,6 +25,7 @@
  * @author Joel Bout, <joel@taotesting.com>
  * @package tao
  */
-class funcAcl_models_classes_FuncAcl extends \oat\funcAcl\models\FuncAcl {
+class funcAcl_models_classes_FuncAcl extends \oat\funcAcl\models\FuncAcl
+{
 
 }
