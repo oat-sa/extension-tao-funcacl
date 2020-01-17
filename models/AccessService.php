@@ -1,23 +1,23 @@
 <?php
 
-/**  
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
  * of the License (non-upgradable).
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- * 
+ *
  * Copyright (c) 2009-2012 (original work) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *               
- * 
+ *
+ *
  */
 
 namespace oat\funcAcl\models;
@@ -30,7 +30,7 @@ use oat\oatbox\event\EventManagerAwareTrait;
  * @author Jehan Bihin
  * @package tao
  * @since 2.2
- 
+
  */
 class AccessService extends \tao_models_classes_GenerisService
 {
@@ -40,32 +40,38 @@ class AccessService extends \tao_models_classes_GenerisService
 
     use EventManagerAwareTrait;
 
-    public function grantExtensionAccess(\core_kernel_classes_Resource $role, $ext) {
+    public function grantExtensionAccess(\core_kernel_classes_Resource $role, $ext)
+    {
         $accessUri = $this->makeEMAUri($ext);
         ExtensionAccessService::singleton()->add($role->getUri(), $accessUri);
     }
 
-    public function grantModuleAccess(\core_kernel_classes_Resource $role, $ext, $mod) {
+    public function grantModuleAccess(\core_kernel_classes_Resource $role, $ext, $mod)
+    {
         $accessUri = $this->makeEMAUri($ext, $mod);
         ModuleAccessService::singleton()->add($role->getUri(), $accessUri);
     }
     
-    public function grantActionAccess(\core_kernel_classes_Resource $role, $ext, $mod, $act) {
+    public function grantActionAccess(\core_kernel_classes_Resource $role, $ext, $mod, $act)
+    {
         $accessUri = $this->makeEMAUri($ext, $mod, $act);
         ActionAccessService::singleton()->add($role->getUri(), $accessUri);
     }
 
-    public function revokeExtensionAccess(\core_kernel_classes_Resource $role, $ext) {
+    public function revokeExtensionAccess(\core_kernel_classes_Resource $role, $ext)
+    {
         $accessUri = $this->makeEMAUri($ext);
         ExtensionAccessService::singleton()->remove($role->getUri(), $accessUri);
     }
     
-    public function revokeModuleAccess(\core_kernel_classes_Resource $role, $ext, $mod) {
+    public function revokeModuleAccess(\core_kernel_classes_Resource $role, $ext, $mod)
+    {
         $accessUri = $this->makeEMAUri($ext, $mod);
         ModuleAccessService::singleton()->remove($role->getUri(), $accessUri);
     }
     
-    public function revokeActionAccess(\core_kernel_classes_Resource $role, $ext, $mod, $act) {
+    public function revokeActionAccess(\core_kernel_classes_Resource $role, $ext, $mod, $act)
+    {
         $accessUri = $this->makeEMAUri($ext, $mod, $act);
         ActionAccessService::singleton()->remove($role->getUri(), $accessUri);
     }
@@ -104,4 +110,3 @@ class AccessService extends \tao_models_classes_GenerisService
         return (string) $returnValue;
     }
 }
-

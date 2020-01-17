@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +43,8 @@ use oat\tao\model\service\ApplicationService;
  * @package tao
  *
  */
-class Admin extends \tao_actions_CommonModule {
+class Admin extends \tao_actions_CommonModule
+{
 
     /**
      * Access to this functionality is inherited from
@@ -82,12 +84,12 @@ class Admin extends \tao_actions_CommonModule {
     {
         $this->defaultData();
         $rolesc = new \core_kernel_classes_Class(GenerisRdf::CLASS_ROLE);
-        $roles = array();
+        $roles = [];
         foreach ($rolesc->getInstances(true) as $id => $r) {
-            $roles[] = array('id' => $id, 'label' => $r->getLabel());
+            $roles[] = ['id' => $id, 'label' => $r->getLabel()];
         }
-        usort($roles, function($a, $b) {
-        	return strcmp($a['label'],$b['label']);
+        usort($roles, function ($a, $b) {
+            return strcmp($a['label'], $b['label']);
         });
 
         $this->setData('roles', $roles);
@@ -104,64 +106,65 @@ class Admin extends \tao_actions_CommonModule {
         $this->beforeAction();
         $role = new \core_kernel_classes_Class($this->getRequestParameter('role'));
 
-        $included = array();
+        $included = [];
         foreach (\tao_models_classes_RoleService::singleton()->getIncludedRoles($role) as $includedRole) {
             $included[$includedRole->getUri()] = $includedRole->getLabel();
         }
 
         $extManager = \common_ext_ExtensionsManager::singleton();
 
-        $extData = array();
-        foreach ($extManager->getInstalledExtensions() as $extension){
+        $extData = [];
+        foreach ($extManager->getInstalledExtensions() as $extension) {
             if ($extension->getId() != 'generis') {
                 $extData[] = $this->buildExtensionData($extension, $role->getUri(), array_keys($included));
             }
         }
 
-        usort($extData, function($a, $b) {
-            return strcmp($a['label'],$b['label']);
+        usort($extData, function ($a, $b) {
+            return strcmp($a['label'], $b['label']);
         });
 
 
-        $this->returnJson(array(
+        $this->returnJson([
             'extensions' => $extData,
             'includedRoles' => $included,
             'locked' => $this->isLocked(),
-        ));
+        ]);
     }
 
-    protected function buildExtensionData(\common_ext_Extension $extension, $roleUri, $includedRoleUris) {
+    protected function buildExtensionData(\common_ext_Extension $extension, $roleUri, $includedRoleUris)
+    {
         $extAccess = CacheHelper::getExtensionAccess($extension->getId());
         $extAclUri = AccessService::singleton()->makeEMAUri($extension->getId());
         $atLeastOneAccess = false;
         $allAccess = in_array($roleUri, $extAccess);
         $inherited = count(array_intersect($includedRoleUris, $extAccess)) > 0;
 
-        $controllers = array();
+        $controllers = [];
         foreach (ControllerHelper::getControllers($extension->getId()) as $controllerClassName) {
             $controllerData = $this->buildControllerData($controllerClassName, $roleUri, $includedRoleUris);
             $atLeastOneAccess = $atLeastOneAccess || $controllerData['access'] != self::ACCESS_NONE;
             $controllers[] = $controllerData;
         }
 
-        usort($controllers, function($a, $b) {
-        	return strcmp($a['label'],$b['label']);
+        usort($controllers, function ($a, $b) {
+            return strcmp($a['label'], $b['label']);
         });
 
         $access = $inherited ? 'inherited'
             : ($allAccess ? 'full'
                 : ($atLeastOneAccess ? 'partial' : 'none'));
 
-        return array(
+        return [
             'uri' => $extAclUri,
             'label' => $extension->getName(),
             'access' => $access,
             'modules' => $controllers
-        );
-
+        ];
     }
 
-    protected function buildControllerData($controllerClassName, $roleUri, $includedRoleUris) {
+    protected function buildControllerData($controllerClassName, $roleUri, $includedRoleUris)
+    {
 
         $modUri = MapHelper::getUriForController($controllerClassName);
 
@@ -172,23 +175,23 @@ class Admin extends \tao_actions_CommonModule {
         $access = self::ACCESS_NONE;
         if (count(array_intersect($includedRoleUris, $moduleAccess['module'])) > 0) {
             $access = self::ACCESS_INHERITED;
-        } elseif (true === in_array($roleUri, $moduleAccess['module'])){
+        } elseif (true === in_array($roleUri, $moduleAccess['module'])) {
             $access = self::ACCESS_FULL;
         } else {
             // have a look at actions.
             foreach ($moduleAccess['actions'] as $roles) {
-                if (in_array($roleUri, $roles) || count(array_intersect($includedRoleUris, $roles)) > 0){
+                if (in_array($roleUri, $roles) || count(array_intersect($includedRoleUris, $roles)) > 0) {
                     $access = self::ACCESS_PARTIAL;
                     break;
                 }
             }
         }
 
-        return array(
+        return [
             'uri' => $modUri,
             'label' => $modId,
             'access' => $access,
-        );
+        ];
     }
 
     /**
@@ -232,7 +235,7 @@ class Admin extends \tao_actions_CommonModule {
     {
         $this->beforeAction();
         $role = new \core_kernel_classes_Resource($this->getRequestParameter('role'));
-        $included = array();
+        $included = [];
         foreach (\tao_models_classes_RoleService::singleton()->getIncludedRoles($role) as $includedRole) {
             $included[] = $includedRole->getUri();
         }
@@ -241,7 +244,7 @@ class Admin extends \tao_actions_CommonModule {
         $controllerClassName = MapHelper::getControllerFromUri($module->getUri());
         $controllerAccess = CacheHelper::getControllerAccess($controllerClassName);
 
-        $actions = array();
+        $actions = [];
         foreach (ControllerHelper::getActions($controllerClassName) as $actionName) {
             $uri = MapHelper::getUriForAction($controllerClassName, $actionName);
             $part = explode('#', $uri);
@@ -257,11 +260,11 @@ class Admin extends \tao_actions_CommonModule {
                     ? self::ACCESS_FULL
                     : self::ACCESS_NONE);
 
-            $actions[$actId] = array(
+            $actions[$actId] = [
                 'uri' => $uri,
                 'access' => $access,
                 'locked' => $this->isLocked(),
-            );
+            ];
         }
 
         ksort($actions);
@@ -282,7 +285,7 @@ class Admin extends \tao_actions_CommonModule {
         $uri = $this->getRequestParameter('uri');
         $extensionService = ExtensionAccessService::singleton();
         $extensionService->remove($role, $uri);
-        echo json_encode(array('uri' => $uri));
+        echo json_encode(['uri' => $uri]);
     }
 
     /**
@@ -298,7 +301,7 @@ class Admin extends \tao_actions_CommonModule {
         $uri = $this->getRequestParameter('uri');
         $extensionService = ExtensionAccessService::singleton();
         $extensionService->add($role, $uri);
-        echo json_encode(array('uri' => $uri));
+        echo json_encode(['uri' => $uri]);
     }
 
     /**
@@ -314,8 +317,7 @@ class Admin extends \tao_actions_CommonModule {
         $uri = $this->getRequestParameter('uri');
         $moduleService = ModuleAccessService::singleton();
         $moduleService->remove($role, $uri);
-        echo json_encode(array('uri' => $uri));
-
+        echo json_encode(['uri' => $uri]);
     }
 
     /**
@@ -331,7 +333,7 @@ class Admin extends \tao_actions_CommonModule {
         $uri = $this->getRequestParameter('uri');
         $moduleService = ModuleAccessService::singleton();
         $moduleService->add($role, $uri);
-        echo json_encode(array('uri' => $uri));
+        echo json_encode(['uri' => $uri]);
     }
 
     /**
@@ -347,7 +349,7 @@ class Admin extends \tao_actions_CommonModule {
         $uri = $this->getRequestParameter('uri');
         $actionService = ActionAccessService::singleton();
         $actionService->remove($role, $uri);
-        echo json_encode(array('uri' => $uri));
+        echo json_encode(['uri' => $uri]);
     }
 
     /**
@@ -363,7 +365,6 @@ class Admin extends \tao_actions_CommonModule {
         $uri = $this->getRequestParameter('uri');
         $actionService = ActionAccessService::singleton();
         $actionService->add($role, $uri);
-        echo json_encode(array('uri' => $uri));
+        echo json_encode(['uri' => $uri]);
     }
-
 }
