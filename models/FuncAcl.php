@@ -66,16 +66,17 @@ class FuncAcl extends ConfigurableService implements FuncAccessControl
      * @param string $extension
      * @param string $controller
      * @param string $action
-     * @param array $parameters
+     *
      * @return boolean
      * @deprecated
      */
-    public function hasAccess($action, $controller, $extension, $parameters = [])
+    public function hasAccess($action, $controller, $extension)
     {
         $user = \common_session_SessionManager::getSession()->getUser();
         $uri = ModuleAccessService::singleton()->makeEMAUri($extension, $controller);
         $controllerClassName = MapHelper::getControllerFromUri($uri);
-        return self::accessPossible($user, $controllerClassName, $action);
+
+        return $this->accessPossible($user, $controllerClassName, $action);
     }
     
     public function applyRule(AccessRule $rule)
@@ -101,7 +102,13 @@ class FuncAcl extends ConfigurableService implements FuncAccessControl
                     // fail silently warning should already be send
             }
         } else {
-            \common_Logger::w('Only grant rules accepted in ' . __CLASS__);
+            $this->revokeRule(
+                new AccessRule(
+                    AccessRule::GRANT,
+                    $rule->getRole(),
+                    $rule->getMask()
+                )
+            );
         }
     }
     
@@ -143,7 +150,7 @@ class FuncAcl extends ConfigurableService implements FuncAccessControl
         // string masks
         if (is_string($mask)) {
             if (strpos($mask, '@') !== false) {
-                list($controller, $action) = explode('@', $mask, 2);
+                [$controller, $action] = explode('@', $mask, 2);
             } else {
                 $controller = $mask;
                 $action = null;
@@ -157,43 +164,50 @@ class FuncAcl extends ConfigurableService implements FuncAccessControl
                 if (is_null($action)) {
                     // grant controller
                     return [$extension, $shortName];
-                } else {
-                    // grant action
-                    return [$extension, $shortName, $action];
                 }
-            } else {
-                \common_Logger::w('Unknown controller ' . $controller);
+
+                // grant action
+                return [$extension, $shortName, $action];
             }
-        
-            /// array masks
-        } elseif (is_array($mask)) {
-            if (isset($mask['act']) && isset($mask['mod']) && isset($mask['ext'])) {
+
+            \common_Logger::w('Unknown controller ' . $controller);
+        } elseif (is_array($mask)) { /// array masks
+            if (isset($mask['act'], $mask['mod'], $mask['ext'])) {
                 return [$mask['ext'], $mask['mod'], $mask['act']];
-            } elseif (isset($mask['mod']) && isset($mask['ext'])) {
+            }
+
+            if (isset($mask['mod'], $mask['ext'])) {
                 return [$mask['ext'], $mask['mod']];
-            } elseif (isset($mask['ext'])) {
+            }
+
+            if (isset($mask['ext'])) {
                 return [$mask['ext']];
-            } elseif (isset($mask['controller'])) {
+            }
+
+            if (isset($mask['controller'])) {
                 $extension = MapHelper::getExtensionFromController($mask['controller']);
                 $shortName = strpos($mask['controller'], '\\') !== false
                     ? substr($mask['controller'], strrpos($mask['controller'], '\\') + 1)
-                    : substr($mask['controller'], strrpos($mask['controller'], '_') + 1)
-                    ;
+                    : substr($mask['controller'], strrpos($mask['controller'], '_') + 1);
+
                 return [$extension, $shortName];
-            } elseif (isset($mask['act']) && strpos($mask['act'], '@') !== false) {
-                list($controller, $action) = explode('@', $mask['act'], 2);
+            }
+
+            if (isset($mask['act']) && strpos($mask['act'], '@') !== false) {
+                [$controller, $action] = explode('@', $mask['act'], 2);
                 $extension = MapHelper::getExtensionFromController($controller);
                 $shortName = strpos($controller, '\\') !== false
                     ? substr($controller, strrpos($controller, '\\') + 1)
-                    : substr($controller, strrpos($controller, '_') + 1)
-                    ;
+                    : substr($controller, strrpos($controller, '_') + 1);
+
                 return [$extension, $shortName, $action];
-            } else {
-                \common_Logger::w('Uninterpretable filter in ' . __CLASS__);
             }
+
+            \common_Logger::w('Uninterpretable filter in ' . __CLASS__);
         } else {
             \common_Logger::w('Uninterpretable filtertype ' . gettype($mask));
         }
+
         return [];
     }
 }
