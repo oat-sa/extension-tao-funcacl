@@ -24,14 +24,14 @@
  * @author CRP Henri Tudor - TAO Team - {@link http://www.tao.lu}
  * @license GPLv2  http://www.opensource.org/licenses/gpl-2.0.php
  */
-$extpath = dirname(__FILE__) . DIRECTORY_SEPARATOR;
+$extpath = __DIR__ . DIRECTORY_SEPARATOR;
 
 return [
     'name' => 'funcAcl',
     'label' => 'Functionality ACL',
     'description' => 'Functionality Access Control Layer',
     'license' => 'GPL-2.0',
-    'version' => '5.3.3',
+    'version' => '5.4.0',
     'author' => 'Open Assessment Technologies, CRP Henri Tudor',
     'requires' => [
         'tao' => '>=27.0.0',
@@ -42,10 +42,10 @@ return [
     ],
     'install' => [
         'rdf' => [
-            dirname(__FILE__) . '/models/ontology/taofuncacl.rdf'
+            __DIR__ . '/models/ontology/taofuncacl.rdf'
         ],
         'php' => [
-            dirname(__FILE__) . '/scripts/install/setFuncAclImpl.php'
+            __DIR__ . '/scripts/install/setFuncAclImpl.php'
         ],
     ],
     'update' => 'oat\\funcAcl\\scripts\\update\\Updater',
@@ -83,7 +83,7 @@ return [
         'TPL_PATH'  => $extpath . "views" . DIRECTORY_SEPARATOR . "templates" . DIRECTORY_SEPARATOR,
     ],
     'extra' => [
-        'structures' => dirname(__FILE__) . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR . 'structures.xml',
+        'structures' => __DIR__ . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR . 'structures.xml',
     ],
 
 ];
