@@ -35,7 +35,7 @@ return [
     'author' => 'Open Assessment Technologies, CRP Henri Tudor',
     'requires' => [
         'tao' => '>=27.0.0',
-        'generis' => '>=5.9.0'
+        'generis' => '>=12.15.0'
     ],
     'models' => [
         'http://www.tao.lu/Ontologies/taoFuncACL.rdf'
