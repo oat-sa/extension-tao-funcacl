@@ -35,14 +35,14 @@ include_once dirname(__FILE__) . '/../../includes/raw_start.php';
 
 class FuncACLTest extends TaoPhpUnitTestRunner
 {
-    
+
     private $user;
     private $testRole;
-    
-    public function setUp()
+
+    public function setUp(): void
     {
         parent::setUp();
-        
+
         $userService = tao_models_classes_UserService::singleton();
         $roleService = tao_models_classes_RoleService::singleton();
         $baseRole = new core_kernel_classes_Resource(TaoOntology::PROPERTY_INSTANCE_ROLE_BACKOFFICE);
@@ -50,8 +50,8 @@ class FuncACLTest extends TaoPhpUnitTestRunner
         $this->user = $userService->addUser('testcase', 'testcase');
         $userService->attachRole($this->user, $this->testRole);
     }
-    
-    public function tearDown()
+
+    public function tearDown(): void
     {
         parent::tearDown();
         $userService = tao_models_classes_UserService::singleton();
@@ -63,7 +63,7 @@ class FuncACLTest extends TaoPhpUnitTestRunner
             $roleService->removeRole($this->testRole);
         }
     }
-    
+
     public function testFuncACL()
     {
         $srv = tao_models_classes_UserService::singleton();
@@ -79,51 +79,51 @@ class FuncACLTest extends TaoPhpUnitTestRunner
         $this->assertEquals($emaurimod, $makeemaurimod);
 
         $funcAclImp = new FuncAcl();
-        
+
         // -- Try to access a restricted action
         $this->assertFalse($funcAclImp->hasAccess('add', 'Users', 'tao'));
-        
+
         // -- Try to access a unrestricted action
         // (BACKOFFICE has access to the backend login action because it includes the TAO Role)
         $this->assertTrue($funcAclImp->hasAccess('login', 'Main', 'tao'));
-        
+
         // -- Try to access an action that does not exist.
         $this->assertFalse($funcAclImp->hasAccess('action', 'Unknown', 'tao'));
-        
+
         // -- Try to access a unrestricted action
         // Add access for this action to the Manager role.
         ActionAccessService::singleton()->add($this->testRole->getUri(), $makeemauri);
-        
+
         // Add the Manager role the the currently tested user
         tao_models_classes_UserService::singleton()->attachRole($this->user, $this->testRole);
-        
+
         // Logoff/login, to refresh roles cache
         $this->assertTrue(LoginService::startSession($generisUser));
-        
+
         // Ask for access
         $this->assertTrue($funcAclImp->hasAccess('add', 'Users', 'tao'));
 
         // Remove the access to this action from the Manager role
         ActionAccessService::singleton()->remove($this->testRole->getUri(), $makeemauri);
-        
+
         // We should not have access anymore to this action with the Manager role
         $this->assertFalse($funcAclImp->hasAccess('add', 'Users', 'tao'));
-        
+
         // -- Give access to the entire module and try to access the previously tested action
         ModuleAccessService::singleton()->add($this->testRole->getUri(), $makeemaurimod);
         $this->assertTrue($funcAclImp->hasAccess('add', 'Users', 'tao'));
-        
+
         // -- Remove the entire module access and try again
         ModuleAccessService::singleton()->remove($this->testRole->getUri(), $makeemaurimod);
         $this->assertFalse($funcAclImp->hasAccess('add', 'Users', 'tao'));
-        
+
         // reset
         ModuleAccessService::singleton()->add($this->testRole->getUri(), $makeemaurimod);
-        
+
         // Unattach role from user
         tao_models_classes_UserService::singleton()->unnatachRole($this->user, $this->testRole);
     }
-    
+
     public function testACLCache()
     {
         $moduleCache = CacheHelper::getControllerAccess('tao_actions_Users');
