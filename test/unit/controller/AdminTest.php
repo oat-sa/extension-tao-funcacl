@@ -55,15 +55,14 @@ class AdminTest extends TestCase
         $_SERVER['HTTP_X_REQUESTED_WITH'] = 'xmlhttprequest';
 
         // At the moment controllers cannot be tested properly so we partially mock the class under test
-        $this->subject = $this->getMock(
-            Admin::class,
-            ['getRequest', 'defaultData', 'prodLocker', 'returnJson']
-        );
+        $this->subject = $this->getMockBuilder(Admin::class)
+            ->setMethods(['getRequest', 'defaultData', 'prodLocker', 'returnJson'])
+            ->getMock();
 
-        $this->applicationServiceMock = $this->getMock(ApplicationService::class);
-        $this->extensionAccessServiceMock = $this->getMock(ExtensionAccessService::class, [], [], '', false);
-        $this->moduleAccessServiceMock = $this->getMock(ModuleAccessService::class, [], [], '', false);
-        $this->actionAccessServiceMock = $this->getMock(ActionAccessService::class, [], [], '', false);
+        $this->applicationServiceMock = $this->createMock(ApplicationService::class);
+        $this->extensionAccessServiceMock = $this->createMock(ExtensionAccessService::class);
+        $this->moduleAccessServiceMock = $this->createMock(ModuleAccessService::class);
+        $this->actionAccessServiceMock = $this->createMock(ActionAccessService::class);
 
         $this->applicationServiceMock
             ->expects($this->once())
@@ -220,7 +219,7 @@ class AdminTest extends TestCase
      */
     private function getRequestMock(string $role, string $uri): Request
     {
-        $requestMock = $this->getMock(Request::class);
+        $requestMock = $this->createMock(Request::class);
 
         $requestMock
             ->method('getParameter')
