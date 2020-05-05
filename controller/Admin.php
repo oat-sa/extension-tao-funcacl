@@ -285,7 +285,10 @@ class Admin extends \tao_actions_CommonModule
         $uri = $this->getRequestParameter('uri');
         $extensionService = ExtensionAccessService::singleton();
         $extensionService->remove($role, $uri);
-        echo json_encode(['uri' => $uri]);
+
+        $this->returnJson([
+            'uri' => $uri,
+        ]);
     }
 
     /**
@@ -301,7 +304,10 @@ class Admin extends \tao_actions_CommonModule
         $uri = $this->getRequestParameter('uri');
         $extensionService = ExtensionAccessService::singleton();
         $extensionService->add($role, $uri);
-        echo json_encode(['uri' => $uri]);
+
+        $this->returnJson([
+            'uri' => $uri,
+        ]);
     }
 
     /**
@@ -317,7 +323,10 @@ class Admin extends \tao_actions_CommonModule
         $uri = $this->getRequestParameter('uri');
         $moduleService = ModuleAccessService::singleton();
         $moduleService->remove($role, $uri);
-        echo json_encode(['uri' => $uri]);
+
+        $this->returnJson([
+            'uri' => $uri,
+        ]);
     }
 
     /**
@@ -333,7 +342,10 @@ class Admin extends \tao_actions_CommonModule
         $uri = $this->getRequestParameter('uri');
         $moduleService = ModuleAccessService::singleton();
         $moduleService->add($role, $uri);
-        echo json_encode(['uri' => $uri]);
+
+        $this->returnJson([
+            'uri' => $uri,
+        ]);
     }
 
     /**
@@ -349,7 +361,10 @@ class Admin extends \tao_actions_CommonModule
         $uri = $this->getRequestParameter('uri');
         $actionService = ActionAccessService::singleton();
         $actionService->remove($role, $uri);
-        echo json_encode(['uri' => $uri]);
+
+        $this->returnJson([
+            'uri' => $uri,
+        ]);
     }
 
     /**
@@ -365,6 +380,9 @@ class Admin extends \tao_actions_CommonModule
         $uri = $this->getRequestParameter('uri');
         $actionService = ActionAccessService::singleton();
         $actionService->add($role, $uri);
-        echo json_encode(['uri' => $uri]);
+
+        $this->returnJson([
+            'uri' => $uri,
+        ]);
     }
 }
