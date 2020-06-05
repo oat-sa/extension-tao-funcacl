@@ -25,16 +25,16 @@ namespace oat\funcAcl\scripts\install;
 
 use oat\tao\model\accessControl\func\AccessRule;
 use oat\funcAcl\models\FuncAcl;
-use oat\tao\model\accessControl\func\FuncAccessControl;
 use oat\oatbox\extension\InstallAction;
 use common_ext_ExtensionsManager;
+use oat\tao\model\accessControl\func\AclProxy;
 
 class RegisterFuncAcl extends InstallAction
 {
     public function __invoke($params)
     {
         $implementation = new FuncAcl();
-        $this->registerService(FuncAccessControl::SERVICE_ID, $implementation);
+        $this->registerService(AclProxy::SERVICE_ID, $implementation);
         // register all access rights so far
         $exts = $this->getServiceLocator()->get(common_ext_ExtensionsManager::class)->getInstalledExtensions();
         foreach ($exts as $extension) {
