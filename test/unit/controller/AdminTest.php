@@ -32,6 +32,8 @@ use oat\tao\model\service\ApplicationService;
 use ReflectionProperty;
 use Request;
 use tao_models_classes_Service;
+use oat\tao\model\accessControl\func\AclProxy;
+use oat\funcAcl\models\FuncAcl;
 
 class AdminTest extends TestCase
 {
@@ -50,6 +52,9 @@ class AdminTest extends TestCase
     /** @var ActionAccessService|MockObject */
     private $actionAccessServiceMock;
 
+    /** @var FuncAcl|MockObject */
+    private $funcAclMock;
+
     protected function setUp(): void
     {
         $_SERVER['HTTP_X_REQUESTED_WITH'] = 'xmlhttprequest';
@@ -63,6 +68,7 @@ class AdminTest extends TestCase
         $this->extensionAccessServiceMock = $this->createMock(ExtensionAccessService::class);
         $this->moduleAccessServiceMock = $this->createMock(ModuleAccessService::class);
         $this->actionAccessServiceMock = $this->createMock(ActionAccessService::class);
+        $this->funcAclMock =  $this->createMock(FuncAcl::class);
 
         $this->applicationServiceMock
             ->expects($this->once())
@@ -71,6 +77,7 @@ class AdminTest extends TestCase
 
         $this->subject->setServiceLocator($this->getServiceLocatorMock([
             ApplicationService::SERVICE_ID => $this->applicationServiceMock,
+            AclProxy::SERVICE_ID => $this->funcAclMock
         ]));
 
         // AccessServices are not registered in the service manager, need to mock them in the global Service class
@@ -79,7 +86,7 @@ class AdminTest extends TestCase
         $instancesRef->setValue(null, [
             ExtensionAccessService::class => $this->extensionAccessServiceMock,
             ModuleAccessService::class => $this->moduleAccessServiceMock,
-            ActionAccessService::class => $this->actionAccessServiceMock,
+            ActionAccessService::class => $this->actionAccessServiceMock
         ]);
     }
 
