@@ -27,6 +27,7 @@ use oat\tao\model\accessControl\func\FuncAccessControl;
 use oat\tao\model\accessControl\func\AccessRule;
 use oat\oatbox\user\User;
 use oat\oatbox\service\ConfigurableService;
+use oat\tao\model\accessControl\AccessControl;
 
 /**
  * Proxy for the Acl Implementation
@@ -35,9 +36,8 @@ use oat\oatbox\service\ConfigurableService;
  * @author Joel Bout, <joel@taotesting.com>
  * @package tao
  */
-class FuncAcl extends ConfigurableService implements FuncAccessControl
+class FuncAcl extends ConfigurableService implements FuncAccessControl, AccessControl
 {
-    
     /**
      * (non-PHPdoc)
      * @see \oat\tao\model\accessControl\func\FuncAccessControl::accessPossible()
@@ -60,23 +60,9 @@ class FuncAcl extends ConfigurableService implements FuncAccessControl
         return (bool) $accessAllowed;
     }
     
-    /**
-     * Compatibility class for old implementation
-     *
-     * @param string $extension
-     * @param string $controller
-     * @param string $action
-     *
-     * @return boolean
-     * @deprecated
-     */
-    public function hasAccess($action, $controller, $extension)
+    public function hasAccess(User $user, $controllerName, $actionName, $parameters)
     {
-        $user = \common_session_SessionManager::getSession()->getUser();
-        $uri = ModuleAccessService::singleton()->makeEMAUri($extension, $controller);
-        $controllerClassName = MapHelper::getControllerFromUri($uri);
-
-        return $this->accessPossible($user, $controllerClassName, $action);
+        return $this->accessPossible($user, $controllerName, $actionName);
     }
     
     public function applyRule(AccessRule $rule)
