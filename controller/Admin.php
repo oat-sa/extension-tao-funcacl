@@ -34,6 +34,9 @@ use oat\funcAcl\helpers\CacheHelper;
 use oat\funcAcl\helpers\MapHelper;
 use common_exception_BadRequest;
 use oat\tao\model\service\ApplicationService;
+use oat\tao\model\accessControl\func\FuncAccessControl;
+use oat\funcAcl\models\FuncAcl;
+use oat\tao\model\accessControl\func\AclProxy;
 
 /**
  * This controller provide the actions to manage the ACLs
@@ -211,7 +214,9 @@ class Admin extends \tao_actions_CommonModule
      */
     private function isLocked()
     {
-        return !$this->getServiceLocator()->get(ApplicationService::SERVICE_ID)->isDebugMode();
+        $locked = !$this->getServiceLocator()->get(AclProxy::SERVICE_ID) instanceof FuncAcl;
+        $locked = $locked || !$this->getServiceLocator()->get(ApplicationService::SERVICE_ID)->isDebugMode();
+        return $locked;
     }
 
     /**
