@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TAO 3.3.0-sprint107\n"
-"PO-Revision-Date: 2019-08-02T09:43:59\n"
+"Project-Id-Version: TAO 3.4.0-sprint121\n"
+"PO-Revision-Date: 2020-08-03T09:53:42\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: th-TH\n"
@@ -14,52 +14,52 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 
 msgid "Actions"
-msgstr ""
+msgstr "การดำเนินการต่างๆ"
 
 msgid "Available roles"
-msgstr ""
+msgstr "บทบาทที่มี"
 
 msgid "Grant access rights to the action"
-msgstr ""
+msgstr "อนุญาตให้มีสิทธิ์เข้าถึงการดำเนินการ"
 
 msgid "Grant access rights to the entire controller"
-msgstr ""
+msgstr "อนุญาตให้มีสิทธิ์เข้าถึงตัวควบคุมทั้งหมด"
 
 msgid "Grant access rights to the entire extension"
-msgstr ""
+msgstr "อนุญาตให้มีสิทธิ์เข้าถึงส่วนขยายทั้งหมด"
 
 msgid "includes"
-msgstr ""
+msgstr "รวม"
 
 msgid "Inherited access to the action"
-msgstr ""
+msgstr "สืบทอดการเข้าถึงให้กับการดำเนินการ"
 
 msgid "Inherited access to the controller"
-msgstr ""
+msgstr "สืบทอดการเข้าถึงให้กับตัวควบคุม"
 
 msgid "Inherited access to the extension"
-msgstr ""
+msgstr "สืบทอดการเข้าถึงให้กับส่วนขยาย"
 
 #, tao-public
 msgid "Manage Access Rights"
-msgstr ""
+msgstr "จัดการสิทธิ์การเข้าถึง"
 
 msgid "Modules"
-msgstr ""
+msgstr "โมดูลต่างๆ"
 
 msgid "Revoke access rights to the action"
-msgstr ""
+msgstr "ถอนสิทธิ์การเข้าถึงการดำเนินการ"
 
 msgid "Revoke access rights to the entire controller"
-msgstr ""
+msgstr "ถอนสิทธิ์การเข้าถึงตัวควบคุมทั้งหมด"
 
 msgid "Revoke access rights to the entire extension"
-msgstr ""
+msgstr "ถอนสิทธิ์การเข้าถึงส่วนขยายทั้งหมด"
 
 msgid "Roles"
-msgstr ""
+msgstr "บทบาทต่างๆ"
 
 #, tao-public
 msgid "Users"
-msgstr ""
+msgstr "ผู้ใช้"
 

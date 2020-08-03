@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TAO 3.3.0-sprint107\n"
-"PO-Revision-Date: 2019-08-02T09:43:59\n"
+"Project-Id-Version: TAO 3.4.0-sprint121\n"
+"PO-Revision-Date: 2020-08-03T09:53:42\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: th-TH\n"
@@ -13,87 +13,87 @@ msgstr ""
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#ControlComponent
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "Control component"
-msgstr ""
+msgstr "ส่วนประกอบสำหรับควบคุม"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#ControlComponent
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "Either an extension, module or action"
-msgstr ""
+msgstr "ไม่ว่าจะเป็นส่วนขยาย โมดูล หรือการดำเนินการ"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Extension
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "An extension"
-msgstr ""
+msgstr "ส่วนขยาย"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Extension
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "A tao extension"
-msgstr ""
+msgstr "ส่วนขยาย tao"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Module
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "A module"
-msgstr ""
+msgstr "โมดูล"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Module
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "A MVC Controller Module"
-msgstr ""
+msgstr "โมดูลตัวควบคุมแบบ MVC"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Action
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "An action"
-msgstr ""
+msgstr "การดำเนินการ"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Action
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "A MVC Controller Action"
-msgstr ""
+msgstr "การดำเนินการของตัวควบคุมแบบ MVC"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Identifier
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "Identifier"
-msgstr ""
+msgstr "ตัวบ่งชี้"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Identifier
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "Identifier"
-msgstr ""
+msgstr "ตัวบ่งชี้"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#GrantAccess
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "Grant access to a control component"
-msgstr ""
+msgstr "อนุญาตให้เข้าถึงส่วนประกอบสำหรับควบคุม"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#GrantAccess
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "Grant access to a control component"
-msgstr ""
+msgstr "อนุญติให้เข้าถึงส่วนประกอบของการควบคุม"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#actionMemberOf
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "Member of"
-msgstr ""
+msgstr "สมาชิกของ"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#actionMemberOf
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "Member of a module"
-msgstr ""
+msgstr "สมาชิกของโมดูล"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#moduleExtension
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "Extension"
-msgstr ""
+msgstr "ส่วนขยาย"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#moduleExtension
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "Extension of the module"
-msgstr ""
+msgstr "ส่วนขยายของโมดูล"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#FuncAclManagerRole
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "Function ACL Manager"
-msgstr ""
+msgstr "ฟังก์ชันตัวจัดการ ACL"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#FuncAclManagerRole
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
