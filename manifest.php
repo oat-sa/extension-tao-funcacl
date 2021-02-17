@@ -30,13 +30,7 @@ return [
     'label' => 'Functionality ACL',
     'description' => 'Functionality Access Control Layer',
     'license' => 'GPL-2.0',
-    'version' => '6.0.1',
     'author' => 'Open Assessment Technologies, CRP Henri Tudor',
-    'requires' => [
-        'tao' => '>=44.6.1',
-        'generis' => '>=12.15.0',
-        'taoBackOffice' => '>=4.3.1',
-    ],
     'install' => [
         'rdf' => [
             __DIR__ . '/models/ontology/taofuncacl.rdf'
@@ -64,5 +58,4 @@ return [
     'extra' => [
         'structures' => __DIR__ . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR . 'structures.xml',
     ],
-
 ];
