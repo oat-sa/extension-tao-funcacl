@@ -52,7 +52,7 @@ class FuncAcl extends ConfigurableService implements FuncAccessControl, AccessCo
 
             $accessAllowed = !empty(array_intersect($userRoles, $allowedRoles));
 
-            if ($accessAllowed === false) {
+            if (!$accessAllowed) {
                 $this->getAdvancedLogger()->info(
                     'Access denied.',
                     [
