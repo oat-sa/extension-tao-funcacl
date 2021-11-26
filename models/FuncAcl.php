@@ -57,7 +57,6 @@ class FuncAcl extends ConfigurableService implements FuncAccessControl, AccessCo
                     'Access denied.',
                     [
                         'allowedRoles' => $allowedRoles,
-                        ContextExtenderInterface::CONTEXT_INCLUDE_USER_ROLES => true,
                     ]
                 );
             }
@@ -66,7 +65,6 @@ class FuncAcl extends ConfigurableService implements FuncAccessControl, AccessCo
                 sprintf('Unknown controller "%s"', $controller),
                 [
                     ContextExtenderInterface::CONTEXT_EXCEPTION => $exception,
-                    ContextExtenderInterface::CONTEXT_INCLUDE_USER_ROLES => true,
                 ]
             );
             $accessAllowed = false;
@@ -237,6 +235,6 @@ class FuncAcl extends ConfigurableService implements FuncAccessControl, AccessCo
 
     private function getAdvancedLogger(): LoggerInterface
     {
-        return $this->getServiceManager()->getContainer()->get(AdvancedLogger::class);
+        return $this->getServiceManager()->getContainer()->get(AdvancedLogger::ACL_LOGGER);
     }
 }
