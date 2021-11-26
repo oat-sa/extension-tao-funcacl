@@ -235,6 +235,6 @@ class FuncAcl extends ConfigurableService implements FuncAccessControl, AccessCo
 
     private function getAdvancedLogger(): LoggerInterface
     {
-        return $this->getServiceManager()->getContainer()->get(AdvancedLogger::ACL_LOGGER);
+        return $this->getServiceManager()->getContainer()->get(AdvancedLogger::ACL_SERVICE_ID);
     }
 }
