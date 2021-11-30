@@ -15,73 +15,89 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
+ * Copyright (c) 2013-2021 (original work) Open Assessment Technologies SA;
  */
 
 namespace oat\funcAcl\models;
 
-use oat\funcAcl\helpers\CacheHelper;
-use oat\funcAcl\helpers\MapHelper;
-use oat\tao\model\accessControl\func\FuncAccessControl;
-use oat\tao\model\accessControl\func\AccessRule;
+use ReflectionException;
 use oat\oatbox\user\User;
+use Psr\Log\LoggerInterface;
+use oat\funcAcl\helpers\MapHelper;
+use oat\funcAcl\helpers\CacheHelper;
+use oat\oatbox\log\logger\AdvancedLogger;
 use oat\oatbox\service\ConfigurableService;
 use oat\tao\model\accessControl\AccessControl;
+use oat\tao\model\accessControl\func\AccessRule;
+use oat\tao\model\accessControl\func\FuncAccessControl;
+use oat\oatbox\log\logger\extender\ContextExtenderInterface;
 
 /**
- * Proxy for the Acl Implementation
- *
- * @access public
  * @author Joel Bout, <joel@taotesting.com>
- * @package tao
  */
 class FuncAcl extends ConfigurableService implements FuncAccessControl, AccessControl
 {
     /**
-     * (non-PHPdoc)
-     * @see \oat\tao\model\accessControl\func\FuncAccessControl::accessPossible()
+     * {@inheritdoc}
      */
     public function accessPossible(User $user, $controller, $action)
     {
         $userRoles = $user->getRoles();
+
         try {
             $controllerAccess = CacheHelper::getControllerAccess($controller);
             $allowedRoles = isset($controllerAccess['actions'][$action])
                 ? array_merge($controllerAccess['module'], $controllerAccess['actions'][$action])
                 : $controllerAccess['module'];
-            
-            $accessAllowed = count(array_intersect($userRoles, $allowedRoles)) > 0;
-        } catch (\ReflectionException $e) {
-            \common_Logger::i('Unknown controller ' . $controller);
+
+            $accessAllowed = !empty(array_intersect($userRoles, $allowedRoles));
+
+            if (!$accessAllowed) {
+                $this->getAdvancedLogger()->info(
+                    'Access denied.',
+                    [
+                        'allowedRoles' => $allowedRoles,
+                    ]
+                );
+            }
+        } catch (ReflectionException $exception) {
+            $this->getAdvancedLogger()->error(
+                sprintf('Unknown controller "%s"', $controller),
+                [
+                    ContextExtenderInterface::CONTEXT_EXCEPTION => $exception,
+                ]
+            );
             $accessAllowed = false;
         }
-        
-        return (bool) $accessAllowed;
+
+        return $accessAllowed;
     }
-    
+
+    /**
+     * {@inheritdoc}
+     */
     public function hasAccess(User $user, $controllerName, $actionName, $parameters)
     {
         return $this->accessPossible($user, $controllerName, $actionName);
     }
-    
+
     public function applyRule(AccessRule $rule)
     {
         if ($rule->isGrant()) {
             $accessService = AccessService::singleton();
             $elements = $this->evalFilterMask($rule->getMask());
-            
+
             switch (count($elements)) {
                 case 1:
                     $extension = reset($elements);
                     $accessService->grantExtensionAccess($rule->getRole(), $extension);
                     break;
                 case 2:
-                    list($extension, $shortName) = $elements;
+                    [$extension, $shortName] = $elements;
                     $accessService->grantModuleAccess($rule->getRole(), $extension, $shortName);
                     break;
                 case 3:
-                    list($extension, $shortName, $action) = $elements;
+                    [$extension, $shortName, $action] = $elements;
                     $accessService->grantActionAccess($rule->getRole(), $extension, $shortName, $action);
                     break;
                 default:
@@ -97,34 +113,39 @@ class FuncAcl extends ConfigurableService implements FuncAccessControl, AccessCo
             );
         }
     }
-    
+
     public function revokeRule(AccessRule $rule)
     {
         if ($rule->isGrant()) {
             $accessService = AccessService::singleton();
             $elements = $this->evalFilterMask($rule->getMask());
-            
+
             switch (count($elements)) {
                 case 1:
                     $extension = reset($elements);
                     $accessService->revokeExtensionAccess($rule->getRole(), $extension);
                     break;
                 case 2:
-                    list($extension, $shortName) = $elements;
+                    [$extension, $shortName] = $elements;
                     $accessService->revokeModuleAccess($rule->getRole(), $extension, $shortName);
                     break;
                 case 3:
-                    list($extension, $shortName, $action) = $elements;
+                    [$extension, $shortName, $action] = $elements;
                     $accessService->revokeActionAccess($rule->getRole(), $extension, $shortName, $action);
                     break;
                 default:
                     // fail silently warning should already be send
             }
         } else {
-            \common_Logger::w('Only grant rules accepted in ' . __CLASS__);
+            $this->getAdvancedLogger()->warning(
+                sprintf(
+                    'Only grant rules accepted in "%s"',
+                    __CLASS__
+                )
+            );
         }
     }
-    
+
     /**
      * Evaluate the mask to ACL components
      *
@@ -146,7 +167,7 @@ class FuncAcl extends ConfigurableService implements FuncAccessControl, AccessCo
                 $shortName = strpos($controller, '\\') !== false
                     ? substr($controller, strrpos($controller, '\\') + 1)
                     : substr($controller, strrpos($controller, '_') + 1);
-        
+
                 if (is_null($action)) {
                     // grant controller
                     return [$extension, $shortName];
@@ -156,7 +177,12 @@ class FuncAcl extends ConfigurableService implements FuncAccessControl, AccessCo
                 return [$extension, $shortName, $action];
             }
 
-            \common_Logger::w('Unknown controller ' . $controller);
+            $this->getAdvancedLogger()->warning(
+                sprintf(
+                    'Unknown controller "%s"',
+                    $controller
+                )
+            );
         } elseif (is_array($mask)) { /// array masks
             if (isset($mask['act'], $mask['mod'], $mask['ext'])) {
                 return [$mask['ext'], $mask['mod'], $mask['act']];
@@ -189,11 +215,26 @@ class FuncAcl extends ConfigurableService implements FuncAccessControl, AccessCo
                 return [$extension, $shortName, $action];
             }
 
-            \common_Logger::w('Uninterpretable filter in ' . __CLASS__);
+            $this->getAdvancedLogger()->warning(
+                sprintf(
+                    'Uninterpretable filter in "%s"',
+                    __CLASS__
+                )
+            );
         } else {
-            \common_Logger::w('Uninterpretable filtertype ' . gettype($mask));
+            $this->getAdvancedLogger()->warning(
+                sprintf(
+                    'Uninterpretable filter type "%s"',
+                    gettype($mask)
+                )
+            );
         }
 
         return [];
+    }
+
+    private function getAdvancedLogger(): LoggerInterface
+    {
+        return $this->getServiceManager()->getContainer()->get(AdvancedLogger::ACL_SERVICE_ID);
     }
 }
