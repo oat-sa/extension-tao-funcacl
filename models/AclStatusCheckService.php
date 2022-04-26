@@ -106,6 +106,7 @@ class AclStatusCheckService extends ConfigurableService
         return [
             'controller' => $controller,
             'action' => $action,
+            'requestParameters' => $requestParameters,
             'user' => [
                 'id' => $user->getIdentifier(),
                 'class' => get_class($user),
