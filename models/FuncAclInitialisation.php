@@ -40,19 +40,19 @@ class FuncAclInitialisation
         $managementRoleClass = new \core_kernel_classes_Class(TaoOntology::CLASS_URI_MANAGEMENT_ROLE);
         $foundManagementRoles = $managementRoleClass->getInstances(true);
         $managementRolesByExtension = [];
-         
+
         foreach (\common_ext_ExtensionsManager::singleton()->getInstalledExtensions() as $extension) {
             $managementRole = $extension->getManagementRole();
-             
+
             if (empty($managementRole)) {
                 // try to discover it.
                 foreach ($foundManagementRoles as $mR) {
                     $moduleURIs = $mR->getPropertyValues(new \core_kernel_classes_Property(AccessService::PROPERTY_ACL_GRANTACCESS));
-        
+
                     foreach ($moduleURIs as $moduleURI) {
                         $uri = explode('#', $moduleURI);
                         list($type, $extId) = explode('_', $uri[1]);
-                         
+
                         if ($extId == $extension->getId()) {
                             $managementRole = $mR;
                             break 2;
@@ -60,14 +60,12 @@ class FuncAclInitialisation
                     }
                 }
             }
-        
+
             if (!empty($managementRole)) {
                 $managementRolesByExtension[$extension->getId()] = $managementRole;
             }
         }
-         
-        CacheHelper::flush();
-        
+
         foreach (\common_ext_ExtensionsManager::singleton()->getInstalledExtensions() as $extension) {
             if ($extension->getId() != 'generis') {
                 // 2. Grant access to Management Role.
