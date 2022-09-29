@@ -47,7 +47,9 @@ class FuncAclInitialisation
             if (empty($managementRole)) {
                 // try to discover it.
                 foreach ($foundManagementRoles as $mR) {
-                    $moduleURIs = $mR->getPropertyValues(new \core_kernel_classes_Property(AccessService::PROPERTY_ACL_GRANTACCESS));
+                    $moduleURIs = $mR->getPropertyValues(
+                        new \core_kernel_classes_Property(AccessService::PROPERTY_ACL_GRANTACCESS)
+                    );
 
                     foreach ($moduleURIs as $moduleURI) {
                         $uri = explode('#', $moduleURI);
@@ -71,7 +73,10 @@ class FuncAclInitialisation
                 // 2. Grant access to Management Role.
                 if (!empty($managementRolesByExtension[$extension->getId()])) {
                     $extAccessService = ExtensionAccessService::singleton();
-                    $extAccessService->add($managementRolesByExtension[$extension->getId()]->getUri(), $extAccessService->makeEMAUri($extension->getId()));
+                    $extAccessService->add(
+                        $managementRolesByExtension[$extension->getId()]->getUri(),
+                        $extAccessService->makeEMAUri($extension->getId())
+                    );
                 } else {
                     \common_Logger::i('Management Role not found for extension ' . $extension->getId());
                 }
