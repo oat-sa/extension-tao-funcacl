@@ -26,7 +26,6 @@ use oat\oatbox\event\Event;
 
 class AccessRightRemovedEvent implements Event, JsonSerializable
 {
-
     /** @var  string */
     protected $roleUri;
     protected $accessUri;

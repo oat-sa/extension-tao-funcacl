@@ -51,7 +51,7 @@ class AccessService extends \tao_models_classes_GenerisService
         $accessUri = $this->makeEMAUri($ext, $mod);
         ModuleAccessService::singleton()->add($role->getUri(), $accessUri);
     }
-    
+
     public function grantActionAccess(\core_kernel_classes_Resource $role, $ext, $mod, $act)
     {
         $accessUri = $this->makeEMAUri($ext, $mod, $act);
@@ -63,19 +63,19 @@ class AccessService extends \tao_models_classes_GenerisService
         $accessUri = $this->makeEMAUri($ext);
         ExtensionAccessService::singleton()->remove($role->getUri(), $accessUri);
     }
-    
+
     public function revokeModuleAccess(\core_kernel_classes_Resource $role, $ext, $mod)
     {
         $accessUri = $this->makeEMAUri($ext, $mod);
         ModuleAccessService::singleton()->remove($role->getUri(), $accessUri);
     }
-    
+
     public function revokeActionAccess(\core_kernel_classes_Resource $role, $ext, $mod, $act)
     {
         $accessUri = $this->makeEMAUri($ext, $mod, $act);
         ActionAccessService::singleton()->remove($role->getUri(), $accessUri);
     }
-    
+
     /**
      * Short description of method makeEMAUri
      *
@@ -89,7 +89,7 @@ class AccessService extends \tao_models_classes_GenerisService
     public function makeEMAUri($ext, $mod = null, $act = null)
     {
         $returnValue = (string) '';
-        
+
         $returnValue = self::FUNCACL_NS . '#';
         if (! is_null($act)) {
             $type = 'a';

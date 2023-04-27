@@ -34,12 +34,11 @@ use oat\funcAcl\models\AccessService;
  */
 class MapHelper
 {
-    
     public static function getUriForExtension($extId)
     {
         return AccessService::singleton()->makeEMAUri($extId);
     }
-    
+
     public static function getUriForController($controllerClassName)
     {
         $extension = self::getExtensionFromController($controllerClassName);
@@ -65,7 +64,7 @@ class MapHelper
         list($type, $extension, $controller) = explode('_', substr($uri, strpos($uri, '#') + 1));
         return FuncHelper::getClassName($extension, $controller);
     }
-    
+
     public static function getActionFromUri($uri)
     {
         list($type, $extension, $controller, $action) = explode('_', substr($uri, strpos($uri, '#') + 1));

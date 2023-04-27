@@ -48,7 +48,6 @@ use oat\tao\model\accessControl\func\AclProxy;
  */
 class Admin extends \tao_actions_CommonModule
 {
-
     /**
      * Access to this functionality is inherited from
      * an included role

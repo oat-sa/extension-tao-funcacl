@@ -38,7 +38,6 @@ use oat\funcAcl\models\event\AccessRightRemovedEvent;
  */
 class ModuleAccessService extends AccessService
 {
-
     /**
      * Short description of method add
      *
@@ -50,11 +49,11 @@ class ModuleAccessService extends AccessService
      */
     public function add($roleUri, $accessUri)
     {
-        
+
         $module = new \core_kernel_classes_Resource($accessUri);
         $role = new \core_kernel_classes_Resource($roleUri);
         $moduleAccessProperty = new \core_kernel_classes_Property(static::PROPERTY_ACL_GRANTACCESS);
-        
+
         $values = $role->getPropertyValues($moduleAccessProperty);
         if (!in_array($module->getUri(), $values)) {
             $role->setPropertyValue($moduleAccessProperty, $module->getUri());
@@ -79,18 +78,18 @@ class ModuleAccessService extends AccessService
         $module = new \core_kernel_classes_Resource($accessUri);
         $role = new \core_kernel_classes_Class($roleUri);
         $accessProperty = new \core_kernel_classes_Property(static::PROPERTY_ACL_GRANTACCESS);
-        
+
         // Retrieve the module ID.
         $uri = explode('#', $module->getUri());
         list($type, $extId, $modId) = explode('_', $uri[1]);
-        
+
         // access via extension?
         $extAccess = CacheHelper::getExtensionAccess($extId);
         if (in_array($roleUri, $extAccess)) {
             // remove access to extension
             $extUri = $this->makeEMAUri($extId);
             ExtensionAccessService::singleton()->remove($roleUri, $extUri);
-            
+
             // add access to all other controllers
             foreach (ModelHelper::getModules($extId) as $eModule) {
                 if (!$module->equals($eModule)) {
@@ -101,8 +100,8 @@ class ModuleAccessService extends AccessService
             }
             //CacheHelper::flushExtensionAccess($extId);
         }
-        
-        
+
+
         // Remove the access to the module for this role.
         $role->removePropertyValue($accessProperty, $module->getUri());
 
@@ -110,12 +109,12 @@ class ModuleAccessService extends AccessService
 
 
         CacheHelper::cacheModule($module);
-                
+
         // Remove the access to the actions corresponding to the module for this role.
         foreach (ModelHelper::getActions($module) as $actionResource) {
             ActionAccessService::singleton()->remove($role->getUri(), $actionResource->getUri());
         }
-        
+
         CacheHelper::cacheModule($module);
     }
 }

@@ -48,7 +48,7 @@ class CacheHelper
      * @var string
      */
     const CACHE_PREFIX_EXTENSION = 'acl_e_';
-    
+
     const SERIAL_PREFIX_MODULE = 'acl';
 
     /**
@@ -82,7 +82,7 @@ class CacheHelper
         self::flushControllerAccess($controllerClassName);
         self::getControllerAccess($controllerClassName);
     }
-    
+
     /**
      * Return the cached description of the roles
      * that have access to this controller
@@ -98,12 +98,12 @@ class CacheHelper
             $extId = MapHelper::getExtensionFromController($controllerClassName);
             $extension = MapHelper::getUriForExtension($extId);
             $module = MapHelper::getUriForController($controllerClassName);
-            
+
             $roleClass = new \core_kernel_classes_Class(GenerisRdf::CLASS_ROLE);
             $accessProperty = new \core_kernel_classes_Property(AccessService::PROPERTY_ACL_GRANTACCESS);
 
             $returnValue = ['module' => [], 'actions' => []];
-            
+
             // roles by extensions
             $roles = $roleClass->searchInstances([
                     $accessProperty->getUri() => $extension
@@ -113,17 +113,17 @@ class CacheHelper
             foreach ($roles as $grantedRole) {
                 $returnValue['module'][] = $grantedRole->getUri();
             }
-            
+
             // roles by controller
             $filters = [
                 $accessProperty->getUri() => $module
             ];
             $options = ['recursive' => true, 'like' => false];
-            
+
             foreach ($roleClass->searchInstances($filters, $options) as $grantedRole) {
                 $returnValue['module'][] = $grantedRole->getUri();
             }
-            
+
             // roles by action
             foreach (ControllerHelper::getActions($controllerClassName) as $actionName) {
                 $actionUri = MapHelper::getUriForAction($controllerClassName, $actionName);
@@ -138,12 +138,12 @@ class CacheHelper
                     }
                 }
             }
-            
+
             self::getCacheImplementation()->put($returnValue, self::SERIAL_PREFIX_MODULE . $controllerClassName);
         }
         return $returnValue;
     }
-    
+
     public static function getExtensionAccess($extId)
     {
         try {
@@ -173,12 +173,12 @@ class CacheHelper
             self::flushControllerAccess($controllerClassName);
         }
     }
-        
+
     public static function flushControllerAccess($controllerClassName)
     {
         self::getCacheImplementation()->remove(self::SERIAL_PREFIX_MODULE . $controllerClassName);
     }
-    
+
     /**
      * Short description of method buildModuleSerial
      *
@@ -191,11 +191,11 @@ class CacheHelper
     {
         $returnValue = (string) '';
 
-        
+
         $uri = explode('#', $module->getUri());
         list($type, $extId) = explode('_', $uri[1]);
         $returnValue = self::SERIAL_PREFIX_MODULE . $extId . urlencode($module->getUri());
-        
+
 
         return (string) $returnValue;
     }
@@ -210,7 +210,7 @@ class CacheHelper
      */
     public static function removeModule(\core_kernel_classes_Resource $module)
     {
-        
+
         self::getCacheImplementation()->remove(self::buildModuleSerial($module));
     }
 }

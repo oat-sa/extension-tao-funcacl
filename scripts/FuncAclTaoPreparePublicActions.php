@@ -36,7 +36,6 @@ use oat\funcAcl\models\FuncAclInitialisation;
  */
 class FuncAclTaoPreparePublicActions extends \tao_scripts_Runner
 {
-
     public function preRun()
     {
     }

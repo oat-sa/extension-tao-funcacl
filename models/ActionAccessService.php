@@ -39,7 +39,6 @@ use oat\funcAcl\helpers\CacheHelper;
  */
 class ActionAccessService extends AccessService
 {
-
     /**
      * Short description of method add
      *
@@ -53,12 +52,12 @@ class ActionAccessService extends AccessService
     {
         $uri = explode('#', $accessUri);
         list($type, $ext, $mod, $act) = explode('_', $uri[1]);
-        
+
         $role = new \core_kernel_classes_Resource($roleUri);
         $module = new \core_kernel_classes_Resource($this->makeEMAUri($ext, $mod));
         $actionAccessProperty = new \core_kernel_classes_Property(static::PROPERTY_ACL_GRANTACCESS);
         $moduleAccessProperty = new \core_kernel_classes_Property(static::PROPERTY_ACL_GRANTACCESS);
-        
+
         $values = $role->getPropertyValues($actionAccessProperty);
         if (!in_array($accessUri, $values)) {
             $role->setPropertyValue($actionAccessProperty, $accessUri);
@@ -81,22 +80,22 @@ class ActionAccessService extends AccessService
      */
     public function remove($roleUri, $accessUri)
     {
-        
+
         $uri = explode('#', $accessUri);
         list($type, $ext, $mod, $act) = explode('_', $uri[1]);
-        
+
         $role = new \core_kernel_classes_Class($roleUri);
         $actionAccessProperty = new \core_kernel_classes_Property(static::PROPERTY_ACL_GRANTACCESS);
-        
+
         $module = new \core_kernel_classes_Resource($this->makeEMAUri($ext, $mod));
         $controllerClassName = MapHelper::getControllerFromUri($module->getUri());
-        
+
         // access via controller?
         $controllerAccess = CacheHelper::getControllerAccess($controllerClassName);
         if (in_array($roleUri, $controllerAccess['module'])) {
             // remove access to controller
             ModuleAccessService::singleton()->remove($roleUri, $module->getUri());
-        
+
             // add access to all other actions
             foreach (ModelHelper::getActions($module) as $action) {
                 if ($action->getUri() != $accessUri) {

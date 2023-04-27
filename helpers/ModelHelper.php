@@ -35,7 +35,6 @@ use oat\funcAcl\models\AccessService;
  */
 class ModelHelper
 {
-
     /**
      * returns the modules of an extension from the ontology
      *
