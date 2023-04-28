@@ -15,9 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
+ * Copyright (c) 2013-2023 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT).
  */
+
+use oat\funcAcl\models\FuncAcl;
 
 /**
  * Proxy for the Acl Implementation
@@ -25,7 +26,9 @@
  * @access public
  * @author Joel Bout, <joel@taotesting.com>
  * @package tao
+ *
+ * phpcs:disable Squiz.Classes.ValidClassName
  */
-class funcAcl_models_classes_FuncAcl extends \oat\funcAcl\models\FuncAcl
+class funcAcl_models_classes_FuncAcl extends FuncAcl
 {
 }
