@@ -31,7 +31,9 @@ use oat\oatbox\user\LoginService;
 use oat\tao\model\TaoOntology;
 use oat\tao\test\TaoPhpUnitTestRunner;
 
+// phpcs:disable
 include_once dirname(__FILE__) . '/../../includes/raw_start.php';
+// phpcs:enable
 
 /**
  * @todo fix 'PHP Warning:  in_array() expects parameter 2 to be array, null given in

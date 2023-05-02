@@ -15,14 +15,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  */
 
 namespace oat\funcAcl\helpers;
 
+use core_kernel_classes_Resource;
 use oat\funcAcl\models\AccessService;
 use oat\tao\helpers\ControllerHelper;
+use ReflectionException;
 
 /**
  * Helper to read/write the action/module model
@@ -58,7 +62,7 @@ class ModelHelper
                 : substr($controllerClassName, strrpos($controllerClassName, '_') + 1)
             ;
             $uri = AccessService::singleton()->makeEMAUri($extensionId, $shortName);
-            $returnValue[$uri] = new \core_kernel_classes_Resource($uri);
+            $returnValue[$uri] = new core_kernel_classes_Resource($uri);
         }
 
         return (array) $returnValue;
@@ -75,7 +79,7 @@ class ModelHelper
      *
      * @return array
      */
-    public static function getActions(\core_kernel_classes_Resource $module)
+    public static function getActions(core_kernel_classes_Resource $module)
     {
         $returnValue = [];
         $controllerClassName = MapHelper::getControllerFromUri($module->getUri());
@@ -83,9 +87,9 @@ class ModelHelper
         try {
             foreach (ControllerHelper::getActions($controllerClassName) as $actionName) {
                 $uri = MapHelper::getUriForAction($controllerClassName, $actionName);
-                $returnValue[$uri] = new \core_kernel_classes_Resource($uri);
+                $returnValue[$uri] = new core_kernel_classes_Resource($uri);
             }
-        } catch (\ReflectionException $e) {
+        } catch (ReflectionException $e) {
             // unknown controller, no actions returned
         }
 

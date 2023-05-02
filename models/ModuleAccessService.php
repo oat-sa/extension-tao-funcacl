@@ -20,6 +20,10 @@
 
 namespace oat\funcAcl\models;
 
+use common_Logger;
+use core_kernel_classes_Class;
+use core_kernel_classes_Property;
+use core_kernel_classes_Resource;
 use oat\funcAcl\helpers\CacheHelper;
 use oat\funcAcl\helpers\ModelHelper;
 use oat\funcAcl\models\event\AccessRightAddedEvent;
@@ -52,9 +56,9 @@ class ModuleAccessService extends AccessService
      */
     public function add($roleUri, $accessUri)
     {
-        $module = new \core_kernel_classes_Resource($accessUri);
-        $role = new \core_kernel_classes_Resource($roleUri);
-        $moduleAccessProperty = new \core_kernel_classes_Property(static::PROPERTY_ACL_GRANTACCESS);
+        $module = new core_kernel_classes_Resource($accessUri);
+        $role = new core_kernel_classes_Resource($roleUri);
+        $moduleAccessProperty = new core_kernel_classes_Property(static::PROPERTY_ACL_GRANTACCESS);
 
         $values = $role->getPropertyValues($moduleAccessProperty);
 
@@ -63,7 +67,7 @@ class ModuleAccessService extends AccessService
             $this->getEventManager()->trigger(new AccessRightAddedEvent($roleUri, $accessUri));
             CacheHelper::cacheModule($module);
         } else {
-            \common_Logger::w('Tried to add role ' . $role->getUri() . ' again to controller ' . $accessUri);
+            common_Logger::w('Tried to add role ' . $role->getUri() . ' again to controller ' . $accessUri);
         }
     }
 
@@ -81,9 +85,9 @@ class ModuleAccessService extends AccessService
      */
     public function remove($roleUri, $accessUri)
     {
-        $module = new \core_kernel_classes_Resource($accessUri);
-        $role = new \core_kernel_classes_Class($roleUri);
-        $accessProperty = new \core_kernel_classes_Property(static::PROPERTY_ACL_GRANTACCESS);
+        $module = new core_kernel_classes_Resource($accessUri);
+        $role = new core_kernel_classes_Class($roleUri);
+        $accessProperty = new core_kernel_classes_Property(static::PROPERTY_ACL_GRANTACCESS);
 
         // Retrieve the module ID.
         $uri = explode('#', $module->getUri());

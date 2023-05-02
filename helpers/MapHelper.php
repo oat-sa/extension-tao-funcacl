@@ -15,12 +15,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
+ * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung
+ *                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                         (under the project TAO-SUSTAIN & TAO-DEV);
  */
 
 namespace oat\funcAcl\helpers;
 
+use common_exception_Error;
+use common_ext_ExtensionsManager;
 use oat\funcAcl\models\AccessService;
 use oat\tao\model\accessControl\func\FuncHelper;
 
@@ -79,7 +83,7 @@ class MapHelper
     /**
      * @param $controllerClass
      *
-     * @throws \common_exception_Error
+     * @throws common_exception_Error
      *
      * @return mixed
      */
@@ -92,9 +96,9 @@ class MapHelper
                 return $parts[0];
             }
 
-            throw new \common_exception_Error('Unknown controller ' . $controllerClass);
+            throw new common_exception_Error('Unknown controller ' . $controllerClass);
         } else {
-            foreach (\common_ext_ExtensionsManager::singleton()->getEnabledExtensions() as $ext) {
+            foreach (common_ext_ExtensionsManager::singleton()->getEnabledExtensions() as $ext) {
                 foreach ($ext->getManifest()->getRoutes() as $routePrefix => $route) {
                     if (is_array($route) && array_key_exists('class', $route)) {
                         $route = $route['class']::getControllerPrefix() ?: $route;
@@ -106,7 +110,7 @@ class MapHelper
                 }
             }
 
-            throw new \common_exception_Error('Unknown controller ' . $controllerClass);
+            throw new common_exception_Error('Unknown controller ' . $controllerClass);
         }
     }
 }

@@ -20,13 +20,14 @@
 
 namespace oat\funcAcl\scripts\update;
 
+use common_ext_ExtensionUpdater;
 use oat\funcAcl\models\FuncAcl;
 use oat\tao\model\accessControl\func\AclProxy;
 
 /**
  * @deprecated use migrations instead. See https://github.com/oat-sa/generis/wiki/Tao-Update-Process
  */
-class Updater extends \common_ext_ExtensionUpdater
+class Updater extends common_ext_ExtensionUpdater
 {
     /**
      * @param string $initialVersion

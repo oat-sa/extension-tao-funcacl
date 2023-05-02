@@ -27,6 +27,13 @@
 namespace oat\funcAcl\controller;
 
 use common_exception_BadRequest;
+use common_exception_Error;
+use common_exception_NotFound;
+use common_ext_Extension;
+use common_ext_ExtensionException;
+use common_ext_ExtensionsManager;
+use core_kernel_classes_Class;
+use core_kernel_classes_Resource;
 use oat\funcAcl\helpers\CacheHelper;
 use oat\funcAcl\helpers\MapHelper;
 use oat\funcAcl\models\AccessService;
@@ -38,6 +45,9 @@ use oat\generis\model\GenerisRdf;
 use oat\tao\helpers\ControllerHelper;
 use oat\tao\model\accessControl\func\AclProxy;
 use oat\tao\model\service\ApplicationService;
+use tao_actions_CommonModule;
+use tao_helpers_Request;
+use tao_models_classes_RoleService;
 
 /**
  * This controller provide the actions to manage the ACLs
@@ -47,7 +57,7 @@ use oat\tao\model\service\ApplicationService;
  *
  * @package tao
  */
-class Admin extends \tao_actions_CommonModule
+class Admin extends tao_actions_CommonModule
 {
     /**
      * Access to this functionality is inherited from
@@ -87,7 +97,7 @@ class Admin extends \tao_actions_CommonModule
     public function index()
     {
         $this->defaultData();
-        $rolesc = new \core_kernel_classes_Class(GenerisRdf::CLASS_ROLE);
+        $rolesc = new core_kernel_classes_Class(GenerisRdf::CLASS_ROLE);
         $roles = [];
 
         foreach ($rolesc->getInstances(true) as $id => $r) {
@@ -102,22 +112,22 @@ class Admin extends \tao_actions_CommonModule
     }
 
     /**
-     * @throws \common_exception_Error
-     * @throws \common_ext_ExtensionException
+     * @throws common_exception_Error
+     * @throws common_ext_ExtensionException
      * @throws common_exception_BadRequest
      */
     public function getModules()
     {
         $this->beforeAction();
-        $role = new \core_kernel_classes_Class($this->getRequestParameter('role'));
+        $role = new core_kernel_classes_Class($this->getRequestParameter('role'));
 
         $included = [];
 
-        foreach (\tao_models_classes_RoleService::singleton()->getIncludedRoles($role) as $includedRole) {
+        foreach (tao_models_classes_RoleService::singleton()->getIncludedRoles($role) as $includedRole) {
             $included[$includedRole->getUri()] = $includedRole->getLabel();
         }
 
-        $extManager = \common_ext_ExtensionsManager::singleton();
+        $extManager = common_ext_ExtensionsManager::singleton();
 
         $extData = [];
 
@@ -138,7 +148,7 @@ class Admin extends \tao_actions_CommonModule
         ]);
     }
 
-    protected function buildExtensionData(\common_ext_Extension $extension, $roleUri, $includedRoleUris)
+    protected function buildExtensionData(common_ext_Extension $extension, $roleUri, $includedRoleUris)
     {
         $extAccess = CacheHelper::getExtensionAccess($extension->getId());
         $extAclUri = AccessService::singleton()->makeEMAUri($extension->getId());
@@ -203,14 +213,14 @@ class Admin extends \tao_actions_CommonModule
     }
 
     /**
-     * @throws \common_ext_ExtensionException
+     * @throws common_ext_ExtensionException
      * @throws common_exception_BadRequest
      */
     private function beforeAction()
     {
         $this->defaultData();
 
-        if (!\tao_helpers_Request::isAjax()) {
+        if (!tao_helpers_Request::isAjax()) {
             throw new common_exception_BadRequest('wrong request mode');
         }
     }
@@ -227,32 +237,32 @@ class Admin extends \tao_actions_CommonModule
     }
 
     /**
-     * @throws \common_exception_NotFound
+     * @throws common_exception_NotFound
      */
     private function prodLocker()
     {
         if ($this->isLocked()) {
-            throw new \common_exception_NotFound();
+            throw new common_exception_NotFound();
         }
     }
 
     /**
      * Shows the access to the actions of a controller for a specific role
      *
-     * @throws \common_exception_Error
-     * @throws \common_ext_ExtensionException
+     * @throws common_exception_Error
+     * @throws common_ext_ExtensionException
      * @throws common_exception_BadRequest
      */
     public function getActions()
     {
         $this->beforeAction();
-        $role = new \core_kernel_classes_Resource($this->getRequestParameter('role'));
+        $role = new core_kernel_classes_Resource($this->getRequestParameter('role'));
         $included = [];
 
-        foreach (\tao_models_classes_RoleService::singleton()->getIncludedRoles($role) as $includedRole) {
+        foreach (tao_models_classes_RoleService::singleton()->getIncludedRoles($role) as $includedRole) {
             $included[] = $includedRole->getUri();
         }
-        $module = new \core_kernel_classes_Resource($this->getRequestParameter('module'));
+        $module = new core_kernel_classes_Resource($this->getRequestParameter('module'));
 
         $controllerClassName = MapHelper::getControllerFromUri($module->getUri());
         $controllerAccess = CacheHelper::getControllerAccess($controllerClassName);
@@ -287,8 +297,8 @@ class Admin extends \tao_actions_CommonModule
     }
 
     /**
-     * @throws \common_exception_NotFound
-     * @throws \common_ext_ExtensionException
+     * @throws common_exception_NotFound
+     * @throws common_ext_ExtensionException
      * @throws common_exception_BadRequest
      */
     public function removeExtensionAccess()
@@ -306,8 +316,8 @@ class Admin extends \tao_actions_CommonModule
     }
 
     /**
-     * @throws \common_exception_NotFound
-     * @throws \common_ext_ExtensionException
+     * @throws common_exception_NotFound
+     * @throws common_ext_ExtensionException
      * @throws common_exception_BadRequest
      */
     public function addExtensionAccess()
@@ -325,8 +335,8 @@ class Admin extends \tao_actions_CommonModule
     }
 
     /**
-     * @throws \common_exception_NotFound
-     * @throws \common_ext_ExtensionException
+     * @throws common_exception_NotFound
+     * @throws common_ext_ExtensionException
      * @throws common_exception_BadRequest
      */
     public function removeModuleAccess()
@@ -344,8 +354,8 @@ class Admin extends \tao_actions_CommonModule
     }
 
     /**
-     * @throws \common_exception_NotFound
-     * @throws \common_ext_ExtensionException
+     * @throws common_exception_NotFound
+     * @throws common_ext_ExtensionException
      * @throws common_exception_BadRequest
      */
     public function addModuleAccess()
@@ -363,8 +373,8 @@ class Admin extends \tao_actions_CommonModule
     }
 
     /**
-     * @throws \common_exception_NotFound
-     * @throws \common_ext_ExtensionException
+     * @throws common_exception_NotFound
+     * @throws common_ext_ExtensionException
      * @throws common_exception_BadRequest
      */
     public function removeActionAccess()
@@ -382,8 +392,8 @@ class Admin extends \tao_actions_CommonModule
     }
 
     /**
-     * @throws \common_exception_NotFound
-     * @throws \common_ext_ExtensionException
+     * @throws common_exception_NotFound
+     * @throws common_ext_ExtensionException
      * @throws common_exception_BadRequest
      */
     public function addActionAccess()
