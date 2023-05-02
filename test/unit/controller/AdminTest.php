@@ -25,15 +25,15 @@ namespace oat\funcAcl\test\unit\controller;
 use oat\funcAcl\controller\Admin;
 use oat\funcAcl\models\ActionAccessService;
 use oat\funcAcl\models\ExtensionAccessService;
+use oat\funcAcl\models\FuncAcl;
 use oat\funcAcl\models\ModuleAccessService;
 use oat\generis\test\MockObject;
 use oat\generis\test\TestCase;
+use oat\tao\model\accessControl\func\AclProxy;
 use oat\tao\model\service\ApplicationService;
 use ReflectionProperty;
 use Request;
 use tao_models_classes_Service;
-use oat\tao\model\accessControl\func\AclProxy;
-use oat\funcAcl\models\FuncAcl;
 
 class AdminTest extends TestCase
 {
@@ -77,7 +77,7 @@ class AdminTest extends TestCase
 
         $this->subject->setServiceLocator($this->getServiceLocatorMock([
             ApplicationService::SERVICE_ID => $this->applicationServiceMock,
-            AclProxy::SERVICE_ID => $this->funcAclMock
+            AclProxy::SERVICE_ID => $this->funcAclMock,
         ]));
 
         // AccessServices are not registered in the service manager, need to mock them in the global Service class
@@ -86,7 +86,7 @@ class AdminTest extends TestCase
         $instancesRef->setValue(null, [
             ExtensionAccessService::class => $this->extensionAccessServiceMock,
             ModuleAccessService::class => $this->moduleAccessServiceMock,
-            ActionAccessService::class => $this->actionAccessServiceMock
+            ActionAccessService::class => $this->actionAccessServiceMock,
         ]);
     }
 

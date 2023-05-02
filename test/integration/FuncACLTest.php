@@ -1,19 +1,6 @@
 <?php
 
-use oat\oatbox\user\LoginService;
-use oat\tao\model\TaoOntology;
-use oat\tao\test\TaoPhpUnitTestRunner;
-use oat\funcAcl\models\AccessService;
-use oat\funcAcl\models\ActionAccessService;
-use oat\funcAcl\models\FuncAcl;
-use oat\funcAcl\models\ModuleAccessService;
-use oat\funcAcl\helpers\CacheHelper;
-
-include_once dirname(__FILE__) . '/../../includes/raw_start.php';
-
-// @todo fix 'PHP Warning:  in_array() expects parameter 2 to be array, null given in /vagrant/build/tao/models/classes/class.UserService.php on line 506'
-
-/*
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; under version 2
@@ -28,14 +15,32 @@ include_once dirname(__FILE__) . '/../../includes/raw_start.php';
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
- *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
+ * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung
+ *                                         (under the project TAO-TRANSFER);
+ *               2009-2012 (update and modification) Public Research Centre Henri Tudor
+ *                                                  (under the project TAO-SUSTAIN & TAO-DEV);
+ *               2023 (update and modification) Open Assessment Technologies SA;
  */
 
+use oat\funcAcl\helpers\CacheHelper;
+use oat\funcAcl\models\AccessService;
+use oat\funcAcl\models\ActionAccessService;
+use oat\funcAcl\models\FuncAcl;
+use oat\funcAcl\models\ModuleAccessService;
+use oat\oatbox\user\LoginService;
+use oat\tao\model\TaoOntology;
+use oat\tao\test\TaoPhpUnitTestRunner;
+
+// phpcs:disable
+include_once dirname(__FILE__) . '/../../includes/raw_start.php';
+// phpcs:enable
+
+/**
+ * @todo fix 'PHP Warning:  in_array() expects parameter 2 to be array, null given in
+ *      /vagrant/build/tao/models/classes/class.UserService.php on line 506'
+ */
 class FuncACLTest extends TaoPhpUnitTestRunner
 {
-
     private $user;
     private $testRole;
 
@@ -56,9 +61,11 @@ class FuncACLTest extends TaoPhpUnitTestRunner
         parent::tearDown();
         $userService = tao_models_classes_UserService::singleton();
         $roleService = tao_models_classes_RoleService::singleton();
+
         if ($this->user != null) {
             $userService->removeUser($this->user);
         }
+
         if ($this->testRole) {
             $roleService->removeRole($this->testRole);
         }
