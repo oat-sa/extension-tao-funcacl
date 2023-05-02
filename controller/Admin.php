@@ -55,14 +55,14 @@ class Admin extends \tao_actions_CommonModule
      *
      * @var string
      */
-    const ACCESS_INHERITED = 'inherited';
+    public const ACCESS_INHERITED = 'inherited';
 
     /**
      * Full access to this functionalities and children
      *
      * @var string
      */
-    const ACCESS_FULL = 'full';
+    public const ACCESS_FULL = 'full';
 
     /**
      * Partial access to thie functionality means
@@ -70,14 +70,14 @@ class Admin extends \tao_actions_CommonModule
      *
      * @var string
      */
-    const ACCESS_PARTIAL = 'partial';
+    public const ACCESS_PARTIAL = 'partial';
 
     /**
      * No access to this functionality or any of its children
      *
      * @var string
      */
-    const ACCESS_NONE = 'none';
+    public const ACCESS_NONE = 'none';
 
     /**
      * Show the list of roles

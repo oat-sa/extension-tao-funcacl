@@ -33,11 +33,10 @@ use oat\oatbox\event\EventManagerAwareTrait;
  */
 class AccessService extends \tao_models_classes_GenerisService
 {
-    const FUNCACL_NS = 'http://www.tao.lu/Ontologies/taoFuncACL.rdf';
-
-    const PROPERTY_ACL_GRANTACCESS = 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#GrantAccess';
-
     use EventManagerAwareTrait;
+    public const FUNCACL_NS = 'http://www.tao.lu/Ontologies/taoFuncACL.rdf';
+
+    public const PROPERTY_ACL_GRANTACCESS = 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#GrantAccess';
 
     public function grantExtensionAccess(\core_kernel_classes_Resource $role, $ext)
     {

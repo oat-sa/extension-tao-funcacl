@@ -46,16 +46,16 @@ class CacheHelper
      *
      * @var string
      */
-    const CACHE_PREFIX_EXTENSION = 'acl_e_';
+    public const CACHE_PREFIX_EXTENSION = 'acl_e_';
 
-    const SERIAL_PREFIX_MODULE = 'acl';
+    public const SERIAL_PREFIX_MODULE = 'acl';
 
     /**
      * Serial to store extensions access to
      *
      * @var string
      */
-    const SERIAL_EXTENSIONS = 'acl_extensions';
+    public const SERIAL_EXTENSIONS = 'acl_extensions';
     // --- OPERATIONS ---
 
     /**
