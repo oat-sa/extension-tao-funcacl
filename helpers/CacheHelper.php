@@ -2,10 +2,10 @@
 
 namespace oat\funcAcl\helpers;
 
+use oat\funcAcl\models\AccessService;
 use oat\generis\model\GenerisRdf;
 use oat\oatbox\service\ServiceManager;
 use oat\tao\helpers\ControllerHelper;
-use oat\funcAcl\models\AccessService;
 
 /**
  * This program is free software; you can redistribute it and/or
@@ -24,21 +24,20 @@ use oat\funcAcl\models\AccessService;
  *
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 /**
  * Short description of class CacheHelper
  *
  * @access public
+ *
  * @author Jerome Bogaerts, <jerome@taotesting.com>
+ *
  * @package tao
-
  */
 class CacheHelper
 {
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 
@@ -61,6 +60,7 @@ class CacheHelper
 
     /**
      * Returns the funcACL Cache implementation
+     *
      * @return \common_cache_Cache
      */
     private static function getCacheImplementation()
@@ -72,8 +72,11 @@ class CacheHelper
      * force recache of a controller
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  Resource $module
+     *
+     * @param Resource $module
+     *
      * @return void
      */
     public static function cacheModule(\core_kernel_classes_Resource $module)
@@ -88,6 +91,7 @@ class CacheHelper
      * that have access to this controller
      *
      * @param string $controllerClassName
+     *
      * @return array
      */
     public static function getControllerAccess($controllerClassName)
@@ -106,17 +110,18 @@ class CacheHelper
 
             // roles by extensions
             $roles = $roleClass->searchInstances([
-                    $accessProperty->getUri() => $extension
+                    $accessProperty->getUri() => $extension,
                 ], [
-                    'recursive' => true, 'like' => false
+                    'recursive' => true, 'like' => false,
             ]);
+
             foreach ($roles as $grantedRole) {
                 $returnValue['module'][] = $grantedRole->getUri();
             }
 
             // roles by controller
             $filters = [
-                $accessProperty->getUri() => $module
+                $accessProperty->getUri() => $module,
             ];
             $options = ['recursive' => true, 'like' => false];
 
@@ -128,11 +133,13 @@ class CacheHelper
             foreach (ControllerHelper::getActions($controllerClassName) as $actionName) {
                 $actionUri = MapHelper::getUriForAction($controllerClassName, $actionName);
                 $rolesForAction = $roleClass->searchInstances([
-                    $accessProperty->getUri() => $actionUri
+                    $accessProperty->getUri() => $actionUri,
                 ], ['recursive' => true, 'like' => false]);
+
                 if (!empty($rolesForAction)) {
                     $actionName = MapHelper::getActionFromUri($actionUri);
                     $returnValue['actions'][$actionName] = [];
+
                     foreach ($rolesForAction as $roleResource) {
                         $returnValue['actions'][$actionName][] = $roleResource->getUri();
                     }
@@ -141,6 +148,7 @@ class CacheHelper
 
             self::getCacheImplementation()->put($returnValue, self::SERIAL_PREFIX_MODULE . $controllerClassName);
         }
+
         return $returnValue;
     }
 
@@ -153,22 +161,25 @@ class CacheHelper
             $aclExtUri = AccessService::singleton()->makeEMAUri($extId);
             $roleClass = new \core_kernel_classes_Class(GenerisRdf::CLASS_ROLE);
             $roles = $roleClass->searchInstances([
-                AccessService::PROPERTY_ACL_GRANTACCESS => $aclExtUri
+                AccessService::PROPERTY_ACL_GRANTACCESS => $aclExtUri,
             ], [
                 'recursive' => true,
-                'like' => false
+                'like' => false,
             ]);
+
             foreach ($roles as $grantedRole) {
                 $returnValue[] = $grantedRole->getUri();
             }
             self::getCacheImplementation()->put($returnValue, self::CACHE_PREFIX_EXTENSION . $extId);
         }
+
         return $returnValue;
     }
 
     public static function flushExtensionAccess($extensionId)
     {
         self::getCacheImplementation()->remove(self::CACHE_PREFIX_EXTENSION . $extensionId);
+
         foreach (ControllerHelper::getControllers($extensionId) as $controllerClassName) {
             self::flushControllerAccess($controllerClassName);
         }
@@ -183,19 +194,20 @@ class CacheHelper
      * Short description of method buildModuleSerial
      *
      * @access private
+     *
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  Resource $module
+     *
+     * @param Resource $module
+     *
      * @return string
      */
     private static function buildModuleSerial(\core_kernel_classes_Resource $module)
     {
         $returnValue = (string) '';
 
-
         $uri = explode('#', $module->getUri());
         list($type, $extId) = explode('_', $uri[1]);
         $returnValue = self::SERIAL_PREFIX_MODULE . $extId . urlencode($module->getUri());
-
 
         return (string) $returnValue;
     }
@@ -204,13 +216,15 @@ class CacheHelper
      * Short description of method removeModule
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome@taotesting.com>
-     * @param  Resource $module
+     *
+     * @param Resource $module
+     *
      * @return void
      */
     public static function removeModule(\core_kernel_classes_Resource $module)
     {
-
         self::getCacheImplementation()->remove(self::buildModuleSerial($module));
     }
 }

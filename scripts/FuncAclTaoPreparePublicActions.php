@@ -33,6 +33,7 @@ use oat\funcAcl\models\FuncAclInitialisation;
  *
  * @author Jérôme Bogaerts, <jerome@taotesting.com>
  * @author Joel Bout, <joel@taotesting.com>
+ *
  * @package tao
  */
 class FuncAclTaoPreparePublicActions extends \tao_scripts_Runner
@@ -46,7 +47,6 @@ class FuncAclTaoPreparePublicActions extends \tao_scripts_Runner
      *
      * * Recreate extension model.
      * * Grant access for the extension to the dedicated management role.
-     *
      */
     public function run()
     {

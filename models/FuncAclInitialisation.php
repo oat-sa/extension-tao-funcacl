@@ -16,21 +16,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\funcAcl\models;
 
-use oat\funcAcl\helpers\CacheHelper;
 use oat\tao\model\TaoOntology;
 
 /**
  * Initialise the FuncAcl Model
  *
  * @access public
+ *
  * @author Joel Bout, <joel@taotesting.com>
+ *
  * @package tao
-
  */
 class FuncAclInitialisation
 {
@@ -57,6 +56,7 @@ class FuncAclInitialisation
 
                         if ($extId == $extension->getId()) {
                             $managementRole = $mR;
+
                             break 2;
                         }
                     }

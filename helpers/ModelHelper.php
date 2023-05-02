@@ -17,20 +17,21 @@
  *
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 namespace oat\funcAcl\helpers;
 
-use oat\tao\helpers\ControllerHelper;
 use oat\funcAcl\models\AccessService;
+use oat\tao\helpers\ControllerHelper;
 
 /**
  * Helper to read/write the action/module model
  * of tao from/to the ontology
  *
  * @access public
+ *
  * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
+ *
  * @package tao
  */
 class ModelHelper
@@ -39,13 +40,18 @@ class ModelHelper
      * returns the modules of an extension from the ontology
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  string $extensionID
+     *
+     * @param string $extensionID
+     * @param mixed $extensionId
+     *
      * @return array
      */
     public static function getModules($extensionId)
     {
         $returnValue = [];
+
         foreach (ControllerHelper::getControllers($extensionId) as $controllerClassName) {
             $shortName = strpos($controllerClassName, '\\') !== false
                 ? substr($controllerClassName, strrpos($controllerClassName, '\\') + 1)
@@ -54,6 +60,7 @@ class ModelHelper
             $uri = AccessService::singleton()->makeEMAUri($extensionId, $shortName);
             $returnValue[$uri] = new \core_kernel_classes_Resource($uri);
         }
+
         return (array) $returnValue;
     }
 
@@ -61,14 +68,18 @@ class ModelHelper
      * returns the actions of a module from the ontology
      *
      * @access public
+     *
      * @author Jerome Bogaerts, <jerome.bogaerts@tudor.lu>
-     * @param  Resource $module
+     *
+     * @param Resource $module
+     *
      * @return array
      */
     public static function getActions(\core_kernel_classes_Resource $module)
     {
         $returnValue = [];
         $controllerClassName = MapHelper::getControllerFromUri($module->getUri());
+
         try {
             foreach (ControllerHelper::getActions($controllerClassName) as $actionName) {
                 $uri = MapHelper::getUriForAction($controllerClassName, $actionName);
@@ -77,6 +88,7 @@ class ModelHelper
         } catch (\ReflectionException $e) {
             // unknown controller, no actions returned
         }
+
         return (array) $returnValue;
     }
 }

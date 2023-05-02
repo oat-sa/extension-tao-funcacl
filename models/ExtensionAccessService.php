@@ -16,29 +16,28 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2009-2012 (original work) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
- *
  */
 
 namespace oat\funcAcl\models;
 
+use oat\funcAcl\helpers\CacheHelper;
 use oat\funcAcl\models\event\AccessRightAddedEvent;
 use oat\funcAcl\models\event\AccessRightRemovedEvent;
-use oat\funcAcl\helpers\CacheHelper;
 
 /**
  * access operation for extensions
  *
  * @access public
+ *
  * @author Jehan Bihin
+ *
  * @package tao
+ *
  * @since 2.2
-
  */
 class ExtensionAccessService extends AccessService
 {
     // --- ASSOCIATIONS ---
-
 
     // --- ATTRIBUTES ---
 
@@ -48,14 +47,16 @@ class ExtensionAccessService extends AccessService
      * Short description of method add
      *
      * @access public
+     *
      * @author Jehan Bihin, <jehan.bihin@tudor.lu>
-     * @param  string $roleUri
-     * @param  string $accessUri
+     *
+     * @param string $roleUri
+     * @param string $accessUri
+     *
      * @return mixed
      */
     public function add($roleUri, $accessUri)
     {
-
         $uri = explode('#', $accessUri);
         list($type, $extId) = explode('_', $uri[1]);
 
@@ -64,6 +65,7 @@ class ExtensionAccessService extends AccessService
         $role = new \core_kernel_classes_Resource($roleUri);
 
         $values = $role->getPropertyValues(new \core_kernel_classes_Property(static::PROPERTY_ACL_GRANTACCESS));
+
         if (!in_array($accessUri, $values)) {
             $role->setPropertyValue(new \core_kernel_classes_Property(static::PROPERTY_ACL_GRANTACCESS), $accessUri);
             $this->getEventManager()->trigger(new AccessRightAddedEvent($roleUri, $accessUri));
@@ -77,14 +79,16 @@ class ExtensionAccessService extends AccessService
      * Short description of method remove
      *
      * @access public
+     *
      * @author Jehan Bihin, <jehan.bihin@tudor.lu>
-     * @param  string $roleUri
-     * @param  string $accessUri
+     *
+     * @param string $roleUri
+     * @param string $accessUri
+     *
      * @return mixed
      */
     public function remove($roleUri, $accessUri)
     {
-
         $uri = explode('#', $accessUri);
         list($type, $extId) = explode('_', $uri[1]);
 

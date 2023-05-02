@@ -17,19 +17,20 @@
  *
  * Copyright (c) 2008-2010 (original work) Deutsche Institut für Internationale Pädagogische Forschung (under the project TAO-TRANSFER);
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
  */
 
 namespace oat\funcAcl\helpers;
 
-use oat\tao\model\accessControl\func\FuncHelper;
 use oat\funcAcl\models\AccessService;
+use oat\tao\model\accessControl\func\FuncHelper;
 
 /**
  * Helper to map URIs to controllers
  *
  * @access public
+ *
  * @author Joel Bout <joel@taotesting.com>
+ *
  * @package tao
  */
 class MapHelper
@@ -46,6 +47,7 @@ class MapHelper
             ? substr($controllerClassName, strrpos($controllerClassName, '\\') + 1)
             : substr($controllerClassName, strrpos($controllerClassName, '_') + 1)
         ;
+
         return AccessService::singleton()->makeEMAUri($extension, $shortName);
     }
 
@@ -56,46 +58,54 @@ class MapHelper
             ? substr($controllerClassName, strrpos($controllerClassName, '\\') + 1)
             : substr($controllerClassName, strrpos($controllerClassName, '_') + 1)
         ;
+
         return AccessService::singleton()->makeEMAUri($extension, $shortName, $actionName);
     }
 
     public static function getControllerFromUri($uri)
     {
         list($type, $extension, $controller) = explode('_', substr($uri, strpos($uri, '#') + 1));
+
         return FuncHelper::getClassName($extension, $controller);
     }
 
     public static function getActionFromUri($uri)
     {
         list($type, $extension, $controller, $action) = explode('_', substr($uri, strpos($uri, '#') + 1));
+
         return $action;
     }
 
     /**
      * @param $controllerClass
-     * @return mixed
+     *
      * @throws \common_exception_Error
+     *
+     * @return mixed
      */
     public static function getExtensionFromController($controllerClass)
     {
         if (strpos($controllerClass, '\\') === false) {
             $parts = explode('_', $controllerClass);
+
             if (count($parts) === 3) {
                 return $parts[0];
-            } else {
-                throw new \common_exception_Error('Unknown controller ' . $controllerClass);
             }
+
+            throw new \common_exception_Error('Unknown controller ' . $controllerClass);
         } else {
             foreach (\common_ext_ExtensionsManager::singleton()->getEnabledExtensions() as $ext) {
                 foreach ($ext->getManifest()->getRoutes() as $routePrefix => $route) {
                     if (is_array($route) && array_key_exists('class', $route)) {
                         $route = $route['class']::getControllerPrefix() ?: $route;
                     }
+
                     if (is_string($route) && substr($controllerClass, 0, strlen($route)) === $route) {
                         return $ext->getId();
                     }
                 }
             }
+
             throw new \common_exception_Error('Unknown controller ' . $controllerClass);
         }
     }

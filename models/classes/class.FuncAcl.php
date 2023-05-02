@@ -24,7 +24,9 @@ use oat\funcAcl\models\FuncAcl;
  * Proxy for the Acl Implementation
  *
  * @access public
+ *
  * @author Joel Bout, <joel@taotesting.com>
+ *
  * @package tao
  *
  * phpcs:disable Squiz.Classes.ValidClassName

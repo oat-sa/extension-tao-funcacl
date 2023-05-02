@@ -16,26 +16,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2009-2012 (original work) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
- *
  */
 
 namespace oat\funcAcl\models;
 
+use oat\funcAcl\helpers\CacheHelper;
 use oat\funcAcl\helpers\MapHelper;
 use oat\funcAcl\helpers\ModelHelper;
 use oat\funcAcl\models\event\AccessRightAddedEvent;
 use oat\funcAcl\models\event\AccessRightRemovedEvent;
-use oat\funcAcl\helpers\CacheHelper;
 
 /**
  * access operation for actions
  *
  * @access public
+ *
  * @author Jehan Bihin
+ *
  * @package tao
+ *
  * @since 2.2
-
  */
 class ActionAccessService extends AccessService
 {
@@ -43,9 +43,12 @@ class ActionAccessService extends AccessService
      * Short description of method add
      *
      * @access public
+     *
      * @author Jehan Bihin, <jehan.bihin@tudor.lu>
-     * @param  string $roleUri
-     * @param  string $accessUri
+     *
+     * @param string $roleUri
+     * @param string $accessUri
+     *
      * @return mixed
      */
     public function add($roleUri, $accessUri)
@@ -59,6 +62,7 @@ class ActionAccessService extends AccessService
         $moduleAccessProperty = new \core_kernel_classes_Property(static::PROPERTY_ACL_GRANTACCESS);
 
         $values = $role->getPropertyValues($actionAccessProperty);
+
         if (!in_array($accessUri, $values)) {
             $role->setPropertyValue($actionAccessProperty, $accessUri);
             $this->getEventManager()->trigger(new AccessRightAddedEvent($roleUri, $accessUri));
@@ -73,14 +77,16 @@ class ActionAccessService extends AccessService
      * Short description of method remove
      *
      * @access public
+     *
      * @author Jehan Bihin, <jehan.bihin@tudor.lu>
-     * @param  string $roleUri
-     * @param  string $accessUri
+     *
+     * @param string $roleUri
+     * @param string $accessUri
+     *
      * @return mixed
      */
     public function remove($roleUri, $accessUri)
     {
-
         $uri = explode('#', $accessUri);
         list($type, $ext, $mod, $act) = explode('_', $uri[1]);
 
@@ -92,6 +98,7 @@ class ActionAccessService extends AccessService
 
         // access via controller?
         $controllerAccess = CacheHelper::getControllerAccess($controllerClassName);
+
         if (in_array($roleUri, $controllerAccess['module'])) {
             // remove access to controller
             ModuleAccessService::singleton()->remove($roleUri, $module->getUri());

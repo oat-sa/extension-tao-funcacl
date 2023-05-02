@@ -22,32 +22,30 @@
  *               2009-2012 (update and modification) Public Research Centre Henri Tudor
  *                                                   (under the project TAO-SUSTAIN & TAO-DEV);
  *               2012-2018 (update and modification) Open Assessment Technologies SA;
- *
  */
 
 namespace oat\funcAcl\controller;
 
-use oat\generis\model\GenerisRdf;
-use oat\tao\helpers\ControllerHelper;
+use common_exception_BadRequest;
+use oat\funcAcl\helpers\CacheHelper;
+use oat\funcAcl\helpers\MapHelper;
 use oat\funcAcl\models\AccessService;
 use oat\funcAcl\models\ActionAccessService;
 use oat\funcAcl\models\ExtensionAccessService;
-use oat\funcAcl\models\ModuleAccessService;
-use oat\funcAcl\helpers\CacheHelper;
-use oat\funcAcl\helpers\MapHelper;
-use common_exception_BadRequest;
-use oat\tao\model\service\ApplicationService;
-use oat\tao\model\accessControl\func\FuncAccessControl;
 use oat\funcAcl\models\FuncAcl;
+use oat\funcAcl\models\ModuleAccessService;
+use oat\generis\model\GenerisRdf;
+use oat\tao\helpers\ControllerHelper;
 use oat\tao\model\accessControl\func\AclProxy;
+use oat\tao\model\service\ApplicationService;
 
 /**
  * This controller provide the actions to manage the ACLs
  *
  * @author CRP Henri Tudor - TAO Team - {@link http://www.tao.lu}
  * @license GPLv2  http://www.opensource.org/licenses/gpl-2.0.php
- * @package tao
  *
+ * @package tao
  */
 class Admin extends \tao_actions_CommonModule
 {
@@ -83,6 +81,7 @@ class Admin extends \tao_actions_CommonModule
 
     /**
      * Show the list of roles
+     *
      * @return void
      */
     public function index()
@@ -90,6 +89,7 @@ class Admin extends \tao_actions_CommonModule
         $this->defaultData();
         $rolesc = new \core_kernel_classes_Class(GenerisRdf::CLASS_ROLE);
         $roles = [];
+
         foreach ($rolesc->getInstances(true) as $id => $r) {
             $roles[] = ['id' => $id, 'label' => $r->getLabel()];
         }
@@ -112,6 +112,7 @@ class Admin extends \tao_actions_CommonModule
         $role = new \core_kernel_classes_Class($this->getRequestParameter('role'));
 
         $included = [];
+
         foreach (\tao_models_classes_RoleService::singleton()->getIncludedRoles($role) as $includedRole) {
             $included[$includedRole->getUri()] = $includedRole->getLabel();
         }
@@ -119,6 +120,7 @@ class Admin extends \tao_actions_CommonModule
         $extManager = \common_ext_ExtensionsManager::singleton();
 
         $extData = [];
+
         foreach ($extManager->getInstalledExtensions() as $extension) {
             if ($extension->getId() != 'generis') {
                 $extData[] = $this->buildExtensionData($extension, $role->getUri(), array_keys($included));
@@ -128,7 +130,6 @@ class Admin extends \tao_actions_CommonModule
         usort($extData, function ($a, $b) {
             return strcmp($a['label'], $b['label']);
         });
-
 
         $this->returnJson([
             'extensions' => $extData,
@@ -146,6 +147,7 @@ class Admin extends \tao_actions_CommonModule
         $inherited = count(array_intersect($includedRoleUris, $extAccess)) > 0;
 
         $controllers = [];
+
         foreach (ControllerHelper::getControllers($extension->getId()) as $controllerClassName) {
             $controllerData = $this->buildControllerData($controllerClassName, $roleUri, $includedRoleUris);
             $atLeastOneAccess = $atLeastOneAccess || $controllerData['access'] != self::ACCESS_NONE;
@@ -164,13 +166,12 @@ class Admin extends \tao_actions_CommonModule
             'uri' => $extAclUri,
             'label' => $extension->getName(),
             'access' => $access,
-            'modules' => $controllers
+            'modules' => $controllers,
         ];
     }
 
     protected function buildControllerData($controllerClassName, $roleUri, $includedRoleUris)
     {
-
         $modUri = MapHelper::getUriForController($controllerClassName);
 
         $moduleAccess = CacheHelper::getControllerAccess($controllerClassName);
@@ -178,6 +179,7 @@ class Admin extends \tao_actions_CommonModule
         list($type, $extId, $modId) = explode('_', $uri[1]);
 
         $access = self::ACCESS_NONE;
+
         if (count(array_intersect($includedRoleUris, $moduleAccess['module'])) > 0) {
             $access = self::ACCESS_INHERITED;
         } elseif (true === in_array($roleUri, $moduleAccess['module'])) {
@@ -187,6 +189,7 @@ class Admin extends \tao_actions_CommonModule
             foreach ($moduleAccess['actions'] as $roles) {
                 if (in_array($roleUri, $roles) || count(array_intersect($includedRoleUris, $roles)) > 0) {
                     $access = self::ACCESS_PARTIAL;
+
                     break;
                 }
             }
@@ -206,6 +209,7 @@ class Admin extends \tao_actions_CommonModule
     private function beforeAction()
     {
         $this->defaultData();
+
         if (!\tao_helpers_Request::isAjax()) {
             throw new common_exception_BadRequest('wrong request mode');
         }
@@ -218,6 +222,7 @@ class Admin extends \tao_actions_CommonModule
     {
         $locked = !$this->getServiceLocator()->get(AclProxy::SERVICE_ID) instanceof FuncAcl;
         $locked = $locked || !$this->getServiceLocator()->get(ApplicationService::SERVICE_ID)->isDebugMode();
+
         return $locked;
     }
 
@@ -243,6 +248,7 @@ class Admin extends \tao_actions_CommonModule
         $this->beforeAction();
         $role = new \core_kernel_classes_Resource($this->getRequestParameter('role'));
         $included = [];
+
         foreach (\tao_models_classes_RoleService::singleton()->getIncludedRoles($role) as $includedRole) {
             $included[] = $includedRole->getUri();
         }
@@ -252,6 +258,7 @@ class Admin extends \tao_actions_CommonModule
         $controllerAccess = CacheHelper::getControllerAccess($controllerClassName);
 
         $actions = [];
+
         foreach (ControllerHelper::getActions($controllerClassName) as $actionName) {
             $uri = MapHelper::getUriForAction($controllerClassName, $actionName);
             $part = explode('#', $uri);

@@ -22,14 +22,14 @@
  *               2023 (update and modification) Open Assessment Technologies SA;
  */
 
-use oat\oatbox\user\LoginService;
-use oat\tao\model\TaoOntology;
-use oat\tao\test\TaoPhpUnitTestRunner;
+use oat\funcAcl\helpers\CacheHelper;
 use oat\funcAcl\models\AccessService;
 use oat\funcAcl\models\ActionAccessService;
 use oat\funcAcl\models\FuncAcl;
 use oat\funcAcl\models\ModuleAccessService;
-use oat\funcAcl\helpers\CacheHelper;
+use oat\oatbox\user\LoginService;
+use oat\tao\model\TaoOntology;
+use oat\tao\test\TaoPhpUnitTestRunner;
 
 include_once dirname(__FILE__) . '/../../includes/raw_start.php';
 
@@ -59,9 +59,11 @@ class FuncACLTest extends TaoPhpUnitTestRunner
         parent::tearDown();
         $userService = tao_models_classes_UserService::singleton();
         $roleService = tao_models_classes_RoleService::singleton();
+
         if ($this->user != null) {
             $userService->removeUser($this->user);
         }
+
         if ($this->testRole) {
             $roleService->removeRole($this->testRole);
         }

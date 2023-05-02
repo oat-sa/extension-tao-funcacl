@@ -16,8 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2009-2012 (original work) Public Research Centre Henri Tudor (under the project TAO-SUSTAIN & TAO-DEV);
- *
- *
  */
 
 namespace oat\funcAcl\models;
@@ -28,9 +26,10 @@ use oat\oatbox\event\EventManagerAwareTrait;
  * mother class for access operations
  *
  * @author Jehan Bihin
+ *
  * @package tao
+ *
  * @since 2.2
-
  */
 class AccessService extends \tao_models_classes_GenerisService
 {
@@ -80,10 +79,13 @@ class AccessService extends \tao_models_classes_GenerisService
      * Short description of method makeEMAUri
      *
      * @access public
+     *
      * @author Jehan Bihin, <jehan.bihin@tudor.lu>
+     *
      * @param string $ext
      * @param string $mod
      * @param string $act
+     *
      * @return string
      */
     public function makeEMAUri($ext, $mod = null, $act = null)
@@ -91,6 +93,7 @@ class AccessService extends \tao_models_classes_GenerisService
         $returnValue = (string) '';
 
         $returnValue = self::FUNCACL_NS . '#';
+
         if (! is_null($act)) {
             $type = 'a';
         } else {
@@ -101,12 +104,15 @@ class AccessService extends \tao_models_classes_GenerisService
             }
         }
         $returnValue .= $type . '_' . $ext;
+
         if (! is_null($mod)) {
             $returnValue .= '_' . $mod;
         }
+
         if (! is_null($act)) {
             $returnValue .= '_' . $act;
         }
+
         return (string) $returnValue;
     }
 }

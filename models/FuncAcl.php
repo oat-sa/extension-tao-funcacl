@@ -20,17 +20,17 @@
 
 namespace oat\funcAcl\models;
 
-use ReflectionException;
-use oat\oatbox\user\User;
-use Psr\Log\LoggerInterface;
-use oat\funcAcl\helpers\MapHelper;
 use oat\funcAcl\helpers\CacheHelper;
+use oat\funcAcl\helpers\MapHelper;
 use oat\oatbox\log\logger\AdvancedLogger;
+use oat\oatbox\log\logger\extender\ContextExtenderInterface;
 use oat\oatbox\service\ConfigurableService;
+use oat\oatbox\user\User;
 use oat\tao\model\accessControl\AccessControl;
 use oat\tao\model\accessControl\func\AccessRule;
 use oat\tao\model\accessControl\func\FuncAccessControl;
-use oat\oatbox\log\logger\extender\ContextExtenderInterface;
+use Psr\Log\LoggerInterface;
+use ReflectionException;
 
 /**
  * @author Joel Bout, <joel@taotesting.com>
@@ -91,14 +91,17 @@ class FuncAcl extends ConfigurableService implements FuncAccessControl, AccessCo
                 case 1:
                     $extension = reset($elements);
                     $accessService->grantExtensionAccess($rule->getRole(), $extension);
+
                     break;
                 case 2:
                     [$extension, $shortName] = $elements;
                     $accessService->grantModuleAccess($rule->getRole(), $extension, $shortName);
+
                     break;
                 case 3:
                     [$extension, $shortName, $action] = $elements;
                     $accessService->grantActionAccess($rule->getRole(), $extension, $shortName, $action);
+
                     break;
                 default:
                     // fail silently warning should already be send
@@ -124,14 +127,17 @@ class FuncAcl extends ConfigurableService implements FuncAccessControl, AccessCo
                 case 1:
                     $extension = reset($elements);
                     $accessService->revokeExtensionAccess($rule->getRole(), $extension);
+
                     break;
                 case 2:
                     [$extension, $shortName] = $elements;
                     $accessService->revokeModuleAccess($rule->getRole(), $extension, $shortName);
+
                     break;
                 case 3:
                     [$extension, $shortName, $action] = $elements;
                     $accessService->revokeActionAccess($rule->getRole(), $extension, $shortName, $action);
+
                     break;
                 default:
                     // fail silently warning should already be send
@@ -150,6 +156,7 @@ class FuncAcl extends ConfigurableService implements FuncAccessControl, AccessCo
      * Evaluate the mask to ACL components
      *
      * @param mixed $mask
+     *
      * @return string[] tao ACL components
      */
     public function evalFilterMask($mask)
@@ -162,6 +169,7 @@ class FuncAcl extends ConfigurableService implements FuncAccessControl, AccessCo
                 $controller = $mask;
                 $action = null;
             }
+
             if (class_exists($controller)) {
                 $extension = MapHelper::getExtensionFromController($controller);
                 $shortName = strpos($controller, '\\') !== false

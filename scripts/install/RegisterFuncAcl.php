@@ -16,17 +16,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2020 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 declare(strict_types=1);
 
 namespace oat\funcAcl\scripts\install;
 
-use oat\tao\model\accessControl\func\AccessRule;
+use common_ext_ExtensionsManager;
 use oat\funcAcl\models\FuncAcl;
 use oat\oatbox\extension\InstallAction;
-use common_ext_ExtensionsManager;
+use oat\tao\model\accessControl\func\AccessRule;
 use oat\tao\model\accessControl\func\AclProxy;
 
 class RegisterFuncAcl extends InstallAction
@@ -37,6 +36,7 @@ class RegisterFuncAcl extends InstallAction
         $this->registerService(AclProxy::SERVICE_ID, $implementation);
         // register all access rights so far
         $exts = $this->getServiceLocator()->get(common_ext_ExtensionsManager::class)->getInstalledExtensions();
+
         foreach ($exts as $extension) {
             foreach ($extension->getManifest()->getAclTable() as $tableEntry) {
                 $rule = new AccessRule($tableEntry[0], $tableEntry[1], $tableEntry[2]);
