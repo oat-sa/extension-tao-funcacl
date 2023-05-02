@@ -16,39 +16,42 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
  */
 
 namespace oat\funcAcl\models;
 
-use oat\funcAcl\helpers\CacheHelper;
+use common_ext_ExtensionsManager;
+use common_Logger;
+use core_kernel_classes_Class;
+use core_kernel_classes_Property;
 use oat\tao\model\TaoOntology;
 
 /**
  * Initialise the FuncAcl Model
  *
  * @access public
+ *
  * @author Joel Bout, <joel@taotesting.com>
+ *
  * @package tao
-
  */
 class FuncAclInitialisation
 {
     public static function run()
     {
         // We get all the management roles and the extension they belong to.
-        $managementRoleClass = new \core_kernel_classes_Class(TaoOntology::CLASS_URI_MANAGEMENT_ROLE);
+        $managementRoleClass = new core_kernel_classes_Class(TaoOntology::CLASS_URI_MANAGEMENT_ROLE);
         $foundManagementRoles = $managementRoleClass->getInstances(true);
         $managementRolesByExtension = [];
 
-        foreach (\common_ext_ExtensionsManager::singleton()->getInstalledExtensions() as $extension) {
+        foreach (common_ext_ExtensionsManager::singleton()->getInstalledExtensions() as $extension) {
             $managementRole = $extension->getManagementRole();
 
             if (empty($managementRole)) {
                 // try to discover it.
                 foreach ($foundManagementRoles as $mR) {
                     $moduleURIs = $mR->getPropertyValues(
-                        new \core_kernel_classes_Property(AccessService::PROPERTY_ACL_GRANTACCESS)
+                        new core_kernel_classes_Property(AccessService::PROPERTY_ACL_GRANTACCESS)
                     );
 
                     foreach ($moduleURIs as $moduleURI) {
@@ -57,6 +60,7 @@ class FuncAclInitialisation
 
                         if ($extId == $extension->getId()) {
                             $managementRole = $mR;
+
                             break 2;
                         }
                     }
@@ -68,7 +72,7 @@ class FuncAclInitialisation
             }
         }
 
-        foreach (\common_ext_ExtensionsManager::singleton()->getInstalledExtensions() as $extension) {
+        foreach (common_ext_ExtensionsManager::singleton()->getInstalledExtensions() as $extension) {
             if ($extension->getId() != 'generis') {
                 // 2. Grant access to Management Role.
                 if (!empty($managementRolesByExtension[$extension->getId()])) {
@@ -78,7 +82,7 @@ class FuncAclInitialisation
                         $extAccessService->makeEMAUri($extension->getId())
                     );
                 } else {
-                    \common_Logger::i('Management Role not found for extension ' . $extension->getId());
+                    common_Logger::i('Management Role not found for extension ' . $extension->getId());
                 }
             }
         }

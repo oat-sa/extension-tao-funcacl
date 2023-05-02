@@ -16,8 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
- *
- *
  */
 
 use oat\funcAcl\scripts\install\RegisterFuncAcl;
@@ -33,10 +31,10 @@ return [
     'author' => 'Open Assessment Technologies, CRP Henri Tudor',
     'install' => [
         'rdf' => [
-            __DIR__ . '/models/ontology/taofuncacl.rdf'
+            __DIR__ . '/models/ontology/taofuncacl.rdf',
         ],
         'php' => [
-            RegisterFuncAcl::class
+            RegisterFuncAcl::class,
         ],
     ],
     'update' => Updater::class,
@@ -45,12 +43,11 @@ return [
         ['grant', 'http://www.tao.lu/Ontologies/taoFuncACL.rdf#FuncAclManagerRole', ['ext' => 'funcAcl']],
     ],
     'routes' => [
-        '/funcAcl' => 'oat\\funcAcl\\controller'
+        '/funcAcl' => 'oat\\funcAcl\\controller',
     ],
     'constants' => [
-
         # views directory
-        "DIR_VIEWS" => $extpath . "views" . DIRECTORY_SEPARATOR,
+        'DIR_VIEWS' => $extpath . 'views' . DIRECTORY_SEPARATOR,
 
         #BASE URL (usually the domain root)
         'BASE_URL' => ROOT_URL . 'funcAcl/',
