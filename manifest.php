@@ -18,6 +18,8 @@
  * Copyright (c) 2013 (original work) Open Assessment Technologies SA (under the project TAO-PRODUCT);
  */
 
+use oat\funcAcl\models\FuncAclServiceProvider;
+use oat\funcAcl\scripts\install\RegisterEvents;
 use oat\funcAcl\scripts\install\RegisterFuncAcl;
 use oat\funcAcl\scripts\update\Updater;
 
@@ -35,6 +37,7 @@ return [
         ],
         'php' => [
             RegisterFuncAcl::class,
+            RegisterEvents::class,
         ],
     ],
     'update' => Updater::class,
@@ -54,5 +57,8 @@ return [
     ],
     'extra' => [
         'structures' => __DIR__ . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR . 'structures.xml',
+    ],
+    'containerServiceProviders' => [
+        FuncAclServiceProvider::class
     ],
 ];
