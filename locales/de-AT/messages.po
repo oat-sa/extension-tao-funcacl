@@ -1,0 +1,72 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: tao-open-source\n"
+"PO-Revision-Date: 2023-06-07 08:10\n"
+"Last-Translator: TAO Translation Team <translation@tao.lu>\n"
+"MIME-Version: 1.0\n"
+"Language: de_AT\n"
+"sourceLanguage: en-US\n"
+"targetLanguage: en-US\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Basepath: ../../\n"
+"X-Poedit-KeywordsList: __\n"
+"X-Poedit-SearchPath-0: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: tao-open-source\n"
+"X-Crowdin-Project-ID: 590867\n"
+"X-Crowdin-Language: de-AT\n"
+"X-Crowdin-File: /[oat-sa.extension-tao-funcacl] develop/locales/en-US/messages.po\n"
+"X-Crowdin-File-ID: 497\n"
+"Language-Team: German, Austria\n"
+
+msgid "Actions"
+msgstr ""
+
+msgid "Available roles"
+msgstr ""
+
+msgid "Grant access rights to the action"
+msgstr ""
+
+msgid "Grant access rights to the entire controller"
+msgstr ""
+
+msgid "Grant access rights to the entire extension"
+msgstr ""
+
+msgid "includes"
+msgstr ""
+
+msgid "Inherited access to the action"
+msgstr ""
+
+msgid "Inherited access to the controller"
+msgstr ""
+
+msgid "Inherited access to the extension"
+msgstr ""
+
+#, tao-public
+msgid "Manage Access Rights"
+msgstr ""
+
+msgid "Modules"
+msgstr ""
+
+msgid "Revoke access rights to the action"
+msgstr ""
+
+msgid "Revoke access rights to the entire controller"
+msgstr ""
+
+msgid "Revoke access rights to the entire extension"
+msgstr ""
+
+msgid "Roles"
+msgstr ""
+
+#, tao-public
+msgid "Users"
+msgstr ""
+
