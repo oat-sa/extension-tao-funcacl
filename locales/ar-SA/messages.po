@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2023-06-07 08:09\n"
+"PO-Revision-Date: 2023-12-04 16:22\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: ar\n"
@@ -21,52 +21,52 @@ msgstr ""
 "Language-Team: Arabic\n"
 
 msgid "Actions"
-msgstr ""
+msgstr "إجراءات"
 
 msgid "Available roles"
-msgstr ""
+msgstr "الأدوار المتاحة"
 
 msgid "Grant access rights to the action"
-msgstr ""
+msgstr "منح حقوق الوصول إلى الإجراء"
 
 msgid "Grant access rights to the entire controller"
-msgstr ""
+msgstr "منح حقوق الوصول إلى وحدة التحكم بأكملها"
 
 msgid "Grant access rights to the entire extension"
-msgstr ""
+msgstr "منح حقوق الوصول إلى الامتداد بأكمله"
 
 msgid "includes"
-msgstr ""
+msgstr "يشمل"
 
 msgid "Inherited access to the action"
-msgstr ""
+msgstr "الوصول الموروث إلى الإجراء"
 
 msgid "Inherited access to the controller"
-msgstr ""
+msgstr "الوصول الموروث إلى وحدة التحكم"
 
 msgid "Inherited access to the extension"
-msgstr ""
+msgstr "الوصول الموروث إلى الملحق"
 
 #, tao-public
 msgid "Manage Access Rights"
-msgstr ""
+msgstr "إدارة حقوق الوصول"
 
 msgid "Modules"
-msgstr ""
+msgstr "مجزوءات"
 
 msgid "Revoke access rights to the action"
-msgstr ""
+msgstr "إلغاء حقوق الوصول إلى الإجراء"
 
 msgid "Revoke access rights to the entire controller"
-msgstr ""
+msgstr "إلغاء حقوق الوصول إلى وحدة التحكم بأكملها"
 
 msgid "Revoke access rights to the entire extension"
-msgstr ""
+msgstr "إلغاء حقوق الوصول إلى الامتداد بأكمله"
 
 msgid "Roles"
-msgstr ""
+msgstr "أدوار"
 
 #, tao-public
 msgid "Users"
-msgstr ""
+msgstr "المستخدمون"
 
