@@ -137,22 +137,24 @@ class CacheHelper
             }
 
             // roles by action
-            foreach (ControllerHelper::getActions($controllerClassName) ?? [] as $actionName) {
-                $actionUri = MapHelper::getUriForAction($controllerClassName, $actionName);
-                $rolesForAction = $roleClass->searchInstances([
-                    $accessProperty->getUri() => $actionUri,
-                ], ['recursive' => true, 'like' => false]);
+            $actions = ControllerHelper::getActions($controllerClassName);
+            if (is_iterable($actions)) {
+                foreach ($actions as $actionName) {
+                    $actionUri = MapHelper::getUriForAction($controllerClassName, $actionName);
+                    $rolesForAction = $roleClass->searchInstances([
+                        $accessProperty->getUri() => $actionUri,
+                    ], ['recursive' => true, 'like' => false]);
 
-                if (!empty($rolesForAction)) {
-                    $actionName = MapHelper::getActionFromUri($actionUri);
-                    $returnValue['actions'][$actionName] = [];
+                    if (!empty($rolesForAction)) {
+                        $actionName = MapHelper::getActionFromUri($actionUri);
+                        $returnValue['actions'][$actionName] = [];
 
-                    foreach ($rolesForAction as $roleResource) {
-                        $returnValue['actions'][$actionName][] = $roleResource->getUri();
+                        foreach ($rolesForAction as $roleResource) {
+                            $returnValue['actions'][$actionName][] = $roleResource->getUri();
+                        }
                     }
                 }
             }
-
             self::getCacheImplementation()->put($returnValue, self::SERIAL_PREFIX_MODULE . $controllerClassName);
         }
 
