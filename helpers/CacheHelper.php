@@ -137,7 +137,7 @@ class CacheHelper
             }
 
             // roles by action
-            foreach (ControllerHelper::getActions($controllerClassName) as $actionName) {
+            foreach (ControllerHelper::getActions($controllerClassName) ?? [] as $actionName) {
                 $actionUri = MapHelper::getUriForAction($controllerClassName, $actionName);
                 $rolesForAction = $roleClass->searchInstances([
                     $accessProperty->getUri() => $actionUri,
