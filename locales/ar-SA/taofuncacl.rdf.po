@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2023-12-04 16:23\n"
+"PO-Revision-Date: 2023-12-05 16:25\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: ar\n"
@@ -20,90 +20,90 @@ msgstr ""
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#ControlComponent
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "Control component"
-msgstr ""
+msgstr "مكون التحكم"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#ControlComponent
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "Either an extension, module or action"
-msgstr ""
+msgstr "إما ملحق أو وحدة نمطية أو إجراء"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Extension
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "An extension"
-msgstr ""
+msgstr "ملحق"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Extension
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "A tao extension"
-msgstr ""
+msgstr "ملحق tao"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Module
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "A module"
-msgstr ""
+msgstr "وحدة نمطية"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Module
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "A MVC Controller Module"
-msgstr ""
+msgstr "وحدة تحكم MVC"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Action
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "An action"
-msgstr ""
+msgstr "إجراء"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Action
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "A MVC Controller Action"
-msgstr ""
+msgstr "إجراء وحدة تحكم MVC"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Identifier
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "Identifier"
-msgstr ""
+msgstr "معرّف"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Identifier
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "Identifier"
-msgstr ""
+msgstr "معرّف"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#GrantAccess
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "Grant access to a control component"
-msgstr ""
+msgstr "منح الوصول إلى مكون التحكم"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#GrantAccess
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "Grant access to a control component"
-msgstr ""
+msgstr "منح الوصول إلى مكون التحكم"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#actionMemberOf
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "Member of"
-msgstr ""
+msgstr "عضو في"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#actionMemberOf
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "Member of a module"
-msgstr ""
+msgstr "عضو في وحدة نمطية"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#moduleExtension
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "Extension"
-msgstr ""
+msgstr "ملحق"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#moduleExtension
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "Extension of the module"
-msgstr ""
+msgstr "ملحق الوحدة"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#FuncAclManagerRole
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "Function ACL Manager"
-msgstr ""
+msgstr "وظيفة مدير ACL"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#FuncAclManagerRole
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "The functionality based access controll layer Manager Role"
-msgstr ""
+msgstr "دور مدير طبقة التحكم في الوصول القائم على الوظائف"
 
