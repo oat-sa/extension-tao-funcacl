@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2023-06-07 08:09\n"
+"PO-Revision-Date: 2024-03-18 17:48\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: fr\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Language-Team: French\n"
 
 msgid "Actions"
-msgstr ""
+msgstr "Actions"
 
 msgid "Available roles"
 msgstr "Rôles disponibles"
@@ -52,7 +52,7 @@ msgid "Manage Access Rights"
 msgstr "Gérer les droits d'accès"
 
 msgid "Modules"
-msgstr ""
+msgstr "Modules"
 
 msgid "Revoke access rights to the action"
 msgstr "Révoquer les droits d'accès à l'action"
