@@ -1,24 +1,31 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TAO 3.3.0-sprint107\n"
-"PO-Revision-Date: 2019-08-02T09:43:59\n"
+"Project-Id-Version: tao-open-source\n"
+"PO-Revision-Date: 2025-12-05 09:27\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
-"Language: hu-HU\n"
+"Language: hu\n"
 "sourceLanguage: en-US\n"
-"targetLanguage: hu-HU\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"targetLanguage: en-US\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: tao-open-source\n"
+"X-Crowdin-Project-ID: 590867\n"
+"X-Crowdin-Language: hu\n"
+"X-Crowdin-File: /[oat-sa.extension-tao-funcacl] develop/locales/en-US/taofuncacl.rdf.po\n"
+"X-Crowdin-File-ID: 976\n"
+"Language-Team: Hungarian\n"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#ControlComponent
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "Control component"
-msgstr "Vezérlő komponens"
+msgstr "Vezérlőelem"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#ControlComponent
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "Either an extension, module or action"
-msgstr "Egy kiterjesztés, modul, vagy esemény"
+msgstr "Vagy egy kiterjesztés, modul vagy művelet"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Extension
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
@@ -28,7 +35,7 @@ msgstr "Egy kiterjesztés"
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Extension
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "A tao extension"
-msgstr "Egy tao kiterjesztés"
+msgstr "A tao kiterjesztése"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Module
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
@@ -38,17 +45,17 @@ msgstr "Egy modul"
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Module
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "A MVC Controller Module"
-msgstr "MVC vezérlő modul"
+msgstr "MVC vezérlőmodul"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Action
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "An action"
-msgstr "Egy művelet"
+msgstr "Egy akció"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Action
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "A MVC Controller Action"
-msgstr "Egy MVC vezérlő művelet"
+msgstr "Egy MVC vezérlőművelet"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Identifier
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
@@ -63,22 +70,22 @@ msgstr "Azonosító"
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#GrantAccess
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "Grant access to a control component"
-msgstr "jog adása a vezérlő komponensnek"
+msgstr "Hozzáférés engedélyezése egy vezérlőkomponenshez"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#GrantAccess
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "Grant access to a control component"
-msgstr "Jog adása a vezérlő komponensnek"
+msgstr "Hozzáférés engedélyezése egy vezérlőkomponenshez"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#actionMemberOf
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "Member of"
-msgstr "Tagja a "
+msgstr "Tagja"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#actionMemberOf
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "Member of a module"
-msgstr "Tagja a modulnak"
+msgstr "Egy modul tagja"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#moduleExtension
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
@@ -88,15 +95,15 @@ msgstr "Kiterjesztés"
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#moduleExtension
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "Extension of the module"
-msgstr "A modul kiterjesztése"
+msgstr "A modul bővítése"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#FuncAclManagerRole
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "Function ACL Manager"
-msgstr "Funkció jogosultság (ACL) vezérlő"
+msgstr "Funkció ACL-kezelő"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#FuncAclManagerRole
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "The functionality based access controll layer Manager Role"
-msgstr ""
+msgstr "A funkcionalitáson alapuló hozzáférés-vezérlési réteg kezelői szerepköre"
 
