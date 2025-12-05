@@ -1,35 +1,42 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TAO 3.3.0-sprint107\n"
-"PO-Revision-Date: 2019-08-02T09:43:59\n"
+"Project-Id-Version: tao-open-source\n"
+"PO-Revision-Date: 2025-12-05 09:26\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
-"Language: hu-HU\n"
+"Language: hu\n"
 "sourceLanguage: en-US\n"
-"targetLanguage: hu-HU\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"targetLanguage: en-US\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: tao-open-source\n"
+"X-Crowdin-Project-ID: 590867\n"
+"X-Crowdin-Language: hu\n"
+"X-Crowdin-File: /[oat-sa.extension-tao-funcacl] develop/locales/en-US/messages.po\n"
+"X-Crowdin-File-ID: 497\n"
+"Language-Team: Hungarian\n"
 
 msgid "Actions"
 msgstr "Műveletek"
 
 msgid "Available roles"
-msgstr "Elérhető szerepek"
+msgstr "Elérhető szerepkörök"
 
 msgid "Grant access rights to the action"
-msgstr "Jog biztosítása a művelethez"
+msgstr "Hozzáférési jogok megadása a művelethez"
 
 msgid "Grant access rights to the entire controller"
-msgstr "Jog biztosítása az egész szabályzóhoz"
+msgstr "Hozzáférési jogok megadása a teljes vezérlőnek"
 
 msgid "Grant access rights to the entire extension"
-msgstr "Jog biztosítása az egész kiterjesztéshez"
+msgstr "Hozzáférési jogok megadása a teljes bővítményhez"
 
 msgid "includes"
-msgstr "magában foglalja"
+msgstr "tartalmazza"
 
 msgid "Inherited access to the action"
 msgstr "Örökölt hozzáférés a művelethez"
@@ -38,23 +45,23 @@ msgid "Inherited access to the controller"
 msgstr "Örökölt hozzáférés a vezérlőhöz"
 
 msgid "Inherited access to the extension"
-msgstr "Örökölt hozzáférés a kiterjesztéshez"
+msgstr "Örökölt hozzáférés a bővítményhez"
 
 #, tao-public
 msgid "Manage Access Rights"
-msgstr "Jogosultságok karbantartása"
+msgstr "Hozzáférési jogok kezelése"
 
 msgid "Modules"
 msgstr "Modulok"
 
 msgid "Revoke access rights to the action"
-msgstr "Hozzáférési jog visszavonása a művelethez"
+msgstr "Hozzáférési jogok visszavonása a művelethez"
 
 msgid "Revoke access rights to the entire controller"
-msgstr "Hozzáférési jog visszavonása az egész vezérlőhöz"
+msgstr "Visszavonja a teljes vezérlő hozzáférési jogait"
 
 msgid "Revoke access rights to the entire extension"
-msgstr "Hozzáférési jog visszavonása az egész kiterjesztéshez"
+msgstr "Hozzáférési jogok visszavonása a teljes bővítményhez"
 
 msgid "Roles"
 msgstr "Szerepkörök"
