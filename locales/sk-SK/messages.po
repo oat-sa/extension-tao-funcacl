@@ -1,17 +1,24 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TAO 3.3.0-sprint107\n"
-"PO-Revision-Date: 2019-08-02T09:43:59\n"
+"Project-Id-Version: tao-open-source\n"
+"PO-Revision-Date: 2025-12-05 09:27\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
-"Language: sk-SK\n"
+"Language: sk\n"
 "sourceLanguage: en-US\n"
-"targetLanguage: sk-SK\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"targetLanguage: en-US\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: __\n"
 "X-Poedit-SearchPath-0: .\n"
+"Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
+"X-Crowdin-Project: tao-open-source\n"
+"X-Crowdin-Project-ID: 590867\n"
+"X-Crowdin-Language: sk\n"
+"X-Crowdin-File: /[oat-sa.extension-tao-funcacl] develop/locales/en-US/messages.po\n"
+"X-Crowdin-File-ID: 497\n"
+"Language-Team: Slovak\n"
 
 msgid "Actions"
 msgstr "Akcie"
@@ -20,16 +27,16 @@ msgid "Available roles"
 msgstr "Dostupné role"
 
 msgid "Grant access rights to the action"
-msgstr "Udeliť prístupové práva k danej akcii"
+msgstr "Udeliť prístupové práva k akcii"
 
 msgid "Grant access rights to the entire controller"
-msgstr "Udeliť prístupové práva celému ovládaču"
+msgstr "Udeliť prístupové práva k celému ovládaču"
 
 msgid "Grant access rights to the entire extension"
-msgstr "Udeliť prístupové práva celému rozšíreniu"
+msgstr "Udeliť prístupové práva k celému rozšíreniu"
 
 msgid "includes"
-msgstr "obsahuje"
+msgstr "zahŕňa"
 
 msgid "Inherited access to the action"
 msgstr "Zdedený prístup k akcii"
@@ -42,24 +49,24 @@ msgstr "Zdedený prístup k rozšíreniu"
 
 #, tao-public
 msgid "Manage Access Rights"
-msgstr "Správa prístupových práv"
+msgstr "Spravovať prístupové práva"
 
 msgid "Modules"
 msgstr "Moduly"
 
 msgid "Revoke access rights to the action"
-msgstr "Zrušiť prístupové práva k danej akcii"
+msgstr "Zrušiť prístupové práva k akcii"
 
 msgid "Revoke access rights to the entire controller"
-msgstr "Zrušiť prístupové práva celému ovládaču"
+msgstr "Zrušiť prístupové práva k celému ovládaču"
 
 msgid "Revoke access rights to the entire extension"
 msgstr "Zrušiť prístupové práva k celému rozšíreniu"
 
 msgid "Roles"
-msgstr "Role"
+msgstr "Roly"
 
 #, tao-public
 msgid "Users"
-msgstr "Užívatelia"
+msgstr "Používatelia"
 

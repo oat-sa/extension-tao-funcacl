@@ -1,10 +1,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2025-12-05 09:30\n"
+"PO-Revision-Date: 2025-12-05 09:27\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
-"Language: hu\n"
+"Language: gl\n"
 "sourceLanguage: en-US\n"
 "targetLanguage: en-US\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -15,58 +15,58 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-Project: tao-open-source\n"
 "X-Crowdin-Project-ID: 590867\n"
-"X-Crowdin-Language: hu\n"
+"X-Crowdin-Language: gl\n"
 "X-Crowdin-File: /[oat-sa.extension-tao-funcacl] develop/locales/en-US/messages.po\n"
 "X-Crowdin-File-ID: 497\n"
-"Language-Team: Hungarian\n"
+"Language-Team: Galician\n"
 
 msgid "Actions"
-msgstr "Műveletek"
+msgstr ""
 
 msgid "Available roles"
-msgstr "Elérhető szerepkörök"
+msgstr ""
 
 msgid "Grant access rights to the action"
-msgstr "Hozzáférési jogok megadása a művelethez"
+msgstr ""
 
 msgid "Grant access rights to the entire controller"
-msgstr "Hozzáférési jogok megadása a teljes vezérlőnek"
+msgstr ""
 
 msgid "Grant access rights to the entire extension"
-msgstr "Hozzáférési jogok megadása a teljes bővítményhez"
+msgstr ""
 
 msgid "includes"
-msgstr "tartalmazza"
+msgstr ""
 
 msgid "Inherited access to the action"
-msgstr "Örökölt hozzáférés a művelethez"
+msgstr ""
 
 msgid "Inherited access to the controller"
-msgstr "Örökölt hozzáférés a vezérlőhöz"
+msgstr ""
 
 msgid "Inherited access to the extension"
-msgstr "Örökölt hozzáférés a bővítményhez"
+msgstr ""
 
 #, tao-public
 msgid "Manage Access Rights"
-msgstr "Hozzáférési jogok kezelése"
+msgstr ""
 
 msgid "Modules"
-msgstr "Modulok"
+msgstr ""
 
 msgid "Revoke access rights to the action"
-msgstr "Hozzáférési jogok visszavonása a művelethez"
+msgstr ""
 
 msgid "Revoke access rights to the entire controller"
-msgstr "Visszavonja a teljes vezérlő hozzáférési jogait"
+msgstr ""
 
 msgid "Revoke access rights to the entire extension"
-msgstr "Hozzáférési jogok visszavonása a teljes bővítményhez"
+msgstr ""
 
 msgid "Roles"
-msgstr "Szerepkörök"
+msgstr ""
 
 #, tao-public
 msgid "Users"
-msgstr "Felhasználók"
+msgstr ""
 
