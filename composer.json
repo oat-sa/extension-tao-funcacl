@@ -64,8 +64,5 @@
         "oat-sa/generis": "dev-goal/remove-prophesize as 99.99",
         "oat-sa/tao-core": ">=53.3",
         "oat-sa/extension-tao-backoffice": ">=6.0.0"
-    },
-    "require-dev": {
-        "phpspec/prophecy-phpunit": "^2.4.0"
     }
 }
