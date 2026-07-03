@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2023-06-07 08:09\n"
+"PO-Revision-Date: 2026-07-03 14:47\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: pt\n"
@@ -39,34 +39,34 @@ msgid "includes"
 msgstr "inclui"
 
 msgid "Inherited access to the action"
-msgstr ""
+msgstr "Acesso herdado para a ação"
 
 msgid "Inherited access to the controller"
-msgstr ""
+msgstr "Acesso herdado para o controlador"
 
 msgid "Inherited access to the extension"
-msgstr ""
+msgstr "Acesso herdado à extensão"
 
 #, tao-public
 msgid "Manage Access Rights"
-msgstr ""
+msgstr "Gerenciar Permissões de Acesso"
 
 msgid "Modules"
-msgstr ""
+msgstr "módulos"
 
 msgid "Revoke access rights to the action"
-msgstr ""
+msgstr "Revogar direitos de acesso para a ação"
 
 msgid "Revoke access rights to the entire controller"
-msgstr ""
+msgstr "Revogar os direitos de acesso para todo o controlador"
 
 msgid "Revoke access rights to the entire extension"
-msgstr ""
+msgstr "Revogar os direitos de acesso a toda a extensão"
 
 msgid "Roles"
-msgstr ""
+msgstr "Papéis"
 
 #, tao-public
 msgid "Users"
-msgstr ""
+msgstr "Utilizadores"
 
