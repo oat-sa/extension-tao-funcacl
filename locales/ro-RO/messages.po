@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2024-07-03 13:27\n"
+"PO-Revision-Date: 2026-07-03 14:47\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: ro\n"
@@ -21,52 +21,52 @@ msgstr ""
 "Language-Team: Romanian\n"
 
 msgid "Actions"
-msgstr ""
+msgstr "Acțiuni"
 
 msgid "Available roles"
-msgstr ""
+msgstr "Roluri disponibile"
 
 msgid "Grant access rights to the action"
-msgstr ""
+msgstr "Acordarea de drepturi de acces la acțiune"
 
 msgid "Grant access rights to the entire controller"
-msgstr ""
+msgstr "Acordă drepturi de acces întregului operator"
 
 msgid "Grant access rights to the entire extension"
-msgstr ""
+msgstr "Acordă drepturi de acces întregii prelungiri"
 
 msgid "includes"
-msgstr ""
+msgstr "include"
 
 msgid "Inherited access to the action"
-msgstr ""
+msgstr "Acces moștenit la acțiune"
 
 msgid "Inherited access to the controller"
-msgstr ""
+msgstr "Acces moștenit la operator"
 
 msgid "Inherited access to the extension"
-msgstr ""
+msgstr "Acces moștenit la extensie"
 
 #, tao-public
 msgid "Manage Access Rights"
-msgstr ""
+msgstr "Gestionează drepturile de acces"
 
 msgid "Modules"
-msgstr ""
+msgstr "Module"
 
 msgid "Revoke access rights to the action"
-msgstr ""
+msgstr "Revocarea drepturilor de acces la acțiune"
 
 msgid "Revoke access rights to the entire controller"
-msgstr ""
+msgstr "Revocați drepturile de acces la întregul operator"
 
 msgid "Revoke access rights to the entire extension"
-msgstr ""
+msgstr "Revocați drepturile de acces la întreaga extensie"
 
 msgid "Roles"
-msgstr ""
+msgstr "Roluri"
 
 #, tao-public
 msgid "Users"
-msgstr ""
+msgstr "Utilizatori"
 
