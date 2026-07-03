@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2023-06-07 08:09\n"
+"PO-Revision-Date: 2026-07-03 14:47\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: ja\n"
@@ -64,7 +64,7 @@ msgid "Revoke access rights to the entire extension"
 msgstr "拡張機能全体へのアクセス権を取り消し"
 
 msgid "Roles"
-msgstr "権限"
+msgstr "ロール"
 
 #, tao-public
 msgid "Users"
