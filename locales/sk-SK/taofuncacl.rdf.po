@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tao-open-source\n"
-"PO-Revision-Date: 2025-12-05 09:27\n"
+"PO-Revision-Date: 2026-07-03 14:47\n"
 "Last-Translator: TAO Translation Team <translation@tao.lu>\n"
 "MIME-Version: 1.0\n"
 "Language: sk\n"
@@ -20,7 +20,7 @@ msgstr ""
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#ControlComponent
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "Control component"
-msgstr "Riadiaca zložka"
+msgstr "Ovládací prvok"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#ControlComponent
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
@@ -35,7 +35,7 @@ msgstr "Rozšírenie"
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Extension
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "A tao extension"
-msgstr "Rozšírenie Tao"
+msgstr "Rozšírenie PET"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Module
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
@@ -55,7 +55,7 @@ msgstr "Akcia"
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Action
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "A MVC Controller Action"
-msgstr "Akcia MVC kontroléra"
+msgstr "Akcia ovládača MVC"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#Identifier
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
@@ -70,12 +70,12 @@ msgstr "Identifikátor"
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#GrantAccess
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
 msgid "Grant access to a control component"
-msgstr "Udeliť prístup ku komponentu ovládania"
+msgstr "Udeliť prístup k ovládaciemu prvku"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#GrantAccess
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "Grant access to a control component"
-msgstr "Udeliť prístup ku komponentu ovládania"
+msgstr "Udeliť prístup k ovládaciemu prvku"
 
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#actionMemberOf
 msgctxt "http://www.w3.org/2000/01/rdf-schema#label"
@@ -105,5 +105,5 @@ msgstr "Správca ACL funkcií"
 # http://www.tao.lu/Ontologies/taoFuncACL.rdf#FuncAclManagerRole
 msgctxt "http://www.w3.org/2000/01/rdf-schema#comment"
 msgid "The functionality based access controll layer Manager Role"
-msgstr "Funkcionalita založená na vrstve riadenia prístupu Manažérska rola"
+msgstr "Funkčná vrstva riadenia prístupu – rola Správcu"
 
